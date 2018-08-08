@@ -1,0 +1,1 @@
+python social_mapper.py -f company -i "Company Name Here" -m accurate -a -t strict

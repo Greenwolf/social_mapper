@@ -1,0 +1,14 @@
+beautifulsoup4
+selenium
+pyvirtualdisplay
+tabulate
+requests
+face_recognition
+django
+numpy
+scipy
+matplotlib
+scikit-image
+scikit-learn
+ipython
+dlib

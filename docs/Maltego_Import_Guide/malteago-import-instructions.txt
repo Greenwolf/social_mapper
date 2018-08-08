@@ -1,0 +1,15 @@
+Guide to importing Social Mapper Results into Maltego Community (Free) Edition
+
+1) Download & Install Maltego Community Edition
+
+2) Take the Social Mapper Results CSV file and shift everything right one column. In each row for this new column enter the Organisation or Group which links all the targets togeather. 
+
+3) Open Maltego and go to File (or Top Left Circle Symbol) > Import > Import Graph From Table
+
+4) Select your edited Social Mapper Results CSV file and Choose 'Tree' from the Connectivity Options (Image 1).
+
+5) In Mapping Configuration choose the mapping for each column. Company for the 1st column, Person for the 2nd column and URL's for the rest (Image 2).
+
+6) In the Connectivity Table in Mapping Configuration point the Person to each URL, and the Organisation to the Person (Image 3).
+
+7) Verify This is correct in the Connectivity Graph View. Then complete the import. 

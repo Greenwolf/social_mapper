@@ -1,0 +1,10 @@
+brew cask install xquartz
+brew install gtk+3 boost
+brew install boost-python --with-python3
+brew install python dlib
+brew link python
+pip install beautifulsoup4 selenium pyvirtualdisplay tabulate requests face_recognition django numpy scipy matplotlib scikit-image scikit-learn ipython dlib
+
+Need to install geckodriver for firefox instrumentation, then place it in path
+Selenium needs 3.6 or above or headless mode
+firefox needs 56.0.0 or above for headless mode
