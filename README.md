@@ -153,6 +153,6 @@ GNU General Public License for more details.
 
 ## Acknowledgments
 
-* Thanks to ageitgey for his great [python facial regcognition library](https://github.com/ageitgey/face_recognition) which was of great help when creating this project. 
+* Thanks to MDSEC for their great LinkedInt tool which inspired me to add the search by LinkedIn company name input method. 
 
 ![Social Mapper Logo](docs/logo.png?raw=true "Social Mapper Logo")
