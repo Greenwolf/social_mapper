@@ -1,3 +1,4 @@
+from __future__ import print_function
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from pyvirtualdisplay import Display
@@ -31,7 +32,7 @@ class Instagramfinder(object):
 		titleString = ''.join([i if ord(i) < 128 else ' ' for i in self.driver.title])
 
 		if(titleString.startswith("Login")):
-			print "\n[+] Instagram Login Page loaded successfully [+]"
+			print("\n[+] Instagram Login Page loaded successfully [+]")
 			instagramUsername = self.driver.find_element_by_xpath("//input[@name='username']")
 			instagramUsername.send_keys(username)
 			instagramPassword = self.driver.find_element_by_xpath("//input[@name='password']")
@@ -41,9 +42,9 @@ class Instagramfinder(object):
 			#self.driver.find_element_by_css_selector("button.submit.btn.primary-btn").click()
 			sleep(5)
 			if(str(self.driver.title.encode('utf8','replace')).startswith("Instagram") == True):
-				print "[+] Instagram Login Success [+]\n"
+				print("[+] Instagram Login Success [+]\n")
 			else:
-				print "[-] Instagram Login Failed [-]\n"
+				print("[-] Instagram Login Failed [-]\n")
 
 
 	def getInstagramProfiles(self,first_name,last_name,username,password):
@@ -65,7 +66,7 @@ class Instagramfinder(object):
 				try:
 					searchbar = self.driver.find_element_by_xpath("//input[@placeholder='Search']")
 				except:
-					print "Instagram Timeout Error, session has expired and attempts to reestablish have failed"
+					print("Instagram Timeout Error, session has expired and attempts to reestablish have failed")
 					return picturelist
 			sleep(1)
 			full_name = first_name + " " + last_name
@@ -101,7 +102,7 @@ class Instagramfinder(object):
 				
 			return picturelist
 		except Exception as e: 
-			print 'Error on line {}'.format(sys.exc_info()[-1].tb_lineno) + e
+			print('Error on line {}'.format(sys.exc_info()[-1].tb_lineno) + e)
 			picturelist = []
 			#print "Error"
 			return picturelist

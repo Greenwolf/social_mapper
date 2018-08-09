@@ -1,3 +1,4 @@
+from __future__ import print_function
 from selenium import webdriver
 from selenium.webdriver.firefox.options import Options
 from pyvirtualdisplay import Display
@@ -27,7 +28,7 @@ class Facebookfinder(object):
 		self.driver.execute_script('localStorage.clear();')
 		
 		if(str(self.driver.title).encode('ascii','replace').startswith("Log in")):
-			print "\n[+] Facebook Login Page loaded successfully [+]"
+			print("\n[+] Facebook Login Page loaded successfully [+]")
 			fbUsername = self.driver.find_element_by_id("email")
 			fbUsername.send_keys(username)
 			fbPassword = self.driver.find_element_by_id("pass")
@@ -37,14 +38,14 @@ class Facebookfinder(object):
 			# checks if a notification is in place, which changes the title
 			if (self.driver.title.encode('utf8','replace')[0] == "("):
 				if(str(self.driver.title.encode('utf8','replace').split()[1]) == "Facebook"):
-					print "[+] Facebook Login Success [+]\n"
+					print("[+] Facebook Login Success [+]\n")
 				else:
-					print "[-] Facebook Login Failed [-]\n"
+					print("[-] Facebook Login Failed [-]\n")
 			else:
 				if(self.driver.title.encode('utf8','replace').startswith("Facebook") == True):
-					print "[+] Facebook Login Success [+]\n"
+					print("[+] Facebook Login Success [+]\n")
 				else:
-					print "[-] Facebook Login Failed [-]\n"
+					print("[-] Facebook Login Failed [-]\n")
 
 
 	def getFacebookProfiles(self,first_name,last_name,username,password):
@@ -62,15 +63,15 @@ class Facebookfinder(object):
 		#print "END TEST"
 		# checks if word after space (for when a notifaction changes the title) or the first word is not equal to the first name being searched, meaning the session has timed out
 		if(self.driver.title.encode('utf8','replace').split()[1].startswith(first_name) == False and self.driver.title.encode('utf8','replace').startswith(first_name) == False): 
-			print "\nFacebook session has expired attempting to reestablish..."
+			print("\nFacebook session has expired attempting to reestablish...")
 			self.doLogin(username,password)
 			self.driver.get(url)
 			sleep(3)
 			if(self.driver.title.encode('utf8','replace').split()[1].startswith(first_name) == False and self.driver.title.encode('utf8','replace').startswith(first_name) == False): 
-				print "Facebook Timeout Error, session has expired and attempts to reestablish have failed"
+				print("Facebook Timeout Error, session has expired and attempts to reestablish have failed")
 				return picturelist
 			else:
-				print "New Facebook Session created, resuming mapping process"
+				print("New Facebook Session created, resuming mapping process")
 		searchresponse = self.driver.page_source.encode('utf-8')
 		soupParser = BeautifulSoup(searchresponse, 'html.parser')
 

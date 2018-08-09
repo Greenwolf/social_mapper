@@ -1,3 +1,4 @@
+from __future__ import print_function
 from modules import facebookfinder
 from modules import twitterfinder
 from modules import instagramfinder
@@ -30,8 +31,8 @@ global linkedin_username
 global linkedin_password
 linkedin_username = ""
 linkedin_password = ""
-global facebook_username 
-global facebook_password 
+global facebook_username
+global facebook_password
 facebook_username = ""
 facebook_password = ""
 global twitter_username
@@ -71,7 +72,7 @@ class Person(object):
     linkedin = ""
     linkedinimage = ""
     facebook = ""
-    facebookimage = "" #higher quality but needs authentication to access 
+    facebookimage = "" #higher quality but needs authentication to access
     facebookcdnimage = "" #lower quality but not authentication, used for html output
     twitter = ""
     twitterimage = ""
@@ -105,16 +106,16 @@ def fill_facebook(peoplelist):
     FacebookfinderObject.doLogin(facebook_username,facebook_password)
 
     count=1
-    ammount=len(peoplelist)                      
+    ammount=len(peoplelist)
     for person in peoplelist:
         if args.vv == True:
-            print "Facebook Check %i/%i : %s" % (count,ammount,person.full_name)
+            print("Facebook Check %i/%i : %s" % (count,ammount,person.full_name))
         else:
             sys.stdout.write("\rFacebook Check %i/%i : %s                                " % (count,ammount,person.full_name))
             sys.stdout.flush()
-        count = count + 1            
+        count = count + 1
         #Testcode to mimic a session timeout
-        #if count == 3: 
+        #if count == 3:
         #    print "triggered delete"
         #    FacebookfinderObject.testdeletecookies()
         if person.person_image:
@@ -143,8 +144,8 @@ def fill_facebook(peoplelist):
             #print image_link
             #print "----"
             cookies = FacebookfinderObject.getCookies()
-            if image_link:  
-                try: 
+            if image_link:
+                try:
                     # Set fake user agent as facebook blocks python requests default user agent
                     headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/602.2.14 (KHTML, like Gecko) Version/10.0.1 Safari/602.2.14'}
                     # Get target image using requests, providing selenium cookies, and fake user agent
@@ -162,17 +163,17 @@ def fill_facebook(peoplelist):
                     results = face_recognition.face_distance([target_encoding], potential_target_encoding)
                     for result in results:
                         #print profilelink + " + " + cdnpicture + " + " + image_link
-                        #print result 
+                        #print result
                         #print ""
-                        # check here to do early break if using fast mode, otherwise if accurate set highest distance in array then do a check for highest afterwards 
+                        # check here to do early break if using fast mode, otherwise if accurate set highest distance in array then do a check for highest afterwards
                         if args.mode == "fast":
                             if result < threshold:
                                 person.facebook = encoding.smart_str(profilelink, encoding='ascii', errors='ignore')
                                 person.facebookimage = encoding.smart_str(image_link, encoding='ascii', errors='ignore')
                                 person.facebookcdnimage = encoding.smart_str(cdnpicture, encoding='ascii', errors='ignore')
                                 if args.vv == True:
-                                    print "\tMatch found: " + person.full_name
-                                    print "\tFacebook: " + person.facebook
+                                    print("\tMatch found: " + person.full_name)
+                                    print("\tFacebook: " + person.facebook)
                                 early_break = True
                                 break
                         elif args.mode == "accurate":
@@ -182,14 +183,14 @@ def fill_facebook(peoplelist):
                                 #print distance
                                 #print "Match over threshold: \n" + profilelink + "\n" + result
                                 updatedlist.append([profilelink,image_link,result,cdnpicture])
-                except Exception as e: 
-                    print e
+                except Exception as e:
+                    print(e)
                     #print(e)
                     #print "Error getting image link, retrying login and getting fresh cookies"
                     #FacebookfinderObject.doLogin(facebook_username,facebook_password)
                     #cookies = FacebookfinderObject.getCookies()
                     continue
-        # For accurate mode pull out largest distance and if its bigger than the threshold then its the most accurate result 
+        # For accurate mode pull out largest distance and if its bigger than the threshold then its the most accurate result
         if args.mode == "accurate":
             highestdistance=1.0
             bestprofilelink=""
@@ -205,12 +206,12 @@ def fill_facebook(peoplelist):
                 person.facebookimage = encoding.smart_str(bestimagelink, encoding='ascii', errors='ignore')
                 person.facebookcdnimage = encoding.smart_str(bestcdnpicture, encoding='ascii', errors='ignore')
                 if args.vv == True:
-                    print "\tMatch found: " + person.full_name
-                    print "\tFacebook: " + person.facebook
-    try:               
+                    print("\tMatch found: " + person.full_name)
+                    print("\tFacebook: " + person.facebook)
+    try:
         FacebookfinderObject.kill()
-    except: 
-        print "Error Killing Facebook Selenium instance"
+    except:
+        print("Error Killing Facebook Selenium instance")
     return peoplelist
 
 def fill_twitter(peoplelist):
@@ -218,14 +219,14 @@ def fill_twitter(peoplelist):
     TwitterfinderObject.doLogin(twitter_username,twitter_password)
 
     count=1
-    ammount=len(peoplelist)                      
+    ammount=len(peoplelist)
     for person in peoplelist:
         if args.vv == True:
-            print "Twitter Check %i/%i : %s" % (count,ammount,person.full_name)
+            print("Twitter Check %i/%i : %s" % (count,ammount,person.full_name))
         else:
             sys.stdout.write("\rTwitter Check %i/%i : %s                                " % (count,ammount,person.full_name))
-            sys.stdout.flush()   
-        count = count + 1         
+            sys.stdout.flush()
+        count = count + 1
         if person.person_image:
             try:
                 target_image = face_recognition.load_image_file(person.person_image)
@@ -246,8 +247,8 @@ def fill_twitter(peoplelist):
             if early_break:
                 break
             image_link = profilepic
-            if image_link:   
-                try: 
+            if image_link:
+                try:
                     urllib.urlretrieve(image_link, "potential_target_image.jpg")
                     potential_target_image = face_recognition.load_image_file("potential_target_image.jpg")
                     try: # try block for when an image has no faces
@@ -261,8 +262,8 @@ def fill_twitter(peoplelist):
                                 person.twitter = encoding.smart_str(profilelink, encoding='ascii', errors='ignore')
                                 person.twitterimage = encoding.smart_str(image_link, encoding='ascii', errors='ignore')
                                 if args.vv == True:
-                                    print "\tMatch found: " + person.full_name
-                                    print "\tTwitter: " + person.twitter
+                                    print("\tMatch found: " + person.full_name)
+                                    print("\tTwitter: " + person.twitter)
                                 early_break = True
                                 break
                         elif args.mode == "accurate":
@@ -283,12 +284,12 @@ def fill_twitter(peoplelist):
                 person.twitter = encoding.smart_str(bestprofilelink, encoding='ascii', errors='ignore')
                 person.twitterimage = encoding.smart_str(bestimagelink, encoding='ascii', errors='ignore')
                 if args.vv == True:
-                    print "\tMatch found: " + person.full_name
-                    print "\tTwitter: " + person.twitter 
+                    print("\tMatch found: " + person.full_name)
+                    print("\tTwitter: " + person.twitter)
     try:
         TwitterfinderObject.kill()
-    except: 
-        print "Error Killing Twitter Selenium instance"
+    except:
+        print("Error Killing Twitter Selenium instance")
     return peoplelist
 
 def fill_instagram(peoplelist):
@@ -296,17 +297,17 @@ def fill_instagram(peoplelist):
     InstagramfinderObject.doLogin(instagram_username,instagram_password)
 
     count=1
-    ammount=len(peoplelist)                      
+    ammount=len(peoplelist)
     for person in peoplelist:
         if args.vv == True:
-            print "Instagram Check %i/%i : %s" % (count,ammount,person.full_name)
+            print("Instagram Check %i/%i : %s" % (count,ammount,person.full_name))
         else:
             sys.stdout.write("\rInstagram Check %i/%i : %s                                " % (count,ammount,person.full_name))
-            sys.stdout.flush()  
-        count = count + 1   
-        #if count == 3: 
+            sys.stdout.flush()
+        count = count + 1
+        #if count == 3:
         #    print "triggered delete"
-        #    InstagramfinderObject.testdeletecookies()       
+        #    InstagramfinderObject.testdeletecookies()
         if person.person_image:
             try:
                 target_image = face_recognition.load_image_file(person.person_image)
@@ -331,14 +332,14 @@ def fill_instagram(peoplelist):
             if early_break:
                 break
             image_link = profilepic
-            if image_link:   
-                try: 
+            if image_link:
+                try:
                     urllib.urlretrieve(image_link, "potential_target_image.jpg")
                     potential_target_image = face_recognition.load_image_file("potential_target_image.jpg")
                     try: # try block for when an image has no faces
                         potential_target_encoding = face_recognition.face_encodings(potential_target_image)[0]
                     except:
-                        continue     
+                        continue
                     results = face_recognition.face_distance([target_encoding], potential_target_encoding)
                     for result in results:
                         if args.mode == "fast":
@@ -346,17 +347,17 @@ def fill_instagram(peoplelist):
                                 person.instagram = encoding.smart_str(profilelink, encoding='ascii', errors='ignore')
                                 person.instagramimage = encoding.smart_str(image_link, encoding='ascii', errors='ignore')
                                 if args.vv == True:
-                                    print "\tMatch found: " + person.full_name
-                                    print "\tInstagram: " + person.instagram
+                                    print("\tMatch found: " + person.full_name)
+                                    print("\tInstagram: " + person.instagram)
                                 early_break = True
                                 break
                         elif args.mode == "accurate":
                             if result < threshold:
                                 #distance=result
                                 updatedlist.append([profilelink,image_link,result])
-                except Exception as e: 
-                    print "ERROR"
-                    print e
+                except Exception as e:
+                    print("ERROR")
+                    print(e)
         if args.mode == "accurate":
             highestdistance=1.0
             bestprofilelink=""
@@ -370,12 +371,12 @@ def fill_instagram(peoplelist):
                 person.instagram = encoding.smart_str(bestprofilelink, encoding='ascii', errors='ignore')
                 person.instagramimage = encoding.smart_str(bestimagelink, encoding='ascii', errors='ignore')
                 if args.vv == True:
-                    print "\tMatch found: " + person.full_name
-                    print "\tInstagram: " + person.instagram
+                    print("\tMatch found: " + person.full_name)
+                    print("\tInstagram: " + person.instagram)
     try:
         InstagramfinderObject.kill()
-    except: 
-        print "Error Killing Instagram Selenium instance"
+    except:
+        print("Error Killing Instagram Selenium instance")
     return peoplelist
 
 def fill_linkedin(peoplelist):
@@ -383,17 +384,17 @@ def fill_linkedin(peoplelist):
     LinkedinfinderObject.doLogin(linkedin_username,linkedin_password)
 
     count=1
-    ammount=len(peoplelist)                      
+    ammount=len(peoplelist)
     for person in peoplelist:
         if args.vv == True:
-            print "LinkedIn Check %i/%i : %s" % (count,ammount,person.full_name)
+            print("LinkedIn Check %i/%i : %s" % (count,ammount,person.full_name))
         else:
             sys.stdout.write("\rLinkedIn Check %i/%i : %s                                " % (count,ammount,person.full_name))
-            sys.stdout.flush()     
+            sys.stdout.flush()
         count = count + 1
-        #if count == 3: 
+        #if count == 3:
             #print "triggered delete"
-        #    LinkedinfinderObject.testdeletecookies()       
+        #    LinkedinfinderObject.testdeletecookies()
         if person.person_image:
             try:
                 target_image = face_recognition.load_image_file(person.person_image)
@@ -415,14 +416,14 @@ def fill_linkedin(peoplelist):
             if early_break:
                 break
             image_link = profilepic
-            if image_link:   
-                try: 
+            if image_link:
+                try:
                     urllib.urlretrieve(image_link, "potential_target_image.jpg")
                     potential_target_image = face_recognition.load_image_file("potential_target_image.jpg")
                     try: # try block for when an image has no faces
                         potential_target_encoding = face_recognition.face_encodings(potential_target_image)[0]
                     except:
-                        continue     
+                        continue
                     results = face_recognition.face_distance([target_encoding], potential_target_encoding)
                     for result in results:
                         if args.mode == "fast":
@@ -430,16 +431,16 @@ def fill_linkedin(peoplelist):
                                 person.linkedin = encoding.smart_str(profilelink, encoding='ascii', errors='ignore')
                                 person.linkedinimage = encoding.smart_str(image_link, encoding='ascii', errors='ignore')
                                 if args.vv == True:
-                                    print "\tMatch found: " + person.full_name
-                                    print "\tLinkedIn: " + person.linkedin
+                                    print("\tMatch found: " + person.full_name)
+                                    print("\tLinkedIn: " + person.linkedin)
                                 early_break = True
                                 break
                         elif args.mode == "accurate":
                             if result < threshold:
                                 #distance=result
                                 updatedlist.append([profilelink,image_link,result])
-                except Exception as e: 
-                    print e
+                except Exception as e:
+                    print(e)
         if args.mode == "accurate":
             highestdistance=1.0
             bestprofilelink=""
@@ -453,12 +454,12 @@ def fill_linkedin(peoplelist):
                 person.linkedin = encoding.smart_str(bestprofilelink, encoding='ascii', errors='ignore')
                 person.linkedinimage = encoding.smart_str(bestimagelink, encoding='ascii', errors='ignore')
                 if args.vv == True:
-                    print "\tMatch found: " + person.full_name
-                    print "\tLinkedIn: " + person.linkedin    
+                    print("\tMatch found: " + person.full_name)
+                    print("\tLinkedIn: " + person.linkedin)
     try:
         LinkedinfinderObject.kill()
-    except: 
-        print "Error Killing LinkedIn Selenium instance"
+    except:
+        print("Error Killing LinkedIn Selenium instance")
     return peoplelist
 
 def fill_googleplus(peoplelist):
@@ -466,14 +467,14 @@ def fill_googleplus(peoplelist):
     GooglePlusfinderObject.doLogin(google_username,google_password)
 
     count=1
-    ammount=len(peoplelist)                      
+    ammount=len(peoplelist)
     for person in peoplelist:
         if args.vv == True:
-            print "GooglePlus Check %i/%i : %s" % (count,ammount,person.full_name)
+            print("GooglePlus Check %i/%i : %s" % (count,ammount,person.full_name))
         else:
             sys.stdout.write("\rGooglePlus Check %i/%i : %s                                " % (count,ammount,person.full_name))
             sys.stdout.flush()
-        count = count + 1         
+        count = count + 1
         if person.person_image:
             try:
                 target_image = face_recognition.load_image_file(person.person_image)
@@ -495,14 +496,14 @@ def fill_googleplus(peoplelist):
             if early_break:
                 break
             image_link = profilepic
-            if image_link:   
-                try: 
+            if image_link:
+                try:
                     urllib.urlretrieve(image_link, "potential_target_image.jpg")
                     potential_target_image = face_recognition.load_image_file("potential_target_image.jpg")
                     try: # try block for when an image has no faces
                         potential_target_encoding = face_recognition.face_encodings(potential_target_image)[0]
                     except:
-                        continue      
+                        continue
                     results = face_recognition.face_distance([target_encoding], potential_target_encoding)
                     for result in results:
                         if args.mode == "fast":
@@ -510,16 +511,16 @@ def fill_googleplus(peoplelist):
                                 person.googleplus = encoding.smart_str(profilelink, encoding='ascii', errors='ignore')
                                 person.googleplusimage = encoding.smart_str(image_link, encoding='ascii', errors='ignore')
                                 if args.vv == True:
-                                    print "\tMatch found: " + person.full_name
-                                    print "\tGoogle Plus: " + person.googleplus
+                                    print("\tMatch found: " + person.full_name)
+                                    print("\tGoogle Plus: " + person.googleplus)
                                 early_break = True
                                 break
                         elif args.mode == "accurate":
                             if result < threshold:
                                 #distance=result
                                 updatedlist.append([profilelink,image_link,result])
-                except Exception as e: 
-                    print e
+                except Exception as e:
+                    print(e)
         if args.mode == "accurate":
             highestdistance=1.0
             bestprofilelink=""
@@ -533,12 +534,12 @@ def fill_googleplus(peoplelist):
                 person.googleplus = encoding.smart_str(bestprofilelink, encoding='ascii', errors='ignore')
                 person.googleplusimage = encoding.smart_str(bestimagelink, encoding='ascii', errors='ignore')
                 if args.vv == True:
-                    print "\tMatch found: " + person.full_name
-                    print "\tGoogle Plus: " + person.googleplus     
+                    print("\tMatch found: " + person.full_name)
+                    print("\tGoogle Plus: " + person.googleplus)
     try:
         GooglePlusfinderObject.kill()
-    except: 
-        print "Error Killing GooglePlus Selenium instance"
+    except:
+        print("Error Killing GooglePlus Selenium instance")
     return peoplelist
 
 def fill_vkontakte(peoplelist):
@@ -546,14 +547,14 @@ def fill_vkontakte(peoplelist):
     VkontaktefinderObject.doLogin(vk_username,vk_password)
 
     count=1
-    ammount=len(peoplelist)                      
+    ammount=len(peoplelist)
     for person in peoplelist:
         if args.vv == True:
-            print "VKontakte Check %i/%i : %s" % (count,ammount,person.full_name)
+            print("VKontakte Check %i/%i : %s" % (count,ammount,person.full_name))
         else:
             sys.stdout.write("\rVKontakte Check %i/%i : %s                                " % (count,ammount,person.full_name))
-            sys.stdout.flush()  
-        count = count + 1          
+            sys.stdout.flush()
+        count = count + 1
         if person.person_image:
             try:
                 target_image = face_recognition.load_image_file(person.person_image)
@@ -575,14 +576,14 @@ def fill_vkontakte(peoplelist):
             if early_break:
                 break
             image_link = profilepic
-            if image_link:   
-                try: 
+            if image_link:
+                try:
                     urllib.urlretrieve(image_link, "potential_target_image.jpg")
                     potential_target_image = face_recognition.load_image_file("potential_target_image.jpg")
                     try: # try block for when an image has no faces
                         potential_target_encoding = face_recognition.face_encodings(potential_target_image)[0]
                     except:
-                        continue     
+                        continue
                     results = face_recognition.face_distance([target_encoding], potential_target_encoding)
                     for result in results:
                         if args.mode == "fast":
@@ -590,16 +591,16 @@ def fill_vkontakte(peoplelist):
                                 person.vk = encoding.smart_str(profilelink, encoding='ascii', errors='ignore')
                                 person.vkimage = encoding.smart_str(image_link, encoding='ascii', errors='ignore')
                                 if args.vv == True:
-                                    print "\tnMatch found: " + person.full_name
-                                    print "\tVkontakte: " + person.vk
+                                    print("\tnMatch found: " + person.full_name)
+                                    print("\tVkontakte: " + person.vk)
                                 early_break = True
                                 break
                         elif args.mode == "accurate":
                             if result < threshold:
                                 #distance=result
                                 updatedlist.append([profilelink,image_link,result])
-                except Exception as e: 
-                    print e
+                except Exception as e:
+                    print(e)
         if args.mode == "accurate":
             highestdistance=1.0
             bestprofilelink=""
@@ -613,12 +614,12 @@ def fill_vkontakte(peoplelist):
                 person.vk = encoding.smart_str(bestprofilelink, encoding='ascii', errors='ignore')
                 person.vkimage = encoding.smart_str(bestimagelink, encoding='ascii', errors='ignore')
                 if args.vv == True:
-                    print "\tMatch found: " + person.full_name
-                    print "\tVkontakte: " + person.vk   
+                    print("\tMatch found: " + person.full_name)
+                    print("\tVkontakte: " + person.vk)
     try:
         VkontaktefinderObject.kill()
-    except: 
-        print "Error Killing VKontakte Selenium instance"
+    except:
+        print("Error Killing VKontakte Selenium instance")
     return peoplelist
 
 def fill_weibo(peoplelist):
@@ -626,14 +627,14 @@ def fill_weibo(peoplelist):
     WeibofinderObject.doLogin(weibo_username,weibo_password)
 
     count=1
-    ammount=len(peoplelist)                      
+    ammount=len(peoplelist)
     for person in peoplelist:
         if args.vv == True:
-            print "Weibo Check %i/%i : %s" % (count,ammount,person.full_name)
+            print("Weibo Check %i/%i : %s" % (count,ammount,person.full_name))
         else:
             sys.stdout.write("\rWeibo Check %i/%i : %s                                " % (count,ammount,person.full_name))
-            sys.stdout.flush() 
-        count = count + 1           
+            sys.stdout.flush()
+        count = count + 1
         if person.person_image:
             try:
                 target_image = face_recognition.load_image_file(person.person_image)
@@ -655,14 +656,14 @@ def fill_weibo(peoplelist):
             if early_break:
                 break
             image_link = profilepic
-            if image_link:   
-                try: 
+            if image_link:
+                try:
                     urllib.urlretrieve(image_link, "potential_target_image.jpg")
                     potential_target_image = face_recognition.load_image_file("potential_target_image.jpg")
                     try: # try block for when an image has no faces
                         potential_target_encoding = face_recognition.face_encodings(potential_target_image)[0]
                     except:
-                        continue       
+                        continue
                     results = face_recognition.face_distance([target_encoding], potential_target_encoding)
                     for result in results:
                         if args.mode == "fast":
@@ -670,16 +671,16 @@ def fill_weibo(peoplelist):
                                 person.weibo =  encoding.smart_str(profilelink, encoding='ascii', errors='ignore')
                                 person.weiboimage =  encoding.smart_str(image_link, encoding='ascii', errors='ignore')
                                 if args.vv == True:
-                                    print "\tMatch found: " + person.full_name
-                                    print "\tWeibo: " + person.weibo
+                                    print("\tMatch found: " + person.full_name)
+                                    print("\tWeibo: " + person.weibo)
                                 early_break = True
                                 break
                         elif args.mode == "accurate":
                             if result < threshold:
                                 #distance=result
                                 updatedlist.append([profilelink,image_link,result])
-                except Exception as e: 
-                    print e
+                except Exception as e:
+                    print(e)
         if args.mode == "accurate":
             highestdistance=1.0
             bestprofilelink=""
@@ -693,12 +694,12 @@ def fill_weibo(peoplelist):
                 person.weibo =  encoding.smart_str(bestprofilelink, encoding='ascii', errors='ignore')
                 person.weiboimage =  encoding.smart_str(bestimagelink, encoding='ascii', errors='ignore')
                 if args.vv == True:
-                    print "\tMatch found: " + person.full_name
-                    print "\tWeibo: " + person.weibo   
+                    print("\tMatch found: " + person.full_name)
+                    print("\tWeibo: " + person.weibo)
     try:
         WeibofinderObject.kill()
-    except: 
-        print "Error Killing Weibo Selenium instance"
+    except:
+        print("Error Killing Weibo Selenium instance")
     return peoplelist
 
 def fill_douban(peoplelist):
@@ -706,14 +707,14 @@ def fill_douban(peoplelist):
     DoubanfinderObject.doLogin(douban_username,douban_password)
 
     count=1
-    ammount=len(peoplelist)                      
+    ammount=len(peoplelist)
     for person in peoplelist:
         if args.vv == True:
-            print "Douban Check %i/%i : %s" % (count,ammount,person.full_name)
+            print("Douban Check %i/%i : %s" % (count,ammount,person.full_name))
         else:
             sys.stdout.write("\rDouban Check %i/%i : %s                                " % (count,ammount,person.full_name))
             sys.stdout.flush()
-        count = count + 1          
+        count = count + 1
         if person.person_image:
             try:
                 target_image = face_recognition.load_image_file(person.person_image)
@@ -735,14 +736,14 @@ def fill_douban(peoplelist):
             if early_break:
                 break
             image_link = profilepic
-            if image_link:   
-                try: 
+            if image_link:
+                try:
                     urllib.urlretrieve(image_link, "potential_target_image.jpg")
                     potential_target_image = face_recognition.load_image_file("potential_target_image.jpg")
                     try: # try block for when an image has no faces
                         potential_target_encoding = face_recognition.face_encodings(potential_target_image)[0]
                     except:
-                        continue       
+                        continue
                     results = face_recognition.face_distance([target_encoding], potential_target_encoding)
                     for result in results:
                         if args.mode == "fast":
@@ -750,16 +751,16 @@ def fill_douban(peoplelist):
                                 person.douban =  encoding.smart_str(profilelink, encoding='ascii', errors='ignore')
                                 person.doubanimage =  encoding.smart_str(image_link, encoding='ascii', errors='ignore')
                                 if args.vv == True:
-                                    print "\tMatch found: " + person.full_name
-                                    print "\tDouban: " + person.douban
+                                    print("\tMatch found: " + person.full_name)
+                                    print("\tDouban: " + person.douban)
                                 early_break = True
                                 break
                         elif args.mode == "accurate":
                             if result < threshold:
                                 #distance=result
                                 updatedlist.append([profilelink,image_link,result])
-                except Exception as e: 
-                    print e
+                except Exception as e:
+                    print(e)
         if args.mode == "accurate":
             highestdistance=1.0
             bestprofilelink=""
@@ -773,12 +774,12 @@ def fill_douban(peoplelist):
                 person.douban =  encoding.smart_str(bestprofilelink, encoding='ascii', errors='ignore')
                 person.doubanimage =  encoding.smart_str(bestimagelink, encoding='ascii', errors='ignore')
                 if args.vv == True:
-                    print "\tMatch found: " + person.full_name
-                    print "\tDouban: " + person.douban   
+                    print("\tMatch found: " + person.full_name)
+                    print("\tDouban: " + person.douban)
     try:
         DoubanfinderObject.kill()
-    except: 
-        print "Error Killing Douban Selenium instance"
+    except:
+        print("Error Killing Douban Selenium instance")
     return peoplelist
 
 #Login function for linkedin for company browsing (Credits to LinkedInt from MDSec)
@@ -804,13 +805,13 @@ def login():
 def authenticate():
     try:
         a = login()
-        print a
+        print(a)
         session = a
         if len(session) == 0:
             sys.exit("[!] Unable to login to LinkedIn.com")
-        print "[*] Obtained new session: %s" % session
+        print("[*] Obtained new session: %s" % session)
         cookies = dict(li_at=session)
-    except Exception, e:
+    except Exception as e:
         sys.exit("[!] Could not authenticate to linkedin. %s" % e)
     return cookies
 
@@ -818,7 +819,7 @@ def loadPage(client, url, data=None):
     try:
         response = client.open(url)
     except:
-        print "[!] Cannot load main LinkedIn page"
+        print("[!] Cannot load main LinkedIn page")
     try:
         if data is not None:
             response = client.open(url, data)
@@ -872,7 +873,7 @@ try:
     if args.thresholdinput == "superstrict":
         threshold = 0.4
     if args.thresholdinput == "strict":
-        threshold = 0.5 
+        threshold = 0.5
     if args.thresholdinput == "standard":
         threshold = 0.6
     if args.thresholdinput == "loose":
@@ -920,7 +921,7 @@ if args.format == "csv":
         peoplelist.append(person)
 
 #remove this when fixed downloading
-#sys.exit(1)     
+#sys.exit(1)
 
 # Parse image folder full of images and names into social_mapper
 if args.format == "imagefolder":
@@ -950,10 +951,10 @@ if args.format == "company":
     cookies = authenticate() # perform authentication
     companyid = 0
     if args.companyid is not None: # Dont find company id, use provided id from -cid or --companyid flag
-        print "Using supplied company Id: %s" % args.companyid
+        print("Using supplied company Id: %s" % args.companyid)
         companyid = args.companyid
     else:
-        #code to get company ID based on name 
+        #code to get company ID based on name
         companyid = 0
         url = "https://www.linkedin.com/voyager/api/typeahead/hits?q=blended&query=%s" % args.input
         headers = {'Csrf-Token':'ajax:0397788525211216808', 'X-RestLi-Protocol-Version':'2.0.0'}
@@ -966,14 +967,14 @@ if args.format == "company":
                 companyid = content['elements'][i]['hitInfo']['com.linkedin.voyager.typeahead.TypeaheadCompany']['id']
                 if firstID == 0:
                     firstID = companyid
-                print "[Notice] Found company ID: %s" % companyid
+                print("[Notice] Found company ID: %s" % companyid)
             except:
                 continue
         companyid = firstID
         if companyid == 0:
-            print "[WARNING] No valid company ID found in auto, please restart and find your own"
+            print("[WARNING] No valid company ID found in auto, please restart and find your own")
             sys.exit(1)
-    print "[*] Using company ID: %s" % companyid
+    print("[*] Using company ID: %s" % companyid)
 
     url = "https://www.linkedin.com/voyager/api/search/cluster?count=40&guides=List(v->PEOPLE,facetCurrentCompany->%s)&origin=OTHER&q=guided&start=0" % (companyid)
     headers = {'Csrf-Token':'ajax:0397788525211216808', 'X-RestLi-Protocol-Version':'2.0.0'}
@@ -988,17 +989,17 @@ if args.format == "company":
         pages = 1
     if data_total % 40 == 0:
         # Becuase we count 0... Subtract a page if there are no left over results on the last page
-        pages = pages - 1 
-    if pages == 0: 
-        print "[!] Try to use quotes in the search name"
+        pages = pages - 1
+    if pages == 0:
+        print("[!] Try to use quotes in the search name")
         sys.exit(0)
 
-    print "[*] %i Results Found" % data_total
+    print("[*] %i Results Found" % data_total)
     if data_total > 1000:
         pages = 25
-        print "[*] LinkedIn only allows 1000 results. Refine keywords to capture all data"
-    print "[*] Fetching %i Pages" % pages
-    print
+        print("[*] LinkedIn only allows 1000 results. Refine keywords to capture all data")
+    print("[*] Fetching %i Pages" % pages)
+    print()
     companyname = args.input.strip("\"")
     for p in range(pages):
         url = "https://www.linkedin.com/voyager/api/search/cluster?count=40&guides=List(v->PEOPLE,facetCurrentCompany->%s)&origin=OTHER&q=guided&start=%i" % (companyid, p*40)
@@ -1020,7 +1021,7 @@ if args.format == "company":
                     last_name = c['hitInfo']['com.linkedin.voyager.search.SearchProfile']['miniProfile']['lastName']
                     last_name = encoding.smart_str(last_name, encoding='ascii', errors='ignore')
                     last_name = last_name.lower()
-                    # Around 30% of people keep putting Certs in last name, so strip these out. 
+                    # Around 30% of people keep putting Certs in last name, so strip these out.
                     last_name = last_name.split(' ',1)[0]
                     full_name = first_name + " " + last_name
                     #full_name = re.sub("[^a-zA-Z ]+", "", full_name)
@@ -1039,14 +1040,14 @@ if args.format == "company":
                     peoplelist.append(person)
                     #print person.linkedin
                     #print person_image
-                except Exception, e:
+                except Exception as e:
                     # This triggers when a profile doesn't have an image associated with it
                     continue
 
-# To continue a social mapper run for additional sites. 
+# To continue a social mapper run for additional sites.
 if args.format == "socialmapper":
     if args.a == True:
-        print "This option is for adding additional sites to a social mapper report\nFeed in a social mapper html file thats only been partially run, for example:\nFirst run(LinkedIn,Facebook,Twitter): python social_mapper -f company -i \"SpiderLabs\" -m fast -t standard -li -fb -tw\n Second run(adding Instagram and Google Plus): python social_mapper -f socialmapper -i SpiderLabs-social-mapper.html -m fast -t standard -ig -gp"
+        print("This option is for adding additional sites to a social mapper report\nFeed in a social mapper html file thats only been partially run, for example:\nFirst run(LinkedIn,Facebook,Twitter): python social_mapper -f company -i \"SpiderLabs\" -m fast -t standard -li -fb -tw\n Second run(adding Instagram and Google Plus): python social_mapper -f socialmapper -i SpiderLabs-social-mapper.html -m fast -t standard -ig -gp")
         sys.exit(1)
     exit=False
     try:
@@ -1056,7 +1057,7 @@ if args.format == "socialmapper":
     if not os.path.exists('temp-targets'):
         os.makedirs('temp-targets')
     copyfile(args.input,'SM-Results/backup.html')
-    print "Backup of original report created: 'SM-Results/backup.html'"
+    print("Backup of original report created: 'SM-Results/backup.html'")
 
     f = open(args.input)
     soup = BeautifulSoup(f, 'html.parser')
@@ -1092,7 +1093,7 @@ if args.format == "socialmapper":
         peoplelist.append(person)
 
 if exit:
-    print "Input Error, check options relating to format and input"
+    print("Input Error, check options relating to format and input")
     sys.exit(1)
 
 #Pass peoplelist to modules for filling out
@@ -1100,50 +1101,50 @@ if args.a == True or args.fb == True:
     if not (facebook_username == "" or facebook_password == ""):
         try:
             peoplelist = fill_facebook(peoplelist)
-        except Exception, e:
-            print "[-] Error Filling out Facebook Profiles [-]"
-            print e
-            print "[-]"
+        except Exception as e:
+            print("[-] Error Filling out Facebook Profiles [-]")
+            print(e)
+            print("[-]")
     else:
-        print "Please provide Facebook Login Credentials in the social_mapper.py file"
+        print("Please provide Facebook Login Credentials in the social_mapper.py file")
 if args.a == True or args.tw == True:
     if not (twitter_username == "" or twitter_password == ""):
         peoplelist = fill_twitter(peoplelist)
     else:
-        print "Please provide Twitter Login Credentials in the social_mapper.py file"
+        print("Please provide Twitter Login Credentials in the social_mapper.py file")
 if args.a == True or args.ig == True:
     if not (instagram_username == "" or instagram_password == ""):
         peoplelist = fill_instagram(peoplelist)
     else:
-        print "Please provide Instagram Login Credentials in the social_mapper.py file"
+        print("Please provide Instagram Login Credentials in the social_mapper.py file")
 if not args.format == "linkedint" and not args.format == "company":
     if args.a == True or args.li == True:
         if not (linkedin_username == "" or linkedin_password == ""):
             peoplelist = fill_linkedin(peoplelist)
         else:
-            print "Please provide LinkedIn Login Credentials in the social_mapper.py file"
+            print("Please provide LinkedIn Login Credentials in the social_mapper.py file")
 if args.a == True or args.gp == True:
     if not (google_username == "" or google_password == ""):
         peoplelist = fill_googleplus(peoplelist)
     else:
-        print "Please provide Google Login Credentials in the social_mapper.py file"
+        print("Please provide Google Login Credentials in the social_mapper.py file")
 if args.a == True or args.vk == True:
     if not (vk_username == "" or vk_password == ""):
         peoplelist = fill_vkontakte(peoplelist)
     else:
-        print "Please provide VK (VKontakte) Login Credentials in the social_mapper.py file"
+        print("Please provide VK (VKontakte) Login Credentials in the social_mapper.py file")
 if args.a == True or args.wb == True:
     if not (weibo_username == "" or weibo_password == ""):
         peoplelist = fill_weibo(peoplelist)
     else:
-        print "Please provide Weibo Login Credentials in the social_mapper.py file"
+        print("Please provide Weibo Login Credentials in the social_mapper.py file")
 if args.a == True or args.db == True:
     if not (douban_username == "" or douban_password == ""):
         peoplelist = fill_douban(peoplelist)
     else:
-        print "Please provide Douban Login Credentials in the social_mapper.py file"
+        print("Please provide Douban Login Credentials in the social_mapper.py file")
 
-#Write out updated people list to a csv file along with other output if 
+#Write out updated people list to a csv file along with other output if
 csv = []
 
 if not os.path.exists("SM-Results"):
@@ -1200,8 +1201,8 @@ titlestring = titlestring[:-1]
 #filewriter.write("Full Name,LinkedIn,Facebook,Twitter,Instagram,Google Plus,Vkontakte,Weibo,Douban\n")
 filewriter.write(titlestring)
 filewriter.write("\n")
-print ""
-for person in peoplelist:  
+print("")
+for person in peoplelist:
     writestring = '"%s",' % (person.full_name)
 
     if args.email is not None:
@@ -1209,7 +1210,7 @@ for person in peoplelist:
             # Try to create email by replacing initials and names with persons name
             email = args.email.replace("<first>",person.first_name).replace("<last>",person.last_name).replace("<f>",person.first_name[0]).replace("<l>",person.last_name[0])
         except:
-            email = "Error" 
+            email = "Error"
 
     if args.a == True or args.li == True or args.format == "socialmapper":
         writestring = writestring + '"%s",' % (person.linkedin)
@@ -1284,9 +1285,9 @@ for person in peoplelist:
     if person.douban != "":
         terminalstring = terminalstring +  "\tDouban: " + person.douban + "\n"
     if terminalstring != "":
-        print person.full_name + "\n" + terminalstring
+        print(person.full_name + "\n" + terminalstring)
 
-print "\nResults file: " + outputfilename
+print("\nResults file: " + outputfilename)
 filewriter.close()
 
 # Close all the filewriters that may exist
@@ -1323,7 +1324,7 @@ try:
 except:
     pass
 try:
-    if filewriterweibo: 
+    if filewriterweibo:
         filewriterweibo.close()
 except:
     pass
@@ -1360,7 +1361,7 @@ css = """<meta charset="utf-8" />
     #employees tbody:nth-child(even){
         background-color: #f2f2f2;
     }
-    
+
     #employees th {
         padding-top: 12px;
         padding-bottom: 12px;
@@ -1491,7 +1492,7 @@ header = """<center><table id=\"employees\">
              """
 filewriter.write(css)
 filewriter.write(header)
-for person in peoplelist:  
+for person in peoplelist:
     body = "<tbody>" \
              "<tr>" \
                 "<td class=\"hasTooltipleft\" rowspan=\"2\"><img src=\"%s\" width=auto height=auto style=\"max-width:200px; max-height:200px;\"><span>%s</span></td>" \
@@ -1511,18 +1512,18 @@ for person in peoplelist:
     filewriter.write(body)
 
 filewriter.write(foot)
-print "HTML file: " + htmloutputfilename + "\n"
+print("HTML file: " + htmloutputfilename + "\n")
 filewriter.close()
 
 # copy images from social mapper to output folder
 outputfoldername = "SM-Results/" + args.input.replace("\"","").replace("/","-") + "-social-mapper"
 if args.format != "imagefolder":
     os.rename('temp-targets',outputfoldername)
-    print "Image folder: " + outputfoldername + "\n"
+    print("Image folder: " + outputfoldername + "\n")
 #if not os.path.exists('temp-targets'):
 #    shutil.rmtree('temp-targets')
 
 
 #print datetime.now() - startTime
 #completiontime = datetime.now() - startTime
-print "Task Duration: " + str(datetime.now() - startTime)
+print("Task Duration: " + str(datetime.now() - startTime))

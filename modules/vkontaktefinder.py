@@ -1,3 +1,4 @@
+from __future__ import print_function
 from selenium import webdriver
 from selenium.webdriver.firefox.options import Options
 from pyvirtualdisplay import Display
@@ -27,7 +28,7 @@ class Vkontaktefinder(object):
 		self.driver.execute_script('localStorage.clear();')
 		
 		if(str(self.driver.title).encode('ascii','replace').startswith("Log in")):
-			print "\n[+] VKontakte Login Page loaded successfully [+]"
+			print("\n[+] VKontakte Login Page loaded successfully [+]")
 			vkUsername = self.driver.find_element_by_id("email")
 			vkUsername.send_keys(username)
 			vkPassword = self.driver.find_element_by_id("pass")
@@ -35,9 +36,9 @@ class Vkontaktefinder(object):
 			self.driver.find_element_by_id("login_button").click()
 			sleep(10)
 			if(str(self.driver.title).encode('ascii','replace').startswith("Log in") == False):
-				print "[+] Vkontakte Login Success [+]\n"
+				print("[+] Vkontakte Login Success [+]\n")
 			else:
-				print "[-] Vkontakte Login Failed [-]\n"
+				print("[-] Vkontakte Login Failed [-]\n")
 
 
 	def getVkontakteProfiles(self,first_name,last_name):

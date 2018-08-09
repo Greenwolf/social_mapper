@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 from selenium import webdriver
 from selenium.webdriver.firefox.options import Options
 from pyvirtualdisplay import Display
@@ -28,7 +29,7 @@ class Weibofinder(object):
 		self.driver.execute_script('localStorage.clear();')
 		
 		if(self.driver.title.encode('utf8','replace').startswith("微博")):
-			print "\n[+] Weibo Login Page loaded successfully [+]"
+			print("\n[+] Weibo Login Page loaded successfully [+]")
 			wbUsername = self.driver.find_element_by_id("loginname")
 			wbUsername.send_keys(username)
 			wbPassword = self.driver.find_element_by_name("password")
@@ -38,9 +39,9 @@ class Weibofinder(object):
 			self.driver.find_element_by_css_selector('a[node-type=\'submitBtn\']').click()
 			sleep(5)
 			if(self.driver.title.encode('utf8','replace').startswith("我的首页") == False):
-				print "[+] Weibo Login Success [+]\n"
+				print("[+] Weibo Login Success [+]\n")
 			else:
-				print "[-] Weibo Login Failed [-]\n"
+				print("[-] Weibo Login Failed [-]\n")
 
 
 	def getWeiboProfiles(self,first_name,last_name):

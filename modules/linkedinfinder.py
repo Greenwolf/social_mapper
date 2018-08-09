@@ -1,3 +1,4 @@
+from __future__ import print_function
 from selenium import webdriver
 from pyvirtualdisplay import Display
 from time import sleep
@@ -25,7 +26,7 @@ class Linkedinfinder(object):
 		self.driver.execute_script('localStorage.clear();')
 		
 		if(str(self.driver.title).encode('ascii','replace').startswith("Sign In")):
-			print "\n[+] LinkedIn Login Page loaded successfully [+]"
+			print("\n[+] LinkedIn Login Page loaded successfully [+]")
 			lnkUsername = self.driver.find_element_by_id("session_key-login")
 			lnkUsername.send_keys(username)
 			lnkPassword = self.driver.find_element_by_id("session_password-login")
@@ -33,9 +34,9 @@ class Linkedinfinder(object):
 			self.driver.find_element_by_id("btn-primary").click()
 			sleep(5)
 			if(str(self.driver.title).encode('utf8','replace') == "LinkedIn"):
-				print "[+] LinkedIn Login Success [+]\n"
+				print("[+] LinkedIn Login Success [+]\n")
 			else:
-				print "[-] LinkedIn Login Failed [-]\n"
+				print("[-] LinkedIn Login Failed [-]\n")
 
 
 	def getLinkedinProfiles(self,first_name,last_name,username,password):
@@ -48,7 +49,7 @@ class Linkedinfinder(object):
 			self.driver.get(url)
 			sleep(3)
 			if "login" in self.driver.current_url: 
-				print "LinkedIn Timeout Error, session has expired and attempts to reestablish have failed"
+				print("LinkedIn Timeout Error, session has expired and attempts to reestablish have failed")
 				return picturelist	
 		searchresponse = self.driver.page_source.encode('utf-8')
 		soupParser = BeautifulSoup(searchresponse, 'html.parser')
