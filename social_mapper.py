@@ -1,11 +1,13 @@
-from modules import facebookfinder
-from modules import twitterfinder
-from modules import instagramfinder
-from modules import linkedinfinder
-from modules import vkontaktefinder
-from modules import weibofinder
-from modules import doubanfinder
-from modules import googleplusfinder
+import sys
+sys.path.insert(0, './modules')
+import facebookfinder
+import twitterfinder
+import instagramfinder
+import linkedinfinder
+import vkontaktefinder
+import weibofinder
+import doubanfinder
+import googleplusfinder
 from shutil import copyfile
 import facebook
 import requests
