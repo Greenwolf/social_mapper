@@ -12,3 +12,4 @@ scikit-image
 scikit-learn
 ipython
 dlib
+facebook-sdk
