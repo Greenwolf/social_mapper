@@ -50,7 +50,11 @@ https://www.mozilla.org/en-GB/firefox/new/
 
 Install the Geckodriver for your operating system and make sure it's in your path, on Mac you can place it in `/usr/local/bin`, on chromeOS you can place it in `/usr/local/bin`, and on Linux you can place it in `/usr/bin`. 
 
-Download it here: https://github.com/mozilla/geckodriver/releases
+Download the latest version of Geckodriver here: 
+
+```
+https://github.com/mozilla/geckodriver/releases
+```
 
 Install the required python 2.7 libaries:
 
