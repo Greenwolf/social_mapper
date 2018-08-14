@@ -40,7 +40,7 @@ These instructions will show you the requirements for and how to use Social Mapp
 
 ### Prerequisites
 
-As this is a python based tool, it should theoretically run on Linux, chromeOS ([Developer Mode](https://www.chromium.org/chromium-os/developer-information-for-chrome-os-devices/generic)), Mac, and Windows. The main requirements are Firefox, Selenium and Geckodriver. To install the tool and set it up follow these 4 steps:
+As this is a python based tool, it should theoretically run on Linux, chromeOS ([Developer Mode](https://www.chromium.org/chromium-os/developer-information-for-chrome-os-devices/generic)) and Mac. The main requirements are Firefox, Selenium and Geckodriver. To install the tool and set it up follow these 4 steps:
 
 Install the latest version of Mozilla Firefox here:
 
