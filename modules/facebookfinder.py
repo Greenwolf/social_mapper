@@ -10,7 +10,7 @@ from bs4 import BeautifulSoup
 class Facebookfinder(object):
 
 	timeout = 10
-	
+
 	def __init__(self,showbrowser):
 		display = Display(visible=0, size=(1600, 1024))
 		display.start()
@@ -22,11 +22,11 @@ class Facebookfinder(object):
 
 
 	def doLogin(self,username,password):
-			
+
 		self.driver.get("https://www.facebook.com/login")
 		self.driver.execute_script('localStorage.clear();')
-		
-		if(str(self.driver.title).encode('ascii','replace').startswith("Log in")):
+
+		if(self.driver.title.encode('ascii','replace').endswith("Facebook")):
 			print "\n[+] Facebook Login Page loaded successfully [+]"
 			fbUsername = self.driver.find_element_by_id("email")
 			fbUsername.send_keys(username)
@@ -61,12 +61,12 @@ class Facebookfinder(object):
 		#print self.driver.title.encode('utf8','replace').split()[1]
 		#print "END TEST"
 		# checks if word after space (for when a notifaction changes the title) or the first word is not equal to the first name being searched, meaning the session has timed out
-		if(self.driver.title.encode('utf8','replace').split()[1].startswith(first_name) == False and self.driver.title.encode('utf8','replace').startswith(first_name) == False): 
+		if(self.driver.title.encode('utf8','replace').split()[1].startswith(first_name) == False and self.driver.title.encode('utf8','replace').startswith(first_name) == False):
 			print "\nFacebook session has expired attempting to reestablish..."
 			self.doLogin(username,password)
 			self.driver.get(url)
 			sleep(3)
-			if(self.driver.title.encode('utf8','replace').split()[1].startswith(first_name) == False and self.driver.title.encode('utf8','replace').startswith(first_name) == False): 
+			if(self.driver.title.encode('utf8','replace').split()[1].startswith(first_name) == False and self.driver.title.encode('utf8','replace').startswith(first_name) == False):
 				print "Facebook Timeout Error, session has expired and attempts to reestablish have failed"
 				return picturelist
 			else:
@@ -123,7 +123,7 @@ class Facebookfinder(object):
 
 
 	def getProfilePicture(self, profilelink):
-		try:	
+		try:
 			self.driver.get(profilelink)
 			sleep(3)
 			profileresponse = self.driver.page_source.encode('utf-8')
