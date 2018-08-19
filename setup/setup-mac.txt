@@ -9,3 +9,6 @@ pip install beautifulsoup4 selenium pyvirtualdisplay tabulate requests face_reco
 Need to install geckodriver for firefox instrumentation, then place it in path
 Selenium needs 3.6 or above or headless mode
 firefox needs 56.0.0 or above for headless mode
+
+Manual DLIB installation for facial recognition library errors:
+https://gist.github.com/ageitgey/629d75c1baac34dfa5ca2a1928a7aeaf
