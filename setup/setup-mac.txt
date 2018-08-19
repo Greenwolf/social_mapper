@@ -1,3 +1,4 @@
+xcode-select --install
 brew cask install xquartz
 brew install gtk+3 boost
 brew install boost-python --with-python3
