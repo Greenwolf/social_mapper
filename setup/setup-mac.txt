@@ -12,3 +12,6 @@ firefox needs 56.0.0 or above for headless mode
 
 Manual DLIB installation for facial recognition library errors:
 https://gist.github.com/ageitgey/629d75c1baac34dfa5ca2a1928a7aeaf
+
+May need to install XQuartz to solve 'Xvfb' issues:
+https://www.xquartz.org/
