@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 from selenium import webdriver
 from selenium.webdriver.firefox.options import Options
 from pyvirtualdisplay import Display
@@ -32,11 +33,11 @@ class GooglePlusfinder(object):
 		
 		
 		if(self.driver.title.encode('utf8','replace').startswith("Discover")):
-			print "\n[+] Google Login Page Part 1 loaded successfully [+]"
+			print("\n[+] Google Login Page Part 1 loaded successfully [+]")
 			self.driver.find_element_by_id("gb_70").click()
 			sleep(5)
 			if(self.driver.title.encode('utf8','replace').startswith("Sign")):
-				print "[+] Google Login Page Part 2 loaded successfully [+]"
+				print("[+] Google Login Page Part 2 loaded successfully [+]")
 				gpUsername = self.driver.find_element_by_id("identifierId")
 				gpUsername.send_keys(username)
 				try:
@@ -44,7 +45,7 @@ class GooglePlusfinder(object):
 				except:
 					pass
 				sleep(5)
-				print "[+] Google Login Page Part 3 loaded successfully [+]"
+				print("[+] Google Login Page Part 3 loaded successfully [+]")
 				#gpPassword = self.driver.find_element_by_class_name("Xb9hP")
 				gpPassword = self.driver.find_element_by_class_name("whsOnd.zHQkBf")
 				gpPassword.send_keys(password)
@@ -57,9 +58,9 @@ class GooglePlusfinder(object):
 				#self.driver.find_element_by_css_selector('a[node-type=\'submitBtn\']').click()
 				sleep(5)
 				if(self.driver.title.encode('utf8','replace').startswith("Discover")):
-					print "[+] GooglePlus Login Success [+]\n"
+					print("[+] GooglePlus Login Success [+]\n")
 				else:
-					print "[-] GooglePlus Login Failed [-]\n"
+					print("[-] GooglePlus Login Failed [-]\n")
 
 
 	def getGooglePlusProfiles(self,first_name,last_name):
@@ -78,8 +79,8 @@ class GooglePlusfinder(object):
 				profilepic = badprofilepiclinkseventytwo.replace("/s72","/s1000").replace("/s36","/s1000").replace("/s180","/s1000")
 				picturelist.append([link,profilepic,1.0])
 			except Exception as e:
-				print "Error"
-				print e
+				print("Error")
+				print(e)
 				continue
 		#print picturelist
 		unique_picturelist = [list(x) for x in set(tuple(x) for x in picturelist)]

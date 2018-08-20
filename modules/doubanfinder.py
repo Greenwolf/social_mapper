@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 from selenium import webdriver
 from selenium.webdriver.firefox.options import Options
 from pyvirtualdisplay import Display
@@ -28,7 +29,7 @@ class Doubanfinder(object):
 		self.driver.execute_script('localStorage.clear();')
 		
 		if(self.driver.title.encode('utf8','replace').startswith("登录")):
-			print "\n[+] Douban Login Page loaded successfully [+]"
+			print("\n[+] Douban Login Page loaded successfully [+]")
 			wbUsername = self.driver.find_element_by_id("email")
 			wbUsername.send_keys(username)
 			wbPassword = self.driver.find_element_by_id("password")
@@ -38,9 +39,9 @@ class Doubanfinder(object):
 			self.driver.find_element_by_css_selector('input[type=\'submit\']').click()
 			sleep(5)
 			if(self.driver.title.encode('utf8','replace').startswith("豆") == False):
-				print "[+] Douban Login Success [+]\n"
+				print("[+] Douban Login Success [+]\n")
 			else:
-				print "[-] Douban Login Failed [-]\n"
+				print("[-] Douban Login Failed [-]\n")
 
 
 	def getDoubanProfiles(self,first_name,last_name):
@@ -60,8 +61,8 @@ class Doubanfinder(object):
 				profilepic = badprofilepiclinksmall.replace("/icon/u","/icon/ul")
 				picturelist.append([link,profilepic,1.0])
 			except Exception as e:
-				print "Error"
-				print e
+				print("Error")
+				print(e)
 				continue
 		return picturelist
 		#except Exception as e:
