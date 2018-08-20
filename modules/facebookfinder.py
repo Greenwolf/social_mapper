@@ -27,7 +27,7 @@ class Facebookfinder(object):
 		self.driver.get("https://www.facebook.com/login")
 		self.driver.execute_script('localStorage.clear();')
 
-		if self.driver.title.encode('ascii','replace').endswith("Facebook"):
+		if(self.driver.title.encode('ascii','replace').endswith("Facebook")):
 			print("\n[+] Facebook Login Page loaded successfully [+]")
 			fbUsername = self.driver.find_element_by_id("email")
 			fbUsername.send_keys(username)
@@ -63,8 +63,7 @@ class Facebookfinder(object):
 		#print "END TEST"
 		# checks if word after space (for when a notifaction changes the title) or the first word is not equal to the first name being searched, meaning the session has timed out
 		
-		if(self.driver.title.encode('utf8','replace').split()[1].startswith(first_name) == False and
-       self.driver.title.encode('utf8','replace').startswith(first_name) == False):
+		if(self.driver.title.encode('utf8','replace').split()[1].startswith(first_name) == False and self.driver.title.encode('utf8','replace').startswith(first_name) == False):
 			print("\nFacebook session has expired attempting to reestablish...")
 			self.doLogin(username,password)
 			self.driver.get(url)
