@@ -21,7 +21,7 @@ Social Mapper takes a variety of input types such as:
 
 * An organisations name, searching via LinkedIn
 * A folder full of named images
-* A CSV file with names and url’s to images online”
+* A CSV file with names and url’s to images online
 
 ## Usecases (Why you want to run this)
 
