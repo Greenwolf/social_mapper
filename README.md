@@ -40,7 +40,7 @@ These instructions will show you the requirements for and how to use Social Mapp
 
 ### Prerequisites
 
-As this is a python based tool, it should theoretically run on Linux, Mac and Windows. The main requirements are Firefox, Selenium and Geckodriver. To install the tool and set it up follow these 4 steps:
+As this is a python based tool, it should theoretically run on Linux, chromeOS ([Developer Mode](https://www.chromium.org/chromium-os/developer-information-for-chrome-os-devices/generic)) and Mac. The main requirements are Firefox, Selenium and Geckodriver. To install the tool and set it up follow these 4 steps:
 
 Install the latest version of Mozilla Firefox here:
 
@@ -48,7 +48,9 @@ Install the latest version of Mozilla Firefox here:
 https://www.mozilla.org/en-GB/firefox/new/
 ```
 
-Install the Geckodriver for your operating system and make sure it's in your path, on Mac you and place it in /usr/local/bin and on Linux /usr/bin. You can down load it here:
+Install the Geckodriver for your operating system and make sure it's in your path, on Mac you can place it in `/usr/local/bin`, on chromeOS you can place it in `/usr/local/bin`, and on Linux you can place it in `/usr/bin`. 
+
+Download the latest version of Geckodriver here: 
 
 ```
 https://github.com/mozilla/geckodriver/releases
@@ -59,7 +61,7 @@ Install the required python 2.7 libaries:
 ```
 git clone https://github.com/SpiderLabs/social_mapper
 cd social_mapper/setup
-pip install -r requirements.txt
+python -m pip install --no-cache-dir -r requirements.txt
 ```
 
 Provide Social Mapper with Credentials to log into social media services:
