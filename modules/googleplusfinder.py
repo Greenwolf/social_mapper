@@ -45,7 +45,8 @@ class GooglePlusfinder(object):
 					pass
 				sleep(5)
 				print "[+] Google Login Page Part 3 loaded successfully [+]"
-				gpPassword = self.driver.find_element_by_class_name("Xb9hP")
+				#gpPassword = self.driver.find_element_by_class_name("Xb9hP")
+				gpPassword = self.driver.find_element_by_class_name("whsOnd.zHQkBf")
 				gpPassword.send_keys(password)
 				try:
 					self.driver.find_element_by_id("passwordNext").click()
