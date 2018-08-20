@@ -71,6 +71,8 @@ cd social_mapper/setup
 python -m pip install --no-cache-dir -r requirements.txt
 ```
 
+On Mac look through the setup/setup-mac.txt file to view some additional xcode, brew and xquartz installation instructions
+
 4) Provide Social Mapper with Credentials to log into social media services:
 
 ```
