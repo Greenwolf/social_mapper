@@ -116,6 +116,7 @@ Additional optional parameters can also be set to add additional customisation t
 -cid, --companyid 	: Additional parameter to add in a LinkedIn Company ID for if name searches are not picking the correct company.
 -s, --showbrowser	: Makes the Firefox browser visable so you can see the searches performed. Useful for debugging. 
 -v, --version		: Display current version
+-e, --email  : Provide a fuzzy email format like "<f><last>@domain.com" to generate additional csv files for each site with firstname,lastname,fullname,email,profileURL,photoURL. These can be fed into phishing frameworks such as GoPhish or Lucy. 
 ```
 
 ### Example Runs
@@ -132,6 +133,9 @@ python social_mapper.py -f company -i "SpiderLabs" -m accurate -a -t strict
 A large run that needs to be split over multiple sessions due to time, the first run doing LinkedIn and Facebook, with the second resuming and filling in Twitter, Google Plus and Instagram:
 python social_mapper.py -f company -i "SpiderLabs" -m accurate -li -fb
 python social_mapper.py -f socialmapper -i ./SpiderLabs-social-mapper-linkedin-facebook.html -m accurate -tw -gp -ig
+
+A quick run (~5min) without facial recognition to generate a CSV full of names,email addresses,profiles and photo links from up to 1000 people pulled out of a LinkedIn company, where the email format is known to be "firstname.lastname". 
+python social_mapper.py -f company -i "SpiderLabs" -m accurate -li -e "<first>.<last>@spiderlabs.com"
 ```
 
 ### Troubleshooting
