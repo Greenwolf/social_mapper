@@ -116,7 +116,7 @@ Additional optional parameters can also be set to add additional customisation t
 -cid, --companyid 	: Additional parameter to add in a LinkedIn Company ID for if name searches are not picking the correct company.
 -s, --showbrowser	: Makes the Firefox browser visable so you can see the searches performed. Useful for debugging. 
 -v, --version		: Display current version
--e, --email  : Provide a fuzzy email format like "<f><last>@domain.com" to generate additional csv files for each site with firstname,lastname,fullname,email,profileURL,photoURL. These can be fed into phishing frameworks such as GoPhish or Lucy. 
+-e, --email		: Provide a fuzzy email format like "<f><last>@domain.com" to generate additional csv files for each site with firstname,lastname,fullname,email,profileURL,photoURL. These can be fed into phishing frameworks such as GoPhish or Lucy. 
 ```
 
 ### Example Runs
