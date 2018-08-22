@@ -25,7 +25,7 @@ from datetime import datetime
 from bs4 import BeautifulSoup
 from django.utils import encoding
 
-
+assert sys.version_info[:2] == (2, 7), "Only Python 2.7 is currently supported."
 
 global linkedin_username
 global linkedin_password
