@@ -50,7 +50,7 @@ As this is a python based tool, it should theoretically run on Linux, chromeOS (
 https://www.mozilla.org/en-GB/firefox/new/
 ```
 
-Or for Linux (Tested with Kali) get the non ESR version of Firefox with:
+Or for Debian (but not required for Ubuntu) get the non ESR version of Firefox with:
 ```
 sudo add-apt-repository ppa:mozillateam/firefox-next && sudo apt update && sudo apt upgrade
 ```
