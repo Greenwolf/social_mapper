@@ -65,7 +65,16 @@ Download the latest version of Geckodriver here:
 https://github.com/mozilla/geckodriver/releases
 ```
 
-3) Install the required python 2.7 libaries:
+3) Install the required libaries:
+
+On Linux install the following prerequisites:
+```
+sudo apt-get install build-essential cmake
+sudo apt-get install libgtk-3-dev
+sudo apt-get install libboost-all-dev
+```
+
+On Linux & OSX finish the install with:
 
 ```
 git clone https://github.com/SpiderLabs/social_mapper
