@@ -1495,7 +1495,7 @@ filewriter.write(header)
 for person in peoplelist:
     body = "<tbody>" \
              "<tr>" \
-                "<td class=\"hasTooltipleft\" rowspan=\"2\"><img src=\"%s\" width=auto height=auto style=\"max-width:200px; max-height:200px;\"><span>%s</span></td>" \
+                "<td class=\"hasTooltipleft\" rowspan=\"2\"><img src=\".%s\" width=auto height=auto style=\"max-width:200px; max-height:200px;\"><span>%s</span></td>" \
                 "<td rowspan=\"2\">%s</td>" \
                 "<td class=\"hasTooltipcenterleft\"><a href=\"%s\"><img src=\"%s\" onerror=\"this.style.display=\'none\'\" width=auto height=auto style=\"max-width:100px; max-height:100px;\"><span>LinkedIn:<br>%s</span></a></td>" \
                 "<td class=\"hasTooltipcenterright\"><a href=\"%s\"><img src=\"%s\" onerror=\"this.style.display=\'none\'\" width=auto height=auto style=\"max-width:100px; max-height:100px;\"><span>Facebook:<br>%s</span></a></td>" \
