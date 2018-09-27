@@ -41,7 +41,7 @@ class Instagramfinder(object):
 			#self.driver.find_element_by_class_name("submit").click()
 			#self.driver.find_element_by_css_selector("button.submit.btn.primary-btn").click()
 			sleep(5)
-			if(str(self.driver.title.encode('utf8','replace')).startswith("Instagram") == True):
+			if(self.driver.title.encode('utf8','replace').startswith("Instagram") == True):
 				print("[+] Instagram Login Success [+]\n")
 			else:
 				print("[-] Instagram Login Failed [-]\n")
