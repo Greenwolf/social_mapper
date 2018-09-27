@@ -27,7 +27,7 @@ class Twitterfinder(object):
 		self.driver.get("https://twitter.com/login")
 		self.driver.execute_script('localStorage.clear();')
 		
-		if(str(self.driver.title).encode('ascii','replace').startswith("Login on")):
+		if(self.driver.title.encode('ascii','replace').startswith("Login on")):
 			print("\n[+] Twitter Login Page loaded successfully [+]")
 			twitterUsername = self.driver.find_element_by_class_name("js-username-field")
 			twitterUsername.send_keys(username)
@@ -35,7 +35,7 @@ class Twitterfinder(object):
 			twitterPassword.send_keys(password)
 			twitterPassword.send_keys(Keys.ENTER)
 			sleep(5)
-			if(str(self.driver.title) == "Twitter"):
+			if(self.driver.title == "Twitter"):
 				print("[+] Twitter Login Success [+]\n")
 			else:
 				print("[-] Twitter Login Failed [-]\n")
