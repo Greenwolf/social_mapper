@@ -27,7 +27,7 @@ class Vkontaktefinder(object):
 		self.driver.get("https://www.vk.com/login")
 		self.driver.execute_script('localStorage.clear();')
 		
-		if(str(self.driver.title).encode('ascii','replace').startswith("Log in")):
+		if(self.driver.title.encode('ascii','replace').startswith("Log in"):
 			print("\n[+] VKontakte Login Page loaded successfully [+]")
 			vkUsername = self.driver.find_element_by_id("email")
 			vkUsername.send_keys(username)
@@ -35,7 +35,7 @@ class Vkontaktefinder(object):
 			vkPassword.send_keys(password)
 			self.driver.find_element_by_id("login_button").click()
 			sleep(10)
-			if(str(self.driver.title).encode('ascii','replace').startswith("Log in") == False):
+			if(self.driver.title.encode('ascii','replace').startswith("Log in") == False):
 				print("[+] Vkontakte Login Success [+]\n")
 			else:
 				print("[-] Vkontakte Login Failed [-]\n")
