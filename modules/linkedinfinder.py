@@ -25,7 +25,7 @@ class Linkedinfinder(object):
 		self.driver.get("https://www.linkedin.com/uas/login")
 		self.driver.execute_script('localStorage.clear();')
 		
-		if(str(self.driver.title).encode('ascii','replace').startswith("Sign In")):
+		if(self.driver.title.encode('ascii','replace').startswith("Sign In")):
 			print("\n[+] LinkedIn Login Page loaded successfully [+]")
 			lnkUsername = self.driver.find_element_by_id("session_key-login")
 			lnkUsername.send_keys(username)
@@ -33,7 +33,7 @@ class Linkedinfinder(object):
 			lnkPassword.send_keys(password)
 			self.driver.find_element_by_id("btn-primary").click()
 			sleep(5)
-			if(str(self.driver.title).encode('utf8','replace') == "LinkedIn"):
+			if(self.driver.title.encode('utf8','replace') == "LinkedIn"):
 				print("[+] LinkedIn Login Success [+]\n")
 			else:
 				print("[-] LinkedIn Login Failed [-]\n")
