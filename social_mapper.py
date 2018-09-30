@@ -1492,24 +1492,43 @@ header = """<center><table id=\"employees\">
              """
 filewriter.write(css)
 filewriter.write(header)
-for person in peoplelist:
-    body = "<tbody>" \
-             "<tr>" \
-                "<td class=\"hasTooltipleft\" rowspan=\"2\"><img src=\"%s\" width=auto height=auto style=\"max-width:200px; max-height:200px;\"><span>%s</span></td>" \
-                "<td rowspan=\"2\">%s</td>" \
-                "<td class=\"hasTooltipcenterleft\"><a href=\"%s\"><img src=\"%s\" onerror=\"this.style.display=\'none\'\" width=auto height=auto style=\"max-width:100px; max-height:100px;\"><span>LinkedIn:<br>%s</span></a></td>" \
-                "<td class=\"hasTooltipcenterright\"><a href=\"%s\"><img src=\"%s\" onerror=\"this.style.display=\'none\'\" width=auto height=auto style=\"max-width:100px; max-height:100px;\"><span>Facebook:<br>%s</span></a></td>" \
-                "<td class=\"hasTooltipright\"><a href=\"%s\"><img src=\"%s\" onerror=\"this.style.display=\'none\'\" width=auto height=auto style=\"max-width:100px; max-height:100px;\"><span>Twitter:<br>%s</span></a></td>" \
-                "<td class=\"hasTooltipfarright\"><a href=\"%s\"><img src=\"%s\" onerror=\"this.style.display=\'none\'\" width=auto height=auto style=\"max-width:100px; max-height:100px;\"><span>Instagram:<br>%s</span></a></td>" \
-            "</tr>" \
-            "<tr>" \
-                "<td class=\"hasTooltipcenterleft\"><a href=\"%s\"><img src=\"%s\" onerror=\"this.style.display=\'none\'\" width=auto height=auto style=\"max-width:100px; max-height:100px;\"><span>GooglePlus:<br>%s</span></a></td>" \
-                "<td class=\"hasTooltipcenterright\"><a href=\"%s\"><img src=\"%s\" onerror=\"this.style.display=\'none\'\" width=auto height=auto style=\"max-width:100px; max-height:100px;\"><span>VKontakte:<br>%s</span></a></td>" \
-                "<td class=\"hasTooltipright\"><a href=\"%s\"><img src=\"%s\" onerror=\"this.style.display=\'none\'\" width=auto height=auto style=\"max-width:100px; max-height:100px;\"><span>Weibo:<br>%s</span></a></td>" \
-                "<td class=\"hasTooltipfarright\"><a href=\"%s\"><img src=\"%s\" onerror=\"this.style.display=\'none\'\" width=auto height=auto style=\"max-width:100px; max-height:100px;\"><span>Douban:<br>%s</span></a></td>" \
-            "</tr>" \
-            "</tbody>" % (person.person_imagelink, person.person_imagelink, person.full_name, person.linkedin, person.linkedinimage, person.linkedin, person.facebook, person.facebookcdnimage, person.facebook, person.twitter, person.twitterimage, person.twitter, person.instagram, person.instagramimage, person.instagram, person.googleplus, person.googleplusimage, person.googleplus, person.vk, person.vkimage, person.vk, person.weibo, person.weiboimage, person.weibo, person.douban, person.doubanimage, person.douban )
-    filewriter.write(body)
+for person in peoplelist:  
+    if person.person_imagelink.find("http") == -1:
+        body = "<tbody>" \
+                 "<tr>" \
+                    "<td class=\"hasTooltipleft\" rowspan=\"2\"><img src=\".%s\" width=auto height=auto style=\"max-width:200px; max-height:200px;\"><span>%s</span></td>" \
+                    "<td rowspan=\"2\">%s</td>" \
+                    "<td class=\"hasTooltipcenterleft\"><a href=\"%s\"><img src=\"%s\" onerror=\"this.style.display=\'none\'\" width=auto height=auto style=\"max-width:100px; max-height:100px;\"><span>LinkedIn:<br>%s</span></a></td>" \
+                    "<td class=\"hasTooltipcenterright\"><a href=\"%s\"><img src=\"%s\" onerror=\"this.style.display=\'none\'\" width=auto height=auto style=\"max-width:100px; max-height:100px;\"><span>Facebook:<br>%s</span></a></td>" \
+                    "<td class=\"hasTooltipright\"><a href=\"%s\"><img src=\"%s\" onerror=\"this.style.display=\'none\'\" width=auto height=auto style=\"max-width:100px; max-height:100px;\"><span>Twitter:<br>%s</span></a></td>" \
+                    "<td class=\"hasTooltipfarright\"><a href=\"%s\"><img src=\"%s\" onerror=\"this.style.display=\'none\'\" width=auto height=auto style=\"max-width:100px; max-height:100px;\"><span>Instagram:<br>%s</span></a></td>" \
+                "</tr>" \
+                "<tr>" \
+                    "<td class=\"hasTooltipcenterleft\"><a href=\"%s\"><img src=\"%s\" onerror=\"this.style.display=\'none\'\" width=auto height=auto style=\"max-width:100px; max-height:100px;\"><span>GooglePlus:<br>%s</span></a></td>" \
+                    "<td class=\"hasTooltipcenterright\"><a href=\"%s\"><img src=\"%s\" onerror=\"this.style.display=\'none\'\" width=auto height=auto style=\"max-width:100px; max-height:100px;\"><span>VKontakte:<br>%s</span></a></td>" \
+                    "<td class=\"hasTooltipright\"><a href=\"%s\"><img src=\"%s\" onerror=\"this.style.display=\'none\'\" width=auto height=auto style=\"max-width:100px; max-height:100px;\"><span>Weibo:<br>%s</span></a></td>" \
+                    "<td class=\"hasTooltipfarright\"><a href=\"%s\"><img src=\"%s\" onerror=\"this.style.display=\'none\'\" width=auto height=auto style=\"max-width:100px; max-height:100px;\"><span>Douban:<br>%s</span></a></td>" \
+                "</tr>" \
+                "</tbody>" % (person.person_imagelink, person.person_imagelink, person.full_name, person.linkedin, person.linkedinimage, person.linkedin, person.facebook, person.facebookcdnimage, person.facebook, person.twitter, person.twitterimage, person.twitter, person.instagram, person.instagramimage, person.instagram, person.googleplus, person.googleplusimage, person.googleplus, person.vk, person.vkimage, person.vk, person.weibo, person.weiboimage, person.weibo, person.douban, person.doubanimage, person.douban )
+        filewriter.write(body)
+    else:
+        body = "<tbody>" \
+                 "<tr>" \
+                    "<td class=\"hasTooltipleft\" rowspan=\"2\"><img src=\"%s\" width=auto height=auto style=\"max-width:200px; max-height:200px;\"><span>%s</span></td>" \
+                    "<td rowspan=\"2\">%s</td>" \
+                    "<td class=\"hasTooltipcenterleft\"><a href=\"%s\"><img src=\"%s\" onerror=\"this.style.display=\'none\'\" width=auto height=auto style=\"max-width:100px; max-height:100px;\"><span>LinkedIn:<br>%s</span></a></td>" \
+                    "<td class=\"hasTooltipcenterright\"><a href=\"%s\"><img src=\"%s\" onerror=\"this.style.display=\'none\'\" width=auto height=auto style=\"max-width:100px; max-height:100px;\"><span>Facebook:<br>%s</span></a></td>" \
+                    "<td class=\"hasTooltipright\"><a href=\"%s\"><img src=\"%s\" onerror=\"this.style.display=\'none\'\" width=auto height=auto style=\"max-width:100px; max-height:100px;\"><span>Twitter:<br>%s</span></a></td>" \
+                    "<td class=\"hasTooltipfarright\"><a href=\"%s\"><img src=\"%s\" onerror=\"this.style.display=\'none\'\" width=auto height=auto style=\"max-width:100px; max-height:100px;\"><span>Instagram:<br>%s</span></a></td>" \
+                "</tr>" \
+                "<tr>" \
+                    "<td class=\"hasTooltipcenterleft\"><a href=\"%s\"><img src=\"%s\" onerror=\"this.style.display=\'none\'\" width=auto height=auto style=\"max-width:100px; max-height:100px;\"><span>GooglePlus:<br>%s</span></a></td>" \
+                    "<td class=\"hasTooltipcenterright\"><a href=\"%s\"><img src=\"%s\" onerror=\"this.style.display=\'none\'\" width=auto height=auto style=\"max-width:100px; max-height:100px;\"><span>VKontakte:<br>%s</span></a></td>" \
+                    "<td class=\"hasTooltipright\"><a href=\"%s\"><img src=\"%s\" onerror=\"this.style.display=\'none\'\" width=auto height=auto style=\"max-width:100px; max-height:100px;\"><span>Weibo:<br>%s</span></a></td>" \
+                    "<td class=\"hasTooltipfarright\"><a href=\"%s\"><img src=\"%s\" onerror=\"this.style.display=\'none\'\" width=auto height=auto style=\"max-width:100px; max-height:100px;\"><span>Douban:<br>%s</span></a></td>" \
+                "</tr>" \
+                "</tbody>" % (person.person_imagelink, person.person_imagelink, person.full_name, person.linkedin, person.linkedinimage, person.linkedin, person.facebook, person.facebookcdnimage, person.facebook, person.twitter, person.twitterimage, person.twitter, person.instagram, person.instagramimage, person.instagram, person.googleplus, person.googleplusimage, person.googleplus, person.vk, person.vkimage, person.vk, person.weibo, person.weiboimage, person.weibo, person.douban, person.doubanimage, person.douban )
+        filewriter.write(body)
 
 filewriter.write(foot)
 print("HTML file: " + htmloutputfilename + "\n")
