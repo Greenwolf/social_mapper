@@ -1,6 +1,7 @@
 # Social Mapper
 ![alt text](https://img.shields.io/badge/Python-2.7_only-blue.svg "Python 2.7 only")
 ![alt text](https://img.shields.io/travis/SpiderLabs/social_mapper.svg "Travis build status")
+![logo---100-px.png](https://github.com/candyskull920/social_mapper/blob/master/docs/reducido-200-px.png?raw=true)
 
 A Social Media Mapping Tool that correlates profiles via facial recognition by Jacob Wilkin(Greenwolf)
 
