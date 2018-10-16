@@ -24,6 +24,9 @@ class Linkedinfinder(object):
 			
 		self.driver.get("https://www.linkedin.com/uas/login")
 		self.driver.execute_script('localStorage.clear();')
+
+		#agent = self.driver.execute_script("return navigator.userAgent")
+		#print("User Agent: " + agent)
 		
 		if(self.driver.title.encode('ascii','replace').startswith("Sign In")):
 			print("\n[+] LinkedIn Login Page loaded successfully [+]")
@@ -33,17 +36,18 @@ class Linkedinfinder(object):
 			lnkPassword.send_keys(password)
 			self.driver.find_element_by_id("btn-primary").click()
 			sleep(5)
-			if(self.driver.title.encode('utf8','replace') == "LinkedIn"):
-				print("[+] LinkedIn Login Success [+]\n")
-			else:
+			if(self.driver.title.encode('utf8','replace') == "Sign In to LinkedIn"):
 				print("[-] LinkedIn Login Failed [-]\n")
+			else:
+				print("[+] LinkedIn Login Success [+]\n")
 
 
 	def getLinkedinProfiles(self,first_name,last_name,username,password):
+		
+		picturelist = []
 		url = "https://www.linkedin.com/search/results/people/?keywords=" + first_name + "%20" + last_name + "&origin=SWITCH_SEARCH_VERTICAL"
 		self.driver.get(url)
 		sleep(3)
-		picturelist = []
 		if "login" in self.driver.current_url: 
 			self.doLogin(username,password)
 			self.driver.get(url)
@@ -53,26 +57,67 @@ class Linkedinfinder(object):
 				return picturelist	
 		searchresponse = self.driver.page_source.encode('utf-8')
 		soupParser = BeautifulSoup(searchresponse, 'html.parser')
-		picturelist = []
+		
+
+		#LinkedIn has implemented some code to say no results seemly at random, need code to research if this result pops.
+		## Anti Scraping Bypass (Try 3 times before skipping):
+		#If there are no results do check
+		if(len(soupParser.find_all('div', {'class': 'search-result__image-wrapper'})) == 0):
+			#If there is the no results page do an additional try
+			if(len(soupParser.find_all('div', {'class': 'search-no-results__image-container'}))!=0):
+				#print("First Check")
+				sleep(30)
+				self.driver.get(url)
+				if "login" in self.driver.current_url: 
+					self.doLogin(username,password)
+					self.driver.get(url)
+					sleep(3)
+					if "login" in self.driver.current_url: 
+						print("LinkedIn Timeout Error, session has expired and attempts to reestablish have failed")
+						return picturelist	
+				searchresponse = self.driver.page_source.encode('utf-8')
+				soupParser = BeautifulSoup(searchresponse, 'html.parser')
+				if(len(soupParser.find_all('div', {'class': 'search-result__image-wrapper'})) == 0):
+					if(len(soupParser.find_all('div', {'class': 'search-no-results__image-container'}))!=0):
+						#print("Second Check")
+						sleep(5)
+						self.driver.get(url)
+						if "login" in self.driver.current_url: 
+							self.doLogin(username,password)
+							self.driver.get(url)
+							sleep(3)
+							if "login" in self.driver.current_url: 
+								print("LinkedIn Timeout Error, session has expired and attempts to reestablish have failed")
+								return picturelist	
+						searchresponse = self.driver.page_source.encode('utf-8')
+						soupParser = BeautifulSoup(searchresponse, 'html.parser')
+		#print("TEST\n\n\n\n\n\n")
+		#print(len(soupParser.find_all('div', {'class': 'search-result__image-wrapper'})))
+		#print(len(soupParser.find_all('div', {'class': 'search-no-results__image-container'})))
 		for element in soupParser.find_all('div', {'class': 'search-result__image-wrapper'}):
+			#print(element)
 			try:
 				# check for ghost-person tag in img class to skip headless profiles
 				#ghostcheck = element.find('div')['class'] - OLD
-				ghostcheck = element.find_all('div')[1]['class']
-				#print ghostcheck
-				if "ghost-person" not in ghostcheck:
-					link = element.find('a')['href']
 
-					#profilepic = element.find('img')['src'] - OLD
-					#profilepicreplaced = profilepic.replace("/mpr/mpr/shrink_100_100/","/media/") - OLD
-					profilepic = element.find_all('div')[1]['style']
-					profilepicreplaced = profilepic.replace("background-image: url(\"","").replace("\");","")
-					picturelist.append(["https://linkedin.com" + link,profilepicreplaced,1.0])
+				#ghostcheck = element.find_all('div')[1]['class']
+
+				link = element.find('a')['href']
+				#print(link)
+				#profilepic = element.find('img')['src'] - OLD
+				#profilepicreplaced = profilepic.replace("/mpr/mpr/shrink_100_100/","/media/") - OLD
+				profilepic = element.find_all('div')[3]['style']
+				profilepicreplaced = profilepic.replace("background-image: url(\"","").replace("\");","")
+				#print(profilepicreplaced)
+				picturelist.append(["https://linkedin.com" + link,profilepicreplaced,1.0])
+				#print("append successs")
 			#except Exception as e:
+				#print("Error")
+				#print(e)
+				#continue			
 			except:
-				#print "Error"
-				#print e
 				continue
+		#print(picturelist)
 		return picturelist
 
 	def testdeletecookies(self):
