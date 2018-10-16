@@ -187,7 +187,7 @@ GNU General Public License for more details.
 
 Youtube Trailer:
 
-[![Social Mapper Trailer](https://img.youtube.com/vi/wVN-7R3B_xs/0.jpg)](https://www.youtube.com/watch?v=wVN-7R3B_xs&feature=youtu.be "Social Mapper Trailer")
+[![Social Mapper Trailer](https://imgur.com/s6rPhgK)](https://www.youtube.com/watch?v=wVN-7R3B_xs&feature=youtu.be "Social Mapper Trailer")
 
 
 
