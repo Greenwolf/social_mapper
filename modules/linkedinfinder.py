@@ -30,9 +30,15 @@ class Linkedinfinder(object):
 		
 		if(self.driver.title.encode('ascii','replace').startswith("Sign In")):
 			print("\n[+] LinkedIn Login Page loaded successfully [+]")
-			lnkUsername = self.driver.find_element_by_id("session_key-login")
+			try:
+				lnkUsername = self.driver.find_element_by_id("session_key-login")
+			except:
+				lnkUsername = self.driver.find_element_by_id("username")
 			lnkUsername.send_keys(username)
-			lnkPassword = self.driver.find_element_by_id("session_password-login")
+			try:
+				lnkPassword = self.driver.find_element_by_id("session_password-login")
+			except:
+				lnkPassword = self.driver.find_element_by_id("password")
 			lnkPassword.send_keys(password)
 			self.driver.find_element_by_id("btn-primary").click()
 			sleep(5)
