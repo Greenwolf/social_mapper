@@ -40,7 +40,10 @@ class Linkedinfinder(object):
 			except:
 				lnkPassword = self.driver.find_element_by_id("password")
 			lnkPassword.send_keys(password)
-			self.driver.find_element_by_id("btn-primary").click()
+			try:
+				self.driver.find_element_by_id("btn-primary").click()
+			except:
+				self.driver.find_element_by_class_name("btn__primary--large").click()
 			sleep(5)
 			if(self.driver.title.encode('utf8','replace') == "Sign In to LinkedIn"):
 				print("[-] LinkedIn Login Failed [-]\n")
