@@ -43,6 +43,12 @@ class Instagramfinder(object):
 			sleep(5)
 			if(self.driver.title.encode('utf8','replace').startswith("Instagram") == True):
 				print("[+] Instagram Login Success [+]\n")
+				try:
+					#print("Closing \"Turn On Notifications\" message")
+					self.driver.find_element_by_class_name("aOOlW").click()
+				except:
+					#print("Closing Message Failed or did not exist")
+					pass
 			else:
 				print("[-] Instagram Login Failed [-]\n")
 
