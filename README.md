@@ -180,7 +180,7 @@ GNU General Public License for more details.
 ## Acknowledgments
 
 * Thanks to Vincent Yiu & MDSEC for their great LinkedInt tool which inspired me to add the search by LinkedIn company name input method. 
-* Thanks to Ewpratten, cclauss and TADT1909 for their pull request contributions to the project. 
+* Thanks to [ewpratten](https://github.com/ewpratten), [cclauss](https://github.com/cclauss) and [TADT1909](https://github.com/tadt1909) for their pull request contributions to the project. 
 * Thanks to `[Your Name Could Be Here, Come Help Out!]` for contributions to the project. 
 
 ![Social Mapper Logo](docs/logo.png?raw=true "Social Mapper Logo")
