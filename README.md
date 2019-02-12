@@ -90,6 +90,8 @@ On Mac look through the setup/setup-mac.txt file to view some additional xcode, 
 Open social_mapper.py and enter social media credentials into global variables at the top of the file
 ```
 
+5) For Facebook, make sure the language of the account which you have provided credentials for is set to 'English (US)' for the duration of the run.
+
 ## Using Social Mapper
 
 Social Mapper is run from the command line using a mix of required and optional parameters. You can specify options such as input type and which sites to check alongside a number of other parameters which affect speed and accuracy. 
