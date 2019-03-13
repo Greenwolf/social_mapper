@@ -77,7 +77,7 @@ sudo apt-get install libboost-all-dev
 On Linux & OSX finish the install with:
 
 ```
-git clone https://github.com/SpiderLabs/social_mapper
+git clone https://github.com/Greenwolf/social_mapper
 cd social_mapper/setup
 python -m pip install --no-cache-dir -r requirements.txt
 ```
