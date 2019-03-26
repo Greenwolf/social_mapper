@@ -22,3 +22,6 @@ python3 setup.py install
 
 May need to install XQuartz to solve 'Xvfb' issues:
 https://www.xquartz.org/
+
+If you run into problems, try using sudo to install with pip + for running python.
+If you get selenium problems when running as sudo, try 'sudo su' to change to the root user, then run as root. 
