@@ -163,6 +163,11 @@ For a guide to loading your Social Mapper results into Maltego, check out the do
 
 * **Jacob Wilkin** - *Research and Development* - [Trustwave SpiderLabs](https://github.com/SpiderLabs)
 
+## Donation
+If this tool has been useful for you, feel free to thank me by buying me a coffee :)
+
+[![Coffee](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://www.buymeacoffee.com/Greenwolf)
+
 ## License
 
 Social Mapper
