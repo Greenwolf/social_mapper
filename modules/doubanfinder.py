@@ -25,7 +25,7 @@ class Doubanfinder(object):
 
 	def doLogin(self,username,password):
 			
-		self.driver.get("https://www.douban.com/login")
+		self.driver.get("https://www.douban.com")
 		self.driver.execute_script('localStorage.clear();')
 		
 		if(self.driver.title.encode('utf8','replace').startswith("登录")):
