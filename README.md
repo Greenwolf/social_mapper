@@ -2,9 +2,9 @@
 ![alt text](https://img.shields.io/badge/Python-2.7_only-blue.svg "Python 2.7 only")
 ![alt text](https://img.shields.io/travis/SpiderLabs/social_mapper.svg "Travis build status")
 
-A Social Media Mapping Tool that correlates profiles via facial recognition by Jacob Wilkin(Greenwolf)
+A Social Media Mapping Tool that correlates profiles via facial recognition by Jacob Wilkin ([Greenwolf](https://github.com/Greenwolf)).
 
-Social Mapper is a Open Source Intelligence Tool that uses facial recognition to correlate social media profiles across different sites on a large scale. It takes an automated approach to searching popular social media sites for targets names and pictures to accurately detect and group a person’s presence, outputting the results into report that a human operator can quickly review.
+Social Mapper is an Open Source Intelligence Tool that uses facial recognition to correlate social media profiles across different sites on a large scale. It takes an automated approach to search popular social media sites for targets names and pictures to accurately detect and group a person’s presence, outputting the results into report that a human operator can quickly review.
 
 Social Mapper has a variety of uses in the security industry, for example the automated gathering of large amounts of social media profiles for use on targeted phishing campaigns. Facial recognition aids this process by removing false positives in the search results, so that reviewing this data is quicker for a human operator.
 
@@ -13,7 +13,7 @@ Social Mapper supports the following social media platforms:
 * LinkedIn
 * Facebook
 * Twitter
-* GooglePlus
+* Google Plus
 * Instagram
 * VKontakte
 * Weibo
@@ -23,7 +23,7 @@ Social Mapper takes a variety of input types such as:
 
 * An organisations name, searching via LinkedIn
 * A folder full of named images
-* A CSV file with names and url’s to images online
+* A CSV file with names and URL’s to images online
 
 ## Usecases (Why you want to run this)
 
@@ -31,9 +31,9 @@ Social Mapper is primarily aimed at Penetration Testers and Red Teamers, who wil
 
 (Note: Social Mapper does not perform these attacks, it gathers you the data you need to perform them on a mass scale.)
 
-* Create fake social media profiles to 'friend' the targets and send them links or malware. Recent statistics show social media users are more than twice as likely to click on links and open documents compared to those delivered via email. 
+* Create fake social media profiles to 'friend' the targets and send them links or malware. Recent statistics show social media users are more than twice as likely to click on links and open documents compared to those delivered via email.
 * Trick users into disclosing their emails and phone numbers with vouchers and offers to make the pivot into phishing, vishing or smishing.
-* Create custom phishing campaigns for each social media site, knowing that the target has an account. Make these more realistic by including their profile picture in the email. Capture the passwords for password reuse. 
+* Create custom phishing campaigns for each social media site, knowing that the target has an account. Make these more realistic by including their profile picture in the email. Capture the passwords for password reuse.
 * View target photos looking for employee access card badges and familiarise yourself with building interiors.
 
 ## Getting Started
@@ -42,30 +42,30 @@ These instructions will show you the requirements for and how to use Social Mapp
 
 ### Prerequisites
 
-As this is a python based tool, it should theoretically run on Linux, chromeOS ([Developer Mode](https://www.chromium.org/chromium-os/developer-information-for-chrome-os-devices/generic)) and Mac. The main requirements are Firefox, Selenium and Geckodriver. To install the tool and set it up follow these 4 steps:
+As this is a python based tool, it should theoretically run on Linux, ChromeOS ([Developer Mode](https://www.chromium.org/chromium-os/developer-information-for-chrome-os-devices/generic)) and macOS. The main requirements are Firefox, Selenium and Geckodriver. To install the tool and set it up follow these 4 steps:
 
-1) Install the latest version of Mozilla Firefox for OSX here:
+1) Install the latest version of Mozilla Firefox for macOS here:
 
 ```
 https://www.mozilla.org/en-GB/firefox/new/
 ```
 
-Or for Debian/Kali (but not required for Ubuntu) get the non ESR version of Firefox with:
+Or for Debian/Kali (but not required for Ubuntu) get the non-ESR version of Firefox with:
 ```
 sudo add-apt-repository ppa:mozillateam/firefox-next && sudo apt update && sudo apt upgrade
 ```
 
-Make sure the new version of Firefox is in the path. If not manually add it. 
+Make sure the new version of Firefox is in the path. If not manually add it.
 
-2) Install the Geckodriver for your operating system and make sure it's in your path, on Mac you can place it in `/usr/local/bin`, on chromeOS you can place it in `/usr/local/bin`, and on Linux you can place it in `/usr/bin`. 
+2) Install the Geckodriver for your operating system and make sure it's in your path, on Mac you can place it in `/usr/local/bin`, on ChromeOS you can place it in `/usr/local/bin`, and on Linux you can place it in `/usr/bin`.
 
-Download the latest version of Geckodriver here: 
+Download the latest version of Geckodriver here:
 
 ```
 https://github.com/mozilla/geckodriver/releases
 ```
 
-3) Install the required libaries:
+3) Install the required libraries:
 
 On Linux install the following prerequisites:
 ```
@@ -74,7 +74,7 @@ sudo apt-get install libgtk-3-dev
 sudo apt-get install libboost-all-dev
 ```
 
-On Linux & OSX finish the install with:
+On Linux & macOS finish the install with:
 
 ```
 git clone https://github.com/Greenwolf/social_mapper
@@ -82,9 +82,9 @@ cd social_mapper/setup
 python -m pip install --no-cache-dir -r requirements.txt
 ```
 
-On Mac look through the setup/setup-mac.txt file to view some additional xcode, brew and xquartz installation instructions
+On Mac look through the setup/setup-mac.txt file to view some additional xcode, brew and xquartz installation instructions.
 
-4) Provide Social Mapper with Credentials to log into social media services:
+4) Provide Social Mapper with credentials to log into social media services:
 
 ```
 Open social_mapper.py and enter social media credentials into global variables at the top of the file
@@ -94,7 +94,7 @@ Open social_mapper.py and enter social media credentials into global variables a
 
 ## Using Social Mapper
 
-Social Mapper is run from the command line using a mix of required and optional parameters. You can specify options such as input type and which sites to check alongside a number of other parameters which affect speed and accuracy. 
+Social Mapper is run from the command-line using a mix of required and optional parameters. You can specify options such as input type and which sites to check alongside a number of other parameters which affect speed and accuracy.
 
 ### Required Parameters
 
@@ -102,34 +102,34 @@ To start up the tool 4 parameters must be provided, an input format, the input f
 
 ```
 -f, --format	: Specify if the -i, --input is a 'name', 'csv', 'imagefolder' or 'socialmapper' resume file
--i, --input 	: The company name, a csv file, imagefolder or social mapper html file to feed into social mapper
--m, --mode		: Fast or Accurate allows you to choose to skip potential targets after a first likely match is found, in some cases potentially speeding up the program x20
+-i, --input		: The company name, a CSV file, imagefolder or Social Mapper html file to feed into Social Mapper
+-m, --mode		: 'fast' or 'accurate' allows you to choose to skip potential targets after a first likely match is found, in some cases potentially speeding up the program x20
 ```
 
 Additionally at least one social media site to check must be selected by including one or more of the following:
 
 ```
--a, --all 			: Selects all of the options below and checks every site that social mapper has credentials for
--fb, --facebook 	: Check Facebook
--tw, --twitter 		: Check Twitter
--ig, --instagram 	: Check Instagram
--li, --linkedin 	: Check LinkedIn
--gp, --googleplus 	: Check GooglePlus
--vk, --vkontakte 	: Check VKontakte
--wb, --weibo 		: Check Weibo
--db, --douban 		: Check Douban
+-a, --all			: Selects all of the options below and checks every site that Social Mapper has credentials for
+-fb, --facebook		: Check Facebook
+-tw, --twitter		: Check Twitter
+-ig, --instagram	: Check Instagram
+-li, --linkedin		: Check LinkedIn
+-gp, --googleplus	: Check Google Plus
+-vk, --vkontakte	: Check VKontakte
+-wb, --weibo		: Check Weibo
+-db, --douban		: Check Douban
 ```
 
 ### Optional Parameters
 
-Additional optional parameters can also be set to add additional customisation to the way social mapper runs:
+Additional optional parameters can also be set to add additional customisation to the way Social Mapper runs:
 
 ```
--t, --threshold 	: Customises the faceial recognition threshold for matches, this can be seen as the match accuracy. Default is 'standard', but can be set to loose, standard, strict or superstrict. For example loose will find more matches, but some may be incorrect. While strict may find less matches but also contain less false positives in the final report. 
--cid, --companyid 	: Additional parameter to add in a LinkedIn Company ID for if name searches are not picking the correct company.
--s, --showbrowser	: Makes the Firefox browser visable so you can see the searches performed. Useful for debugging. 
--v, --version		: Display current version
--e, --email		: Provide a fuzzy email format like "<f><last>@domain.com" to generate additional csv files for each site with firstname,lastname,fullname,email,profileURL,photoURL. These can be fed into phishing frameworks such as GoPhish or Lucy. 
+-t, --threshold		: Customises the facial recognition threshold for matches, this can be seen as the match accuracy. Default is 'standard', but can be set to 'loose', 'standard', 'strict' or 'superstrict'. For example 'loose' will find more matches, but some may be incorrect. While 'strict' may find less matches but also contain less false positives in the final report.
+-cid, --companyid	: Additional parameter to add in a LinkedIn Company ID for if name searches are not picking the correct company.
+-s, --showbrowser	: Makes the Firefox browser visible so you can see the searches performed. Useful for debugging.
+-v, --version		: Display current version.
+-e, --email			: Provide a fuzzy email format like "<f><last>@domain.com" to generate additional CSV files for each site with firstname, lastname, fullname, email, profileURL, photoURL. These can be fed into phishing frameworks such as Gophish or Lucy.
 ```
 
 ### Example Runs
@@ -137,27 +137,27 @@ Additional optional parameters can also be set to add additional customisation t
 Here are a couple of example runs to get started for differing use cases:
 
 ```
-A quick run for facebook and twitter on some targets you have in an imagefolder, that you plan to manually review and don't mind some false positives:
+A quick run for Facebook and Twitter on some targets you have in an imagefolder, that you plan to manually review and don't mind some false positives:
 python social_mapper.py -f imagefolder -i ./mytargets -m fast -fb -tw
 
-A exhaustive run on a large company where false positives must be kept to a minimum:
+An exhaustive run on a large company where false positives must be kept to a minimum:
 python social_mapper.py -f company -i "SpiderLabs" -m accurate -a -t strict
 
 A large run that needs to be split over multiple sessions due to time, the first run doing LinkedIn and Facebook, with the second resuming and filling in Twitter, Google Plus and Instagram:
 python social_mapper.py -f company -i "SpiderLabs" -m accurate -li -fb
 python social_mapper.py -f socialmapper -i ./SpiderLabs-social-mapper-linkedin-facebook.html -m accurate -tw -gp -ig
 
-A quick run (~5min) without facial recognition to generate a CSV full of names,email addresses,profiles and photo links from up to 1000 people pulled out of a LinkedIn company, where the email format is known to be "firstname.lastname". 
+A quick run (~5min) without facial recognition to generate a CSV full of names, email addresses, profiles and photo links from up to 1000 people pulled out of a LinkedIn company, where the email format is known to be "firstname.lastname":
 python social_mapper.py -f company -i "SpiderLabs" -m accurate -li -e "<first>.<last>@spiderlabs.com"
 ```
 
 ### Troubleshooting
 
-Social Media sites often change their page formats and class names, if Social Mapper isn't working for you on a specific site, check out the docs section for troubleshooting advice on how to fix it. Please feel free to submit a pull request with your fixes.
+Social Media sites often change their page formats and class names, if Social Mapper isn't working for you on a specific site, check out the [docs](docs/TroubleShooting_Social_Mapper) section for troubleshooting advice on how to fix it. Please feel free to submit a pull request with your fixes.
 
 ### Maltego
 
-For a guide to loading your Social Mapper results into Maltego, check out the docs section. 
+For a guide to loading your Social Mapper results into Maltego, check out the [docs](docs/Maltego_Import_Guide) section.
 
 ## Authors
 
@@ -173,7 +173,7 @@ If this tool has been useful for you, feel free to thank me by buying me a coffe
 Social Mapper
 Created by Jacob Wilkin
 Copyright (C) 2017 Trustwave Holdings, Inc.
- 
+
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
@@ -186,15 +186,12 @@ GNU General Public License for more details.
 
 ## Acknowledgments
 
-* Thanks to Vincent Yiu & MDSEC for their great LinkedInt tool which inspired me to add the search by LinkedIn company name input method. 
-* Thanks to [ewpratten](https://github.com/ewpratten), [cclauss](https://github.com/cclauss) and [TADT1909](https://github.com/tadt1909) for their pull request contributions to the project. 
-* Thanks to `[Your Name Could Be Here, Come Help Out!]` for contributions to the project. 
+* Thanks to Vincent Yiu & MDSEC for their great LinkedInt tool which inspired me to add the search by LinkedIn company name input method.
+* Thanks to [ewpratten](https://github.com/ewpratten), [cclauss](https://github.com/cclauss) and [TADT1909](https://github.com/tadt1909) for their pull request contributions to the project.
+* Thanks to `[Your Name Could Be Here, Come Help Out!]` for contributions to the project.
 
 ![Social Mapper Logo](docs/logo.png?raw=true "Social Mapper Logo")
 
 Youtube Trailer:
 
 [![Social Mapper Trailer](https://i.imgur.com/s6rPhgK.jpg)](https://www.youtube.com/watch?v=wVN-7R3B_xs&feature=youtu.be "Social Mapper Trailer")
-
-
-
