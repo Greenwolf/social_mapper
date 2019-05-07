@@ -73,7 +73,7 @@ class Person(object):
     linkedinimage = ""
     facebook = ""
     facebookimage = "" #higher quality but needs authentication to access
-    facebookcdnimage = "" #lower quality but not authentication, used for html output
+    facebookcdnimage = "" #lower quality but no authentication, used for HTML output
     twitter = ""
     twitterimage = ""
     instagram = ""
@@ -146,12 +146,12 @@ def fill_facebook(peoplelist):
             cookies = FacebookfinderObject.getCookies()
             if image_link:
                 try:
-                    # Set fake user agent as facebook blocks python requests default user agent
+                    # Set fake user agent as Facebook blocks Python requests default user agent
                     headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/602.2.14 (KHTML, like Gecko) Version/10.0.1 Safari/602.2.14'}
-                    # Get target image using requests, providing selenium cookies, and fake user agent
+                    # Get target image using requests, providing Selenium cookies, and fake user agent
                     response = requests.get(image_link, cookies=cookies,headers=headers,stream=True)
                     with open('potential_target_image.jpg', 'wb') as out_file:
-                        #facebook images are sent content encoded so need to decode them
+                        #Facebook images are sent content encoded so need to decode them
                         response.raw.decode_content = True
                         shutil.copyfileobj(response.raw, out_file)
                     del response
@@ -838,9 +838,9 @@ parser.add_argument('-v', '--version', action='version',
     version='%(prog)s 0.1.0 : Social Mapper by Greenwolf (Github Link Here)')
 parser.add_argument('-vv', '--verbose', action='store_true',dest='vv',help='Verbose Mode')
 parser.add_argument('-f', '--format',action='store', dest='format',required=True,choices=set(("csv","imagefolder","company","socialmapper")),
-    help='Specify if the input file is either a \'company\',a \'csv\',a \'imagefolder\' or a social mapper html file to resume')
+    help='Specify if the input file is either a \'company\',a \'CSV\',a \'imagefolder\' or a Social Mapper HTML file to resume')
 parser.add_argument('-i', '--input',action='store', dest='input',required=True,
-    help='The name of the csv file, input folder or company name to use as input')
+    help='The name of the CSV file, input folder or company name to use as input')
 parser.add_argument('-m', '--mode',action='store', dest='mode',required=True,choices=set(("accurate","fast")),
     help='Selects the mode either accurate or fast, fast will report the first match over the threshold while accurate will check for the highest match over the threshold')
 parser.add_argument('-t', '--threshold',action='store', dest='thresholdinput',required=False,choices=set(("loose","standard","strict","superstrict")),
@@ -1044,10 +1044,10 @@ if args.format == "company":
                     # This triggers when a profile doesn't have an image associated with it
                     continue
 
-# To continue a social mapper run for additional sites.
+# To continue a Social Mapper run for additional sites.
 if args.format == "socialmapper":
     if args.a == True:
-        print("This option is for adding additional sites to a social mapper report\nFeed in a social mapper html file thats only been partially run, for example:\nFirst run(LinkedIn,Facebook,Twitter): python social_mapper -f company -i \"SpiderLabs\" -m fast -t standard -li -fb -tw\n Second run(adding Instagram and Google Plus): python social_mapper -f socialmapper -i SpiderLabs-social-mapper.html -m fast -t standard -ig -gp")
+        print("This option is for adding additional sites to a Social Mapper report\nFeed in a Social Mapper HTML file that's only been partially run, for example:\nFirst run (LinkedIn, Facebook, Twitter): python social_mapper -f company -i \"SpiderLabs\" -m fast -t standard -li -fb -tw\n Second run (adding Instagram and Google Plus): python social_mapper -f socialmapper -i SpiderLabs-social-mapper.html -m fast -t standard -ig -gp")
         sys.exit(1)
     exit=False
     try:
@@ -1144,7 +1144,7 @@ if args.a == True or args.db == True:
     else:
         print("Please provide Douban Login Credentials in the social_mapper.py file")
 
-#Write out updated people list to a csv file along with other output if
+#Write out updated people list to a CSV file along with other output if
 csv = []
 
 if not os.path.exists("SM-Results"):
@@ -1335,7 +1335,7 @@ except:
     pass
 
 
-# Code for generating html file
+# Code for generating HTML file
 htmloutputfilename = "SM-Results/" + args.input.replace("\"","").replace("/","-") + "-social-mapper.html"
 if args.format == "imagefolder":
     htmloutputfilename = "SM-Results/results-social-mapper.html"
@@ -1515,7 +1515,7 @@ filewriter.write(foot)
 print("HTML file: " + htmloutputfilename + "\n")
 filewriter.close()
 
-# copy images from social mapper to output folder
+# copy images from Social Mapper to output folder
 outputfoldername = "SM-Results/" + args.input.replace("\"","").replace("/","-") + "-social-mapper"
 if args.format != "imagefolder":
     os.rename('temp-targets',outputfoldername)

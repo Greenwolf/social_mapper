@@ -4,7 +4,7 @@
 
 A Social Media Mapping Tool that correlates profiles via facial recognition by Jacob Wilkin ([Greenwolf](https://github.com/Greenwolf)).
 
-Social Mapper is an Open Source Intelligence Tool that uses facial recognition to correlate social media profiles across different sites on a large scale. It takes an automated approach to search popular social media sites for targets names and pictures to accurately detect and group a person’s presence, outputting the results into report that a human operator can quickly review.
+Social Mapper is an Open Source Intelligence Tool that uses facial recognition to correlate social media profiles across different sites on a large scale. It takes an automated approach to search popular social media sites for targets' names and pictures to accurately detect and group a person’s presence, outputting the results into report that a human operator can quickly review.
 
 Social Mapper has a variety of uses in the security industry, for example the automated gathering of large amounts of social media profiles for use on targeted phishing campaigns. Facial recognition aids this process by removing false positives in the search results, so that reviewing this data is quicker for a human operator.
 
@@ -21,7 +21,7 @@ Social Mapper supports the following social media platforms:
 
 Social Mapper takes a variety of input types such as:
 
-* An organisations name, searching via LinkedIn
+* An organisation's name, searching via LinkedIn
 * A folder full of named images
 * A CSV file with names and URL’s to images online
 
@@ -42,7 +42,7 @@ These instructions will show you the requirements for and how to use Social Mapp
 
 ### Prerequisites
 
-As this is a python based tool, it should theoretically run on Linux, ChromeOS ([Developer Mode](https://www.chromium.org/chromium-os/developer-information-for-chrome-os-devices/generic)) and macOS. The main requirements are Firefox, Selenium and Geckodriver. To install the tool and set it up follow these 4 steps:
+As this is a Python based tool, it should theoretically run on Linux, ChromeOS ([Developer Mode](https://www.chromium.org/chromium-os/developer-information-for-chrome-os-devices/generic)) and macOS. The main requirements are Firefox, Selenium and Geckodriver. To install the tool and set it up follow these 4 steps:
 
 1) Install the latest version of Mozilla Firefox for macOS here:
 
@@ -82,7 +82,7 @@ cd social_mapper/setup
 python -m pip install --no-cache-dir -r requirements.txt
 ```
 
-On Mac look through the setup/setup-mac.txt file to view some additional xcode, brew and xquartz installation instructions.
+On Mac look through the [setup/setup-mac.txt](setup/setup-mac.txt) file to view some additional xcode, brew and xquartz installation instructions.
 
 4) Provide Social Mapper with credentials to log into social media services:
 
@@ -102,14 +102,14 @@ To start up the tool 4 parameters must be provided, an input format, the input f
 
 ```
 -f, --format	: Specify if the -i, --input is a 'name', 'csv', 'imagefolder' or 'socialmapper' resume file
--i, --input		: The company name, a CSV file, imagefolder or Social Mapper html file to feed into Social Mapper
--m, --mode		: 'fast' or 'accurate' allows you to choose to skip potential targets after a first likely match is found, in some cases potentially speeding up the program x20
+-i, --input	: The company name, a CSV file, imagefolder or Social Mapper HTML file to feed into Social Mapper
+-m, --mode	: 'fast' or 'accurate' allows you to choose to skip potential targets after a first likely match is found, in some cases potentially speeding up the program x20
 ```
 
 Additionally at least one social media site to check must be selected by including one or more of the following:
 
 ```
--a, --all			: Selects all of the options below and checks every site that Social Mapper has credentials for
+-a, --all		: Selects all of the options below and checks every site that Social Mapper has credentials for
 -fb, --facebook		: Check Facebook
 -tw, --twitter		: Check Twitter
 -ig, --instagram	: Check Instagram
@@ -129,7 +129,7 @@ Additional optional parameters can also be set to add additional customisation t
 -cid, --companyid	: Additional parameter to add in a LinkedIn Company ID for if name searches are not picking the correct company.
 -s, --showbrowser	: Makes the Firefox browser visible so you can see the searches performed. Useful for debugging.
 -v, --version		: Display current version.
--e, --email			: Provide a fuzzy email format like "<f><last>@domain.com" to generate additional CSV files for each site with firstname, lastname, fullname, email, profileURL, photoURL. These can be fed into phishing frameworks such as Gophish or Lucy.
+-e, --email		: Provide a fuzzy email format like "<f><last>@domain.com" to generate additional CSV files for each site with firstname, lastname, fullname, email, profileURL, photoURL. These can be fed into phishing frameworks such as Gophish or Lucy.
 ```
 
 ### Example Runs
