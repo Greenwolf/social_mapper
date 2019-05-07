@@ -58,9 +58,9 @@ class GooglePlusfinder(object):
 				#self.driver.find_element_by_css_selector('a[node-type=\'submitBtn\']').click()
 				sleep(5)
 				if(self.driver.title.encode('utf8','replace').startswith("Discover")):
-					print("[+] GooglePlus Login Success [+]\n")
+					print("[+] Google Plus Login Success [+]\n")
 				else:
-					print("[-] GooglePlus Login Failed [-]\n")
+					print("[-] Google Plus Login Failed [-]\n")
 
 
 	def getGooglePlusProfiles(self,first_name,last_name):
