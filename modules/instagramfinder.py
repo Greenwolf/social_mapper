@@ -28,16 +28,26 @@ class Instagramfinder(object):
 		self.driver.get("https://instagram.com/accounts/login/")
 		self.driver.execute_script('localStorage.clear();')
 
-		# convert Unicode in Instagram title to spaces for comparison
+		#convert unicode in instagram title to spaces for comparison
 		titleString = ''.join([i if ord(i) < 128 else ' ' for i in self.driver.title])
 
 		if(titleString.startswith("Login")):
 			print("\n[+] Instagram Login Page loaded successfully [+]")
-			instagramUsername = self.driver.find_element_by_xpath("//input[@name='username']")
+			try:
+				instagramUsername = self.driver.find_element_by_xpath("//input[@name='username']")
+			except:
+				print("Instagram Login Page username field seems to have changed, please make an issue on: https://github.com/Greenwolf/social_mapper")
 			instagramUsername.send_keys(username)
-			instagramPassword = self.driver.find_element_by_xpath("//input[@name='password']")
+			try:
+				instagramPassword = self.driver.find_element_by_xpath("//input[@name='password']")
+			except:
+				print("Instagram Login Page password field seems to have changed, please make an issue on: https://github.com/Greenwolf/social_mapper")
 			instagramPassword.send_keys(password)
-			self.driver.find_element_by_xpath("//button[contains(.,'Log in')]").click()
+			try:
+				#self.driver.find_element_by_xpath("//button[contains(.,'Log in')]").click()
+				self.driver.find_element_by_xpath("//button[@type='submit']").click()
+			except:
+				print("Instagram Login Page login button seems to have changed, please make an issue on: https://github.com/Greenwolf/social_mapper")
 			#self.driver.find_element_by_class_name("submit").click()
 			#self.driver.find_element_by_css_selector("button.submit.btn.primary-btn").click()
 			sleep(5)
@@ -46,11 +56,15 @@ class Instagramfinder(object):
 				try:
 					#print("Closing \"Turn On Notifications\" message")
 					self.driver.find_element_by_class_name("aOOlW").click()
+					sleep(3)
 				except:
 					#print("Closing Message Failed or did not exist")
 					pass
 			else:
 				print("[-] Instagram Login Failed [-]\n")
+			#sleep(3600)
+		else:
+			print("Instagram Login Page title field seems to have changed, please make an issue on: https://github.com/Greenwolf/social_mapper")
 
 
 	def getInstagramProfiles(self,first_name,last_name,username,password):
@@ -58,6 +72,13 @@ class Instagramfinder(object):
 			url = "https://www.instagram.com/"
 			self.driver.get(url)
 			sleep(3)
+			try:
+				#print("Closing \"Turn On Notifications\" message")
+				self.driver.find_element_by_class_name("aOOlW").click()
+				sleep(3)
+			except:
+				#print("Closing Message Failed or did not exist")
+				pass
 			#searchbar = self.driver.find_element_by_xpath("//body")
 			#searchbar.send_keys(Keys.TAB)
 			#searchbar = self.driver.find_element_by_class_name("_avvq0").click()
@@ -65,7 +86,7 @@ class Instagramfinder(object):
 			try:
 				searchbar = self.driver.find_element_by_xpath("//input[@placeholder='Search']")
 			except:
-				# if cant find search bar try to relogin
+				#if cant find search bar try to relogin
 				self.doLogin(username,password)
 				self.driver.get(url)
 				sleep(3)
@@ -89,21 +110,21 @@ class Instagramfinder(object):
 				try:
 					#profilepic = element.find('img')['src']
 					#print profilepic
-					# Errors with Instagram https://github.com/stevenschobert/instafeed.js/issues/549
+					# Errors with instagram https://github.com/stevenschobert/instafeed.js/issues/549
 
-					# Old code for getting a bigger Instagram profile picture, doesn't work since March 23rd 2018
+					# Old code for getting a bigger instagram profile picture, doesnt work since March 23rd 2018
 					#profilepicwithsmallid = element.find('img')['src']
 					#if not "150x150" in profilepicwithsmallid:
 					#	continue
 					#profilepicbadurl = profilepicwithsmallid.replace('150x150', '600x600')
 					#profilepic = profilepicbadurl.split("/")[0] + "//" + profilepicbadurl.split("/")[2] + "/" + profilepicbadurl.split("/")[6] + "/" + profilepicbadurl.split("/")[7] + "/" + profilepicbadurl.split("/")[8] 
 					
-					# New code for getting Instagram profile pic, if possible make it better with a bigger image, but may not be possible anymore
+					# New code for getting instagram profile pic, if possible make it better with a bigger image, but may not be possible anymore
 					profilepic = element.find('img')['src']
 
 					picturelist.append(["https://instagram.com" + link, profilepic,1.0])
 				except:
-					#The find imgsrc fails on search items that aren't profiles so we catch and continue
+					#The find imgsrc fails on search items that arn't profiles so we catch and continue
 					continue
 				
 			return picturelist
