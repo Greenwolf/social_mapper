@@ -31,26 +31,19 @@ class Linkedinfinder(object):
 		if(self.driver.title.encode('ascii','replace').startswith("LinkedIn Login")):
 			print("\n[+] LinkedIn Login Page loaded successfully [+]")
 			try:
-				print("debug1")
 				lnkUsername = self.driver.find_element_by_id("session_key-login")
 			except:
 				try:
-					print("debug2")
 					lnkUsername = self.driver.find_element_by_id("username")
 				except:
-					print("debug3")
 					print("LinkedIn Login Page username field seems to have changed, please make an issue on: https://github.com/Greenwolf/social_mapper")
-			print("debug4")
 			lnkUsername.send_keys(username)
 			try:
-				print("debug5")
 				lnkPassword = self.driver.find_element_by_id("session_password-login")
 			except:
 				try:
-					print("debug7")
 					lnkPassword = self.driver.find_element_by_id("password")
 				except:
-					print("debug8")
 					print("LinkedIn Login Page password field seems to have changed, please make an issue on: https://github.com/Greenwolf/social_mapper")
 			lnkPassword.send_keys(password)
 			try:
@@ -130,11 +123,11 @@ class Linkedinfinder(object):
 				#ghostcheck = element.find_all('div')[1]['class']
 
 				link = element.find('a')['href']
-				print(link)
+				#print(link)
 				#print(link)
 				profilepic = element.find('img')['src']
 				#profilepicreplaced = profilepic.replace("/mpr/mpr/shrink_100_100/","/media/") - OLD
-				print(profilepic)
+				#print(profilepic)
 
 				#new then old again
 				#profilepic = element.find_all('div')[3]['style']
