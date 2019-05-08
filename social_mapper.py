@@ -72,8 +72,8 @@ class Person(object):
     linkedin = ""
     linkedinimage = ""
     facebook = ""
-    facebookimage = "" #higher quality but needs authentication to access
-    facebookcdnimage = "" #lower quality but not authentication, used for html output
+    facebookimage = "" # higher quality but needs authentication to access
+    facebookcdnimage = "" # lower quality but no authentication, used for HTML output
     twitter = ""
     twitterimage = ""
     instagram = ""
@@ -114,7 +114,7 @@ def fill_facebook(peoplelist):
             sys.stdout.write("\rFacebook Check %i/%i : %s                                " % (count,ammount,person.full_name))
             sys.stdout.flush()
         count = count + 1
-        #Testcode to mimic a session timeout
+        # Testcode to mimic a session timeout
         #if count == 3:
         #    print "triggered delete"
         #    FacebookfinderObject.testdeletecookies()
@@ -146,12 +146,12 @@ def fill_facebook(peoplelist):
             cookies = FacebookfinderObject.getCookies()
             if image_link:
                 try:
-                    # Set fake user agent as facebook blocks python requests default user agent
+                    # Set fake user agent as Facebook blocks Python requests default user agent
                     headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/602.2.14 (KHTML, like Gecko) Version/10.0.1 Safari/602.2.14'}
-                    # Get target image using requests, providing selenium cookies, and fake user agent
+                    # Get target image using requests, providing Selenium cookies, and fake user agent
                     response = requests.get(image_link, cookies=cookies,headers=headers,stream=True)
                     with open('potential_target_image.jpg', 'wb') as out_file:
-                        #facebook images are sent content encoded so need to decode them
+                        # Facebook images are sent content encoded so need to decode them
                         response.raw.decode_content = True
                         shutil.copyfileobj(response.raw, out_file)
                     del response
@@ -177,7 +177,7 @@ def fill_facebook(peoplelist):
                                 early_break = True
                                 break
                         elif args.mode == "accurate":
-                            #code for accurate mode here, check if result is higher than current distace (best match in photo with multiple people) and store highest for later comparison
+                            # code for accurate mode here, check if result is higher than current distance (best match in photo with multiple people) and store highest for later comparison
                             if result < threshold:
                                 #print "Adding to updated list"
                                 #print distance
@@ -190,7 +190,7 @@ def fill_facebook(peoplelist):
                     #FacebookfinderObject.doLogin(facebook_username,facebook_password)
                     #cookies = FacebookfinderObject.getCookies()
                     continue
-        # For accurate mode pull out largest distance and if its bigger than the threshold then its the most accurate result
+        # For accurate mode pull out largest distance and if it's bigger than the threshold then it's the most accurate result
         if args.mode == "accurate":
             highestdistance=1.0
             bestprofilelink=""
@@ -470,9 +470,9 @@ def fill_googleplus(peoplelist):
     ammount=len(peoplelist)
     for person in peoplelist:
         if args.vv == True:
-            print("GooglePlus Check %i/%i : %s" % (count,ammount,person.full_name))
+            print("Google Plus Check %i/%i : %s" % (count,ammount,person.full_name))
         else:
-            sys.stdout.write("\rGooglePlus Check %i/%i : %s                                " % (count,ammount,person.full_name))
+            sys.stdout.write("\rGoogle Plus Check %i/%i : %s                                " % (count,ammount,person.full_name))
             sys.stdout.flush()
         count = count + 1
         if person.person_image:
@@ -539,7 +539,7 @@ def fill_googleplus(peoplelist):
     try:
         GooglePlusfinderObject.kill()
     except:
-        print("Error Killing GooglePlus Selenium instance")
+        print("Error Killing Google Plus Selenium instance")
     return peoplelist
 
 def fill_vkontakte(peoplelist):
@@ -782,7 +782,7 @@ def fill_douban(peoplelist):
         print("Error Killing Douban Selenium instance")
     return peoplelist
 
-#Login function for linkedin for company browsing (Credits to LinkedInt from MDSec)
+# Login function for LinkedIn for company browsing (Credits to LinkedInt from MDSec)
 def login():
     cookie_filename = "cookies.txt"
     cookiejar = cookielib.MozillaCookieJar(cookie_filename)
@@ -812,7 +812,7 @@ def authenticate():
         print("[*] Obtained new session: %s" % session)
         cookies = dict(li_at=session)
     except Exception as e:
-        sys.exit("[!] Could not authenticate to linkedin. %s" % e)
+        sys.exit("[!] Could not authenticate to LinkedIn. %s" % e)
     return cookies
 
 def loadPage(client, url, data=None):
@@ -832,19 +832,19 @@ def loadPage(client, url, data=None):
 #Setup Argument parser to print help and lock down options
 parser = argparse.ArgumentParser(
         formatter_class=argparse.RawDescriptionHelpFormatter,
-        description='Social Mapper by Jacob Wilkin(Greenwolf)',
+        description='Social Mapper by Jacob Wilkin (Greenwolf)',
         usage='%(prog)s -f <format> -i <input> -m <mode> -t <threshold> <options>')
 parser.add_argument('-v', '--version', action='version',
     version='%(prog)s 0.1.0 : Social Mapper by Greenwolf (Github Link Here)')
 parser.add_argument('-vv', '--verbose', action='store_true',dest='vv',help='Verbose Mode')
 parser.add_argument('-f', '--format',action='store', dest='format',required=True,choices=set(("csv","imagefolder","company","socialmapper")),
-    help='Specify if the input file is either a \'company\',a \'csv\',a \'imagefolder\' or a social mapper html file to resume')
+    help='Specify if the input file is either a \'company\',a \'CSV\',a \'imagefolder\' or a Social Mapper HTML file to resume')
 parser.add_argument('-i', '--input',action='store', dest='input',required=True,
-    help='The name of the csv file, input folder or company name to use as input')
+    help='The name of the CSV file, input folder or company name to use as input')
 parser.add_argument('-m', '--mode',action='store', dest='mode',required=True,choices=set(("accurate","fast")),
     help='Selects the mode either accurate or fast, fast will report the first match over the threshold while accurate will check for the highest match over the threshold')
 parser.add_argument('-t', '--threshold',action='store', dest='thresholdinput',required=False,choices=set(("loose","standard","strict","superstrict")),
-    help='The strictness level for image matching, default is standard but can be specified to loose,standard,strict or superstrict')
+    help='The strictness level for image matching, default is standard but can be specified to loose, standard, strict or superstrict')
 parser.add_argument('-e', '--email',action='store', dest='email',required=False,
     help='Provide an email format to trigger phishing list generation output, should follow a convention such as "<first><last><f><l>@domain.com"')
 parser.add_argument('-cid', '--companyid',action='store', dest='companyid',required=False,
@@ -867,7 +867,7 @@ args = parser.parse_args()
 if not (args.a or args.fb or args.tw or args.ig or args.li or args.gp or args.vk or args.wb or args.db):
     parser.error('No sites specified requested, add -a for all, or a combination of the sites you want to check using a mix of -fb -tw -ig -li')
 
-#Set up face matching threshold
+# Set up face matching threshold
 threshold = 0.6
 try:
     if args.thresholdinput == "superstrict":
@@ -887,10 +887,10 @@ else:
     showbrowser=False
 
 exit=True
-#remove targets dir for remaking
+# remove targets dir for remaking
 if os.path.exists('temp-targets'):
     shutil.rmtree('temp-targets')
-#people list to hold people in memory
+# people list to hold people in memory
 peoplelist = []
 
 # Fill people list from document with just name + image link
@@ -943,18 +943,18 @@ if args.format == "imagefolder":
             person.person_imagelink = args.input + filename
             peoplelist.append(person)
 
-# Get targets from linkedin company search
+# Get targets from LinkedIn company search
 if args.format == "company":
     exit=False
     if not os.path.exists('temp-targets'):
         os.makedirs('temp-targets')
     cookies = authenticate() # perform authentication
     companyid = 0
-    if args.companyid is not None: # Dont find company id, use provided id from -cid or --companyid flag
+    if args.companyid is not None: # Don't find company id, use provided id from -cid or --companyid flag
         print("Using supplied company Id: %s" % args.companyid)
         companyid = args.companyid
     else:
-        #code to get company ID based on name
+        # code to get company ID based on name
         companyid = 0
         url = "https://www.linkedin.com/voyager/api/typeahead/hits?q=blended&query=%s" % args.input
         headers = {'Csrf-Token':'ajax:0397788525211216808', 'X-RestLi-Protocol-Version':'2.0.0'}
@@ -988,7 +988,7 @@ if args.format == "company":
     if pages == 0:
         pages = 1
     if data_total % 40 == 0:
-        # Becuase we count 0... Subtract a page if there are no left over results on the last page
+        # Because we count 0... Subtract a page if there are no left over results on the last page
         pages = pages - 1
     if pages == 0:
         print("[!] Try to use quotes in the search name")
@@ -1013,7 +1013,7 @@ if args.format == "company":
         for c in content['elements'][0]['elements']:
             if 'com.linkedin.voyager.search.SearchProfile' in c['hitInfo'] and c['hitInfo']['com.linkedin.voyager.search.SearchProfile']['headless'] == False:
                 try:
-                    # get the link to profile pic, link to linkedin profile page, and their full name
+                    # get the link to profile pic, link to LinkedIn profile page, and their full name
                     #person_image = "https://media.licdn.com/mpr/mpr/shrinknp_400_400%s" % c['hitInfo']['com.linkedin.voyager.search.SearchProfile']['miniProfile']['picture']['com.linkedin.voyager.common.MediaProcessorImage']['id']
                     first_name = c['hitInfo']['com.linkedin.voyager.search.SearchProfile']['miniProfile']['firstName']
                     first_name = encoding.smart_str(first_name, encoding='ascii', errors='ignore')
@@ -1044,10 +1044,10 @@ if args.format == "company":
                     # This triggers when a profile doesn't have an image associated with it
                     continue
 
-# To continue a social mapper run for additional sites.
+# To continue a Social Mapper run for additional sites.
 if args.format == "socialmapper":
     if args.a == True:
-        print("This option is for adding additional sites to a social mapper report\nFeed in a social mapper html file thats only been partially run, for example:\nFirst run(LinkedIn,Facebook,Twitter): python social_mapper -f company -i \"SpiderLabs\" -m fast -t standard -li -fb -tw\n Second run(adding Instagram and Google Plus): python social_mapper -f socialmapper -i SpiderLabs-social-mapper.html -m fast -t standard -ig -gp")
+        print("This option is for adding additional sites to a Social Mapper report\nFeed in a Social Mapper HTML file that's only been partially run, for example:\nFirst run (LinkedIn, Facebook, Twitter): python social_mapper -f company -i \"SpiderLabs\" -m fast -t standard -li -fb -tw\n Second run (adding Instagram and Google Plus): python social_mapper -f socialmapper -i SpiderLabs-social-mapper.html -m fast -t standard -ig -gp")
         sys.exit(1)
     exit=False
     try:
@@ -1096,7 +1096,7 @@ if exit:
     print("Input Error, check options relating to format and input")
     sys.exit(1)
 
-#Pass peoplelist to modules for filling out
+# Pass peoplelist to modules for filling out
 if args.a == True or args.fb == True:
     if not (facebook_username == "" or facebook_password == ""):
         try:
@@ -1144,7 +1144,7 @@ if args.a == True or args.db == True:
     else:
         print("Please provide Douban Login Credentials in the social_mapper.py file")
 
-#Write out updated people list to a csv file along with other output if
+# Write out updated people list to a CSV file along with other output if
 csv = []
 
 if not os.path.exists("SM-Results"):
@@ -1277,7 +1277,7 @@ for person in peoplelist:
     if person.instagram != "":
         terminalstring = terminalstring +  "\tInstagram: " + person.instagram + "\n"
     if person.googleplus != "":
-        terminalstring = terminalstring +  "\tGooglePlus: " + person.googleplus + "\n"
+        terminalstring = terminalstring +  "\tGoogle Plus: " + person.googleplus + "\n"
     if person.vk != "":
         terminalstring = terminalstring +  "\tVkontakte: " + person.vk + "\n"
     if person.weibo != "":
@@ -1335,7 +1335,7 @@ except:
     pass
 
 
-# Code for generating html file
+# Code for generating HTML file
 htmloutputfilename = "SM-Results/" + args.input.replace("\"","").replace("/","-") + "-social-mapper.html"
 if args.format == "imagefolder":
     htmloutputfilename = "SM-Results/results-social-mapper.html"
@@ -1515,7 +1515,7 @@ filewriter.write(foot)
 print("HTML file: " + htmloutputfilename + "\n")
 filewriter.close()
 
-# copy images from social mapper to output folder
+# copy images from Social Mapper to output folder
 outputfoldername = "SM-Results/" + args.input.replace("\"","").replace("/","-") + "-social-mapper"
 if args.format != "imagefolder":
     os.rename('temp-targets',outputfoldername)

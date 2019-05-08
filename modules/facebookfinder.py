@@ -61,10 +61,10 @@ class Facebookfinder(object):
 		#print "title: "
 		#print self.driver.title.encode('utf8','replace').split()[1]
 		#print "END TEST"
-		# checks if word after space (for when a notifaction changes the title) or the first word is not equal to the first name being searched, meaning the session has timed out
+		# checks if word after space (for when a notification changes the title) or the first word is not equal to the first name being searched, meaning the session has timed out
 		
 		if(self.driver.title.encode('utf8','replace').split()[1].startswith(first_name) == False and self.driver.title.encode('utf8','replace').startswith(first_name) == False):
-			print("\nFacebook session has expired attempting to reestablish...")
+			print("\nFacebook session has expired, attempting to reestablish...")
 			self.doLogin(username,password)
 			self.driver.get(url)
 			sleep(3)

@@ -68,11 +68,11 @@ class Linkedinfinder(object):
 		soupParser = BeautifulSoup(searchresponse, 'html.parser')
 		
 
-		#LinkedIn has implemented some code to say no results seemly at random, need code to research if this result pops.
+		# LinkedIn has implemented some code to say no results seemly at random, need code to research if this result pops.
 		## Anti Scraping Bypass (Try 3 times before skipping):
-		#If there are no results do check
+		# If there are no results do check
 		if(len(soupParser.find_all('div', {'class': 'search-result__image-wrapper'})) == 0):
-			#If there is the no results page do an additional try
+			# If there is the no results page do an additional try
 			if(len(soupParser.find_all('div', {'class': 'search-no-results__image-container'}))!=0):
 				#print("First Check")
 				sleep(30)
