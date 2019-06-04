@@ -168,22 +168,6 @@ If this tool has been useful for you, feel free to thank me by buying me a coffe
 
 [![Coffee](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://www.buymeacoffee.com/Greenwolf)
 
-## License
-
-Social Mapper
-Created by Jacob Wilkin
-Copyright (C) 2017 Trustwave Holdings, Inc.
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
 ## Acknowledgments
 
 * Thanks to Vincent Yiu & MDSEC for their great LinkedInt tool which inspired me to add the search by LinkedIn company name input method.
