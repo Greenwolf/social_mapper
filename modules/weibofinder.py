@@ -18,7 +18,11 @@ class Weibofinder(object):
 		display.start()
 		if not showbrowser:
 			os.environ['MOZ_HEADLESS'] = '1'
-		self.driver = webdriver.Firefox()
+		firefoxprofile = webdriver.FirefoxProfile()
+		firefoxprofile.set_preference("permissions.default.desktop-notification", 1)
+		firefoxprofile.set_preference("dom.webnotifications.enabled", 1)
+		firefoxprofile.set_preference("dom.push.enabled", 1)
+		self.driver = webdriver.Firefox(firefox_profile=firefoxprofile)
 
 		self.driver.delete_all_cookies()
 
