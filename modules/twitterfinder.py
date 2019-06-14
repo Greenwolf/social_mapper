@@ -32,10 +32,6 @@ class Twitterfinder(object):
 		self.driver.execute_script('localStorage.clear();')
 		
 		if(self.driver.title.encode('ascii','replace').startswith("Login on")):
-		self.driver.get("https://twitter.com/login")
-		self.driver.execute_script('localStorage.clear();')
-		
-		if(self.driver.title.encode('ascii','replace').startswith("Login on")):
 			print("\n[+] Twitter Login Page loaded successfully [+]")
 			try:
 				twUsername = self.driver.find_element_by_class_name("js-username-field")
