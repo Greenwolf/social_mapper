@@ -32,17 +32,31 @@ class Twitterfinder(object):
 		self.driver.execute_script('localStorage.clear();')
 		
 		if(self.driver.title.encode('ascii','replace').startswith("Login on")):
+		self.driver.get("https://twitter.com/login")
+		self.driver.execute_script('localStorage.clear();')
+		
+		if(self.driver.title.encode('ascii','replace').startswith("Login on")):
 			print("\n[+] Twitter Login Page loaded successfully [+]")
-			twitterUsername = self.driver.find_element_by_class_name("js-username-field")
-			twitterUsername.send_keys(username)
-			twitterPassword = self.driver.find_element_by_class_name("js-password-field")
-			twitterPassword.send_keys(password)
-			twitterPassword.send_keys(Keys.ENTER)
+			try:
+				twUsername = self.driver.find_element_by_class_name("js-username-field")
+			except:
+				print("Twitter Login Page username field seems to have changed, please make an issue on: https://github.com/Greenwolf/social_mapper")
+			twUsername.send_keys(username)
+
+			try:
+				twPassword = self.driver.find_element_by_class_name("js-password-field")
+			except:
+				print("Twitter Login Page password field seems to have changed, please make an issue on: https://github.com/Greenwolf/social_mapper")
+			twPassword.send_keys(password)
+			twPassword.send_keys(Keys.ENTER)
+
 			sleep(5)
 			if(self.driver.title == "Twitter"):
-				print("[+] Twitter Login Success [+]\n")
-			else:
 				print("[-] Twitter Login Failed [-]\n")
+			else:
+				print("[+] Twitter Login Success [+]\n")
+		else:
+			print("Twitter Login Page title field seems to have changed, please make an issue on: https://github.com/Greenwolf/social_mapper")
 
 	def getTwitterProfiles(self,first_name,last_name):
 		url = "https://twitter.com/search?f=users&vertical=default&q=" + first_name + "%20" + last_name + "&src=typd"
