@@ -916,15 +916,18 @@ if args.format == "csv":
         os.makedirs('temp-targets')
     filereader = csv.reader(open('temp.csv', 'rb'), delimiter=",")
     for full_name, person_image in filereader:
-        full_name = encoding.smart_str(full_name, encoding='ascii', errors='ignore')
-        person_image = encoding.smart_str(person_image, encoding='ascii', errors='ignore')
-        #print person_image
-        urllib.urlretrieve(person_image, "temp-targets/" + full_name + ".jpg")
-        first_name = full_name.split(" ")[0]
-        last_name = full_name.split(" ",1)[1]
-        person = Person(first_name, last_name, full_name, "temp-targets/" + full_name + ".jpg")
-        person.person_imagelink = person_image
-        peoplelist.append(person)
+        try:
+            full_name = encoding.smart_str(full_name, encoding='ascii', errors='ignore')
+            person_image = encoding.smart_str(person_image, encoding='ascii', errors='ignore')
+            #print person_image
+            urllib.urlretrieve(person_image, "temp-targets/" + full_name + ".jpg")
+            first_name = full_name.split(" ")[0]
+            last_name = full_name.split(" ",1)[1]
+            person = Person(first_name, last_name, full_name, "temp-targets/" + full_name + ".jpg")
+            person.person_imagelink = person_image
+            peoplelist.append(person)
+        except Exception as e:
+            print("Error getting image or creating person structure, skipping:" + full_name)
 
 #remove this when fixed downloading
 #sys.exit(1)
