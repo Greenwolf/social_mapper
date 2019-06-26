@@ -176,6 +176,6 @@ If this tool has been useful for you, feel free to thank me by buying me a coffe
 
 ![Social Mapper Logo](docs/logo.png?raw=true "Social Mapper Logo")
 
-Youtube Trailer:
+## Youtube Trailer:
 
 [![Social Mapper Trailer](https://i.imgur.com/s6rPhgK.jpg)](https://www.youtube.com/watch?v=wVN-7R3B_xs&feature=youtu.be "Social Mapper Trailer")
