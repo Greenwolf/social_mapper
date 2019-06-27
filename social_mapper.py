@@ -922,7 +922,10 @@ if args.format == "csv":
             #print person_image
             urllib.urlretrieve(person_image, "temp-targets/" + full_name + ".jpg")
             first_name = full_name.split(" ")[0]
-            last_name = full_name.split(" ",1)[1]
+            try:
+                last_name = full_name.split(" ",1)[1] 
+            except:
+                last_name = ""
             person = Person(first_name, last_name, full_name, "temp-targets/" + full_name + ".jpg")
             person.person_imagelink = person_image
             peoplelist.append(person)
@@ -1078,7 +1081,10 @@ if args.format == "socialmapper":
         person_image = encoding.smart_str(personhtml.findAll("td")[0].string, encoding='ascii', errors='ignore').replace(";","")
         full_name = encoding.smart_str(personhtml.findAll("td")[1].string, encoding='ascii', errors='ignore')
         first_name = full_name.split(" ")[0]
-        last_name = full_name.split(" ",1)[1]
+        try:
+            last_name = full_name.split(" ",1)[1]
+        except:
+            last_name = ""
         urllib.urlretrieve(person_image, "temp-targets/" + full_name + ".jpg")
         person = Person(first_name, last_name, full_name, "temp-targets/" + full_name + ".jpg")
         person.person_imagelink = person_image
