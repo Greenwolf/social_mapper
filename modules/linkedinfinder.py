@@ -64,7 +64,8 @@ class Linkedinfinder(object):
 				print("[+] LinkedIn Login Success [+]\n")
 		else:
 			print("LinkedIn Login Page title field seems to have changed, please make an issue on: https://github.com/Greenwolf/social_mapper")
-
+		#Added this sleep for 20 seconds so you can manually enter a capatcha if needed
+		sleep(20)
 
 	def getLinkedinProfiles(self,first_name,last_name,username,password):
 		
