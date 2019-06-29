@@ -23,7 +23,7 @@ class Weibofinder(object):
 		firefoxprofile.set_preference("dom.webnotifications.enabled", 1)
 		firefoxprofile.set_preference("dom.push.enabled", 1)
 		self.driver = webdriver.Firefox(firefox_profile=firefoxprofile)
-
+		self.driver.implicitly_wait(15)
 		self.driver.delete_all_cookies()
 
 
@@ -32,7 +32,7 @@ class Weibofinder(object):
 		self.driver.get("https://weibo.com/login.php")
 		self.driver.execute_script('localStorage.clear();')
 		
-		if(self.driver.title.encode('utf8','replace').startswith("微博")):
+		if(self.driver.title.encode('utf8','replace').startswith(bytes("微博", 'utf-8'))):
 			print("\n[+] Weibo Login Page loaded successfully [+]")
 			wbUsername = self.driver.find_element_by_id("loginname")
 			wbUsername.send_keys(username)
@@ -42,7 +42,7 @@ class Weibofinder(object):
 			#self.driver.find_element_by_css_selector('a.submitBtn').click()
 			self.driver.find_element_by_css_selector('a[node-type=\'submitBtn\']').click()
 			sleep(5)
-			if(self.driver.title.encode('utf8','replace').startswith("我的首页") == False):
+			if(self.driver.title.encode('utf8','replace').startswith(bytes("我的首页", 'utf-8')) == False):
 				print("[+] Weibo Login Success [+]\n")
 			else:
 				print("[-] Weibo Login Failed [-]\n")
