@@ -32,7 +32,7 @@ class Linkedinfinder(object):
 		#agent = self.driver.execute_script("return navigator.userAgent")
 		#print("User Agent: " + agent)
 		
-		if(self.driver.title.encode('ascii','replace').startswith("LinkedIn Login")):
+		if(self.driver.title.encode('ascii','replace').startswith(bytes("LinkedIn Login", 'utf-8'))):
 			print("\n[+] LinkedIn Login Page loaded successfully [+]")
 			try:
 				lnkUsername = self.driver.find_element_by_id("session_key-login")
@@ -58,14 +58,13 @@ class Linkedinfinder(object):
 				except:
 					print("LinkedIn Login Page login button seems to have changed, please make an issue on: https://github.com/Greenwolf/social_mapper")
 			sleep(5)
-			if(self.driver.title.encode('utf8','replace') == "Sign In to LinkedIn"):
+			if(self.driver.title.encode('utf8','replace') == bytes("Sign In to LinkedIn", 'utf-8')):
 				print("[-] LinkedIn Login Failed [-]\n")
 			else:
 				print("[+] LinkedIn Login Success [+]\n")
 		else:
 			print("LinkedIn Login Page title field seems to have changed, please make an issue on: https://github.com/Greenwolf/social_mapper")
-		#Added this sleep for 20 seconds so you can manually enter a capatcha if needed
-		sleep(20)
+
 
 	def getLinkedinProfiles(self,first_name,last_name,username,password):
 		
