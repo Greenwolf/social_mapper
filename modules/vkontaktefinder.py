@@ -22,7 +22,7 @@ class Vkontaktefinder(object):
 		firefoxprofile.set_preference("dom.webnotifications.enabled", 1)
 		firefoxprofile.set_preference("dom.push.enabled", 1)
 		self.driver = webdriver.Firefox(firefox_profile=firefoxprofile)
-
+		self.driver.implicitly_wait(15)
 		self.driver.delete_all_cookies()
 
 
@@ -31,7 +31,7 @@ class Vkontaktefinder(object):
 		self.driver.get("https://www.vk.com/login")
 		self.driver.execute_script('localStorage.clear();')
 		
-		if(self.driver.title.encode('ascii','replace').startswith("Log in")):
+		if(self.driver.title.encode('ascii','replace').startswith(bytes("Log in", 'utf-8'))):
 			print("\n[+] VKontakte Login Page loaded successfully [+]")
 			vkUsername = self.driver.find_element_by_id("email")
 			vkUsername.send_keys(username)
@@ -39,7 +39,7 @@ class Vkontaktefinder(object):
 			vkPassword.send_keys(password)
 			self.driver.find_element_by_id("login_button").click()
 			sleep(10)
-			if(self.driver.title.encode('ascii','replace').startswith("Log in") == False):
+			if(self.driver.title.encode('ascii','replace').startswith(bytes("Log in", 'utf-8')) == False):
 				print("[+] Vkontakte Login Success [+]\n")
 			else:
 				print("[-] Vkontakte Login Failed [-]\n")
