@@ -22,7 +22,7 @@ class Facebookfinder(object):
 		firefoxprofile.set_preference("dom.webnotifications.enabled", 1)
 		firefoxprofile.set_preference("dom.push.enabled", 1)
 		self.driver = webdriver.Firefox(firefox_profile=firefoxprofile)
-
+		self.driver.implicitly_wait(15)
 		self.driver.delete_all_cookies()
 
 
@@ -31,7 +31,7 @@ class Facebookfinder(object):
 		self.driver.get("https://www.facebook.com/login")
 		self.driver.execute_script('localStorage.clear();')
 
-		if(self.driver.title.encode('ascii','replace').endswith("Facebook")):
+		if(self.driver.title.encode('ascii','replace').endswith(bytes("Facebook", 'utf-8'))):
 			print("\n[+] Facebook Login Page loaded successfully [+]")
 			fbUsername = self.driver.find_element_by_id("email")
 			fbUsername.send_keys(username)
@@ -41,12 +41,12 @@ class Facebookfinder(object):
 			sleep(5)
 			# checks if a notification is in place, which changes the title
 			if (self.driver.title.encode('utf8','replace')[0] == "("):
-				if(str(self.driver.title.encode('utf8','replace').split()[1]) == "Facebook"):
+				if(str(self.driver.title.encode('utf8','replace').split()[1]) == bytes("Facebook", 'utf-8')):
 					print("[+] Facebook Login Success [+]\n")
 				else:
 					print("[-] Facebook Login Failed [-]\n")
 			else:
-				if(self.driver.title.encode('utf8','replace').startswith("Facebook") == True):
+				if(self.driver.title.encode('utf8','replace').startswith(bytes("Facebook", 'utf-8')) == True):
 					print("[+] Facebook Login Success [+]\n")
 				else:
 					print("[-] Facebook Login Failed [-]\n")
@@ -67,13 +67,12 @@ class Facebookfinder(object):
 		#print "END TEST"
 		# checks if word after space (for when a notification changes the title) or the first word is not equal to the first name being searched, meaning the session has timed out
 		
-		if(self.driver.title.encode('utf8','replace').split()[1].startswith(first_name) == False and self.driver.title.encode('utf8','replace').startswith(first_name) == False):
+		if(self.driver.title.encode('utf8','replace').split()[1].startswith(bytes(first_name, 'utf-8')) == False and self.driver.title.encode('utf8','replace').startswith(bytes(first_name, 'utf-8')) == False):
 			print("\nFacebook session has expired, attempting to reestablish...")
 			self.doLogin(username,password)
 			self.driver.get(url)
 			sleep(3)
-			if(self.driver.title.encode('utf8','replace').split()[1].startswith(first_name) == False and
-         self.driver.title.encode('utf8','replace').startswith(first_name) == False):
+			if(self.driver.title.encode('utf8','replace').split()[1].startswith(bytes(first_name, 'utf-8')) == False and self.driver.title.encode('utf8','replace').startswith(bytes(first_name, 'utf-8')) == False):
 				print("Facebook Timeout Error, session has expired and attempts to reestablish have failed")
 				return picturelist
 			else:
@@ -139,7 +138,7 @@ class Facebookfinder(object):
 			for element in soupParser.find_all('div', {'class': 'photoContainer'}):
 				linktobigpic = element.find('a')['href']
 
-			#if linktobigpic.startswith("/")
+			#if linktobigpic.startswith(bytes("/")
 				#return ""
 			self.driver.get(linktobigpic)
 			sleep(3)
