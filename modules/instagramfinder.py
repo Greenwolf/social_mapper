@@ -23,7 +23,6 @@ class Instagramfinder(object):
 		firefoxprofile.set_preference("dom.push.enabled", 1)
 		self.driver = webdriver.Firefox(firefox_profile=firefoxprofile)
 		self.driver.implicitly_wait(15)
-		#self.driver.set_page_load_timeout(15)
 		self.driver.delete_all_cookies()
 
 
@@ -55,7 +54,7 @@ class Instagramfinder(object):
 			#self.driver.find_element_by_class_name("submit").click()
 			#self.driver.find_element_by_css_selector("button.submit.btn.primary-btn").click()
 			sleep(5)
-			if(self.driver.title.encode('utf8','replace').startswith("Instagram") == True):
+			if(self.driver.title.encode('utf8','replace').startswith(bytes("Instagram", 'utf-8')) == True):
 				print("[+] Instagram Login Success [+]\n")
 				try:
 					#print("Closing \"Turn On Notifications\" message")
