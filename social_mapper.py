@@ -6,7 +6,6 @@ from modules import linkedinfinder
 from modules import vkontaktefinder
 from modules import weibofinder
 from modules import doubanfinder
-from modules import googleplusfinder
 from shutil import copyfile
 import facebook
 import requests
@@ -14,25 +13,28 @@ import sys
 import csv
 import face_recognition
 import urllib
-import urllib2
 import os
 import codecs
 import argparse
 import shutil
-import cookielib
+import http.cookiejar
 import json
 from datetime import datetime
 from bs4 import BeautifulSoup
 from django.utils import encoding
+import traceback
+import math
 
-assert sys.version_info[:2] == (2, 7), "Only Python 2.7 is currently supported."
+
+assert sys.version_info >= (3,), "Only Python 3 is currently supported."
+
 
 global linkedin_username
 global linkedin_password
 linkedin_username = ""
 linkedin_password = ""
-global facebook_username
-global facebook_password
+global facebook_username 
+global facebook_password 
 facebook_username = ""
 facebook_password = ""
 global twitter_username
@@ -43,10 +45,6 @@ global instagram_username
 global instagram_password
 instagram_username = ""
 instagram_password = ""
-global google_username
-global google_password
-google_username = ""
-google_password = ""
 global vk_username
 global vk_password
 vk_username = "" # Can be mobile or email
@@ -84,8 +82,6 @@ class Person(object):
     weiboimage = ""
     douban = ""
     doubanimage = ""
-    googleplus = ""
-    googleplusimage = ""
     def __init__(self, first_name, last_name, full_name, person_image):
         self.first_name = first_name
         self.last_name = last_name
@@ -249,7 +245,7 @@ def fill_twitter(peoplelist):
             image_link = profilepic
             if image_link:
                 try:
-                    urllib.urlretrieve(image_link, "potential_target_image.jpg")
+                    urllib.request.urlretrieve(image_link, "potential_target_image.jpg")
                     potential_target_image = face_recognition.load_image_file("potential_target_image.jpg")
                     try: # try block for when an image has no faces
                         potential_target_encoding = face_recognition.face_encodings(potential_target_image)[0]
@@ -334,7 +330,7 @@ def fill_instagram(peoplelist):
             image_link = profilepic
             if image_link:
                 try:
-                    urllib.urlretrieve(image_link, "potential_target_image.jpg")
+                    urllib.request.urlretrieve(image_link, "potential_target_image.jpg")
                     potential_target_image = face_recognition.load_image_file("potential_target_image.jpg")
                     try: # try block for when an image has no faces
                         potential_target_encoding = face_recognition.face_encodings(potential_target_image)[0]
@@ -418,7 +414,7 @@ def fill_linkedin(peoplelist):
             image_link = profilepic
             if image_link:
                 try:
-                    urllib.urlretrieve(image_link, "potential_target_image.jpg")
+                    urllib.request.urlretrieve(image_link, "potential_target_image.jpg")
                     potential_target_image = face_recognition.load_image_file("potential_target_image.jpg")
                     try: # try block for when an image has no faces
                         potential_target_encoding = face_recognition.face_encodings(potential_target_image)[0]
@@ -462,86 +458,6 @@ def fill_linkedin(peoplelist):
         print("Error Killing LinkedIn Selenium instance")
     return peoplelist
 
-def fill_googleplus(peoplelist):
-    GooglePlusfinderObject = googleplusfinder.GooglePlusfinder(showbrowser)
-    GooglePlusfinderObject.doLogin(google_username,google_password)
-
-    count=1
-    ammount=len(peoplelist)
-    for person in peoplelist:
-        if args.vv == True:
-            print("Google Plus Check %i/%i : %s" % (count,ammount,person.full_name))
-        else:
-            sys.stdout.write("\rGoogle Plus Check %i/%i : %s                                " % (count,ammount,person.full_name))
-            sys.stdout.flush()
-        count = count + 1
-        if person.person_image:
-            try:
-                target_image = face_recognition.load_image_file(person.person_image)
-                target_encoding = face_recognition.face_encodings(target_image)[0]
-                profilelist = GooglePlusfinderObject.getGooglePlusProfiles(person.first_name, person.last_name)
-            except:
-                continue
-        else:
-            continue
-
-        early_break = False
-        #print "DEBUG: " + person.full_name
-        updatedlist = []
-        for profilelink,profilepic,distance in profilelist:
-            try:
-                os.remove("potential_target_image.jpg")
-            except:
-                pass
-            if early_break:
-                break
-            image_link = profilepic
-            if image_link:
-                try:
-                    urllib.urlretrieve(image_link, "potential_target_image.jpg")
-                    potential_target_image = face_recognition.load_image_file("potential_target_image.jpg")
-                    try: # try block for when an image has no faces
-                        potential_target_encoding = face_recognition.face_encodings(potential_target_image)[0]
-                    except:
-                        continue
-                    results = face_recognition.face_distance([target_encoding], potential_target_encoding)
-                    for result in results:
-                        if args.mode == "fast":
-                            if result < threshold:
-                                person.googleplus = encoding.smart_str(profilelink, encoding='ascii', errors='ignore')
-                                person.googleplusimage = encoding.smart_str(image_link, encoding='ascii', errors='ignore')
-                                if args.vv == True:
-                                    print("\tMatch found: " + person.full_name)
-                                    print("\tGoogle Plus: " + person.googleplus)
-                                early_break = True
-                                break
-                        elif args.mode == "accurate":
-                            if result < threshold:
-                                #distance=result
-                                updatedlist.append([profilelink,image_link,result])
-                except Exception as e:
-                    print(e)
-        if args.mode == "accurate":
-            highestdistance=1.0
-            bestprofilelink=""
-            bestimagelink=""
-            for profilelink,image_link,distance in updatedlist:
-                if distance < highestdistance:
-                    highestdistance = distance
-                    bestprofilelink = profilelink
-                    bestimagelink = image_link
-            if highestdistance < threshold:
-                person.googleplus = encoding.smart_str(bestprofilelink, encoding='ascii', errors='ignore')
-                person.googleplusimage = encoding.smart_str(bestimagelink, encoding='ascii', errors='ignore')
-                if args.vv == True:
-                    print("\tMatch found: " + person.full_name)
-                    print("\tGoogle Plus: " + person.googleplus)
-    try:
-        GooglePlusfinderObject.kill()
-    except:
-        print("Error Killing Google Plus Selenium instance")
-    return peoplelist
-
 def fill_vkontakte(peoplelist):
     VkontaktefinderObject = vkontaktefinder.Vkontaktefinder(showbrowser)
     VkontaktefinderObject.doLogin(vk_username,vk_password)
@@ -578,7 +494,7 @@ def fill_vkontakte(peoplelist):
             image_link = profilepic
             if image_link:
                 try:
-                    urllib.urlretrieve(image_link, "potential_target_image.jpg")
+                    urllib.request.urlretrieve(image_link, "potential_target_image.jpg")
                     potential_target_image = face_recognition.load_image_file("potential_target_image.jpg")
                     try: # try block for when an image has no faces
                         potential_target_encoding = face_recognition.face_encodings(potential_target_image)[0]
@@ -591,7 +507,7 @@ def fill_vkontakte(peoplelist):
                                 person.vk = encoding.smart_str(profilelink, encoding='ascii', errors='ignore')
                                 person.vkimage = encoding.smart_str(image_link, encoding='ascii', errors='ignore')
                                 if args.vv == True:
-                                    print("\tnMatch found: " + person.full_name)
+                                    print("\tMatch found: " + person.full_name)
                                     print("\tVkontakte: " + person.vk)
                                 early_break = True
                                 break
@@ -658,7 +574,7 @@ def fill_weibo(peoplelist):
             image_link = profilepic
             if image_link:
                 try:
-                    urllib.urlretrieve(image_link, "potential_target_image.jpg")
+                    urllib.request.urlretrieve(image_link, "potential_target_image.jpg")
                     potential_target_image = face_recognition.load_image_file("potential_target_image.jpg")
                     try: # try block for when an image has no faces
                         potential_target_encoding = face_recognition.face_encodings(potential_target_image)[0]
@@ -738,7 +654,7 @@ def fill_douban(peoplelist):
             image_link = profilepic
             if image_link:
                 try:
-                    urllib.urlretrieve(image_link, "potential_target_image.jpg")
+                    urllib.request.urlretrieve(image_link, "potential_target_image.jpg")
                     potential_target_image = face_recognition.load_image_file("potential_target_image.jpg")
                     try: # try block for when an image has no faces
                         potential_target_encoding = face_recognition.face_encodings(potential_target_image)[0]
@@ -785,8 +701,8 @@ def fill_douban(peoplelist):
 # Login function for LinkedIn for company browsing (Credits to LinkedInt from MDSec)
 def login():
     cookie_filename = "cookies.txt"
-    cookiejar = cookielib.MozillaCookieJar(cookie_filename)
-    opener = urllib2.build_opener(urllib2.HTTPRedirectHandler(),urllib2.HTTPHandler(debuglevel=0),urllib2.HTTPSHandler(debuglevel=0),urllib2.HTTPCookieProcessor(cookiejar))
+    cookiejar = http.cookiejar.MozillaCookieJar(cookie_filename)
+    opener = urllib.request.build_opener(urllib.request.HTTPRedirectHandler(),urllib.request.HTTPHandler(debuglevel=0),urllib.request.HTTPSHandler(debuglevel=0),urllib.request.HTTPCookieProcessor(cookiejar))
     
     page = loadPage(opener, "https://www.linkedin.com/uas/login")
     parse = BeautifulSoup(page, "html.parser")
@@ -795,7 +711,7 @@ def login():
         name = link.get('name')
         if name == 'loginCsrfParam':
             csrf = link.get('value')
-    login_data = urllib.urlencode({'session_key': linkedin_username, 'session_password': linkedin_password, 'loginCsrfParam': csrf})
+    login_data = urllib.parse.urlencode({'session_key': linkedin_username, 'session_password': linkedin_password, 'loginCsrfParam': csrf})
     page = loadPage(opener,"https://www.linkedin.com/checkpoint/lg/login-submit", login_data)
 
     parse = BeautifulSoup(page, "html.parser")
@@ -803,6 +719,7 @@ def login():
     try:
         cookie = cookiejar._cookies['.www.linkedin.com']['/']['li_at'].value
     except:
+        print("cookie debug")
         sys.exit(0)
     cookiejar.save()
     os.remove(cookie_filename)
@@ -815,7 +732,7 @@ def authenticate():
         session = a
         if len(session) == 0:
             sys.exit("[!] Unable to login to LinkedIn.com")
-        print("[*] Obtained new session: %s" % session)
+        print(("[*] Obtained new session: %s" % session))
         cookies = dict(li_at=session)
     except Exception as e:
         sys.exit("[!] Could not authenticate to LinkedIn. %s" % e)
@@ -828,12 +745,16 @@ def loadPage(client, url, data=None):
         print("[!] Cannot load main LinkedIn page")
     try:
         if data is not None:
-            response = client.open(url, data)
+            response = client.open(url, data.encode("utf-8"))
         else:
             response = client.open(url)
-        return ''.join(response.readlines())
+        emptybyte = bytearray()
+        return emptybyte.join(response.readlines())
     except:
+        print("loadpage debug")
+        traceback.print_exc()
         sys.exit(0)
+
 
 #Setup Argument parser to print help and lock down options
 parser = argparse.ArgumentParser(
@@ -863,15 +784,14 @@ parser.add_argument('-fb', '--facebook',action='store_true',dest='fb',help='Flag
 parser.add_argument('-tw', '--twitter',action='store_true',dest='tw',help='Flag to check Twitter')
 parser.add_argument('-ig', '--instagram',action='store_true',dest='ig',help='Flag to check Instagram')
 parser.add_argument('-li', '--linkedin',action='store_true',dest='li',help='Flag to check LinkedIn - Automatic with \'company\' input type')
-parser.add_argument('-gp', '--googleplus',action='store_true',dest='gp',help='Flag to check Google Plus')
 parser.add_argument('-vk', '--vkontakte',action='store_true',dest='vk',help='Flag to check the Russian VK VKontakte Site')
 parser.add_argument('-wb', '--weibo',action='store_true',dest='wb',help='Flag to check the Chinese Weibo Site')
 parser.add_argument('-db', '--douban',action='store_true',dest='db',help='Flag to check the Chinese Douban Site')
 
 args = parser.parse_args()
 
-if not (args.a or args.fb or args.tw or args.ig or args.li or args.gp or args.vk or args.wb or args.db):
-    parser.error('No sites specified requested, add -a for all, or a combination of the sites you want to check using a mix of -fb -tw -ig -li')
+if not (args.a or args.fb or args.tw or args.ig or args.li or args.vk or args.wb or args.db):
+    parser.error('No sites specified requested, add -a for all, or a combination of the sites you want to check using a mix of -fb -tw -ig -li -vk -db -wb')
 
 # Set up face matching threshold
 threshold = 0.6
@@ -909,7 +829,7 @@ if args.format == "csv":
         os.remove('temp.csv')
     except OSError:
         pass
-    tempcsv = open('temp.csv', 'wb')
+    tempcsv = open('temp.csv', 'w')
     tempcsv.write(data.replace('\x00',''))
     tempcsv.close()
     if not os.path.exists('temp-targets'):
@@ -920,12 +840,9 @@ if args.format == "csv":
             full_name = encoding.smart_str(full_name, encoding='ascii', errors='ignore')
             person_image = encoding.smart_str(person_image, encoding='ascii', errors='ignore')
             #print person_image
-            urllib.urlretrieve(person_image, "temp-targets/" + full_name + ".jpg")
+            urllib.request.urlretrieve(person_image, "temp-targets/" + full_name + ".jpg")
             first_name = full_name.split(" ")[0]
-            try:
-                last_name = full_name.split(" ",1)[1] 
-            except:
-                last_name = ""
+            last_name = full_name.split(" ",1)[1]
             person = Person(first_name, last_name, full_name, "temp-targets/" + full_name + ".jpg")
             person.person_imagelink = person_image
             peoplelist.append(person)
@@ -996,7 +913,7 @@ if args.format == "company":
     data_total = content['elements'][0]['total']
 
     # Calculate pages off final results at 40 results/page
-    pages = data_total / 40
+    pages = math.ceil(data_total / 40)
     if pages == 0:
         pages = 1
     if data_total % 40 == 0:
@@ -1044,7 +961,7 @@ if args.format == "company":
                     person_image = encoding.smart_str(person_image, encoding='ascii', errors='ignore')
                     linkedin = "https://www.linkedin.com/in/%s" % c['hitInfo']['com.linkedin.voyager.search.SearchProfile']['miniProfile']['publicIdentifier']
                     linkedin = encoding.smart_str(linkedin, encoding='ascii', errors='ignore')
-                    urllib.urlretrieve(person_image, "temp-targets/" + full_name + ".jpg")
+                    urllib.request.urlretrieve(person_image, "temp-targets/" + full_name + ".jpg")
                     person = Person(first_name, last_name, full_name, "temp-targets/" + full_name + ".jpg")
                     person.person_imagelink = person_image
                     person.linkedin = linkedin
@@ -1059,7 +976,7 @@ if args.format == "company":
 # To continue a Social Mapper run for additional sites.
 if args.format == "socialmapper":
     if args.a == True:
-        print("This option is for adding additional sites to a Social Mapper report\nFeed in a Social Mapper HTML file that's only been partially run, for example:\nFirst run (LinkedIn, Facebook, Twitter): python social_mapper -f company -i \"SpiderLabs\" -m fast -t standard -li -fb -tw\n Second run (adding Instagram and Google Plus): python social_mapper -f socialmapper -i SpiderLabs-social-mapper.html -m fast -t standard -ig -gp")
+        print("This option is for adding additional sites to a Social Mapper report\nFeed in a Social Mapper HTML file that's only been partially run, for example:\nFirst run (LinkedIn, Facebook, Twitter): python social_mapper -f company -i \"SpiderLabs\" -m fast -t standard -li -fb -tw\n Second run (adding Instagram): python social_mapper -f socialmapper -i SpiderLabs-social-mapper.html -m fast -t standard -ig")
         sys.exit(1)
     exit=False
     try:
@@ -1081,11 +998,8 @@ if args.format == "socialmapper":
         person_image = encoding.smart_str(personhtml.findAll("td")[0].string, encoding='ascii', errors='ignore').replace(";","")
         full_name = encoding.smart_str(personhtml.findAll("td")[1].string, encoding='ascii', errors='ignore')
         first_name = full_name.split(" ")[0]
-        try:
-            last_name = full_name.split(" ",1)[1]
-        except:
-            last_name = ""
-        urllib.urlretrieve(person_image, "temp-targets/" + full_name + ".jpg")
+        last_name = full_name.split(" ",1)[1]
+        urllib.request.urlretrieve(person_image, "temp-targets/" + full_name + ".jpg")
         person = Person(first_name, last_name, full_name, "temp-targets/" + full_name + ".jpg")
         person.person_imagelink = person_image
         person.linkedin = encoding.smart_str(personhtml.findAll("td")[2].find("a")['href'], encoding='ascii', errors='ignore').replace(";","")
@@ -1097,8 +1011,6 @@ if args.format == "socialmapper":
         person.twitterimage = encoding.smart_str(personhtml.findAll("td")[4].find("img")['src'], encoding='ascii', errors='ignore').replace(";","")
         person.instagram = encoding.smart_str(personhtml.findAll("td")[5].find("a")['href'], encoding='ascii', errors='ignore').replace(";","")
         person.instagramimage = encoding.smart_str(personhtml.findAll("td")[5].find("img")['src'], encoding='ascii', errors='ignore').replace(";","")
-        person.googleplus = encoding.smart_str(personhtml.findAll("td")[6].find("a")['href'], encoding='ascii', errors='ignore').replace(";","")
-        person.googleplusimage = encoding.smart_str(personhtml.findAll("td")[6].find("img")['src'], encoding='ascii', errors='ignore').replace(";","")
         person.vk = encoding.smart_str(personhtml.findAll("td")[7].find("a")['href'], encoding='ascii', errors='ignore').replace(";","")
         person.vkimage = encoding.smart_str(personhtml.findAll("td")[7].find("img")['src'], encoding='ascii', errors='ignore').replace(";","")
         person.weibo = encoding.smart_str(personhtml.findAll("td")[8].find("a")['href'], encoding='ascii', errors='ignore').replace(";","")
@@ -1138,11 +1050,6 @@ if not args.format == "linkedint" and not args.format == "company":
             peoplelist = fill_linkedin(peoplelist)
         else:
             print("Please provide LinkedIn Login Credentials in the social_mapper.py file")
-if args.a == True or args.gp == True:
-    if not (google_username == "" or google_password == ""):
-        peoplelist = fill_googleplus(peoplelist)
-    else:
-        print("Please provide Google Login Credentials in the social_mapper.py file")
 if args.a == True or args.vk == True:
     if not (vk_username == "" or vk_password == ""):
         peoplelist = fill_vkontakte(peoplelist)
@@ -1170,50 +1077,45 @@ phishingoutputfilename = "SM-Results/" + args.input.replace("\"","").replace("/"
 if args.format == "imagefolder":
     outputfilename = "SM-Results/results-social-mapper.csv"
     phishingoutputfilename = "SM-Results/results"
-filewriter = open(outputfilename.format(outputfilename), 'wb')
+filewriter = open(outputfilename.format(outputfilename), 'w')
 titlestring = "Full Name,"
 if args.a == True or args.li == True or args.format == "socialmapper":
         titlestring = titlestring + "LinkedIn,"
         if args.email is not None:
             phishingoutputfilenamelinkedin=phishingoutputfilename+"-linkedin.csv"
-            filewriterlinkedin = open(phishingoutputfilenamelinkedin.format(phishingoutputfilenamelinkedin), 'wb')
+            filewriterlinkedin = open(phishingoutputfilenamelinkedin.format(phishingoutputfilenamelinkedin), 'w')
 if args.a == True or args.fb == True or args.format == "socialmapper":
         titlestring = titlestring + "Facebook,"
         if args.email is not None:
             phishingoutputfilenamefacebook=phishingoutputfilename+"-facebook.csv"
-            filewriterfacebook = open(phishingoutputfilenamefacebook.format(phishingoutputfilenamefacebook), 'wb')
+            filewriterfacebook = open(phishingoutputfilenamefacebook.format(phishingoutputfilenamefacebook), 'w')
 if args.a == True or args.tw == True or args.format == "socialmapper":
         titlestring = titlestring + "Twitter,"
         if args.email is not None:
             phishingoutputfilenametwitter=phishingoutputfilename+"-twitter.csv"
-            filewritertwitter = open(phishingoutputfilenametwitter.format(phishingoutputfilenametwitter), 'wb')
+            filewritertwitter = open(phishingoutputfilenametwitter.format(phishingoutputfilenametwitter), 'w')
 if args.a == True or args.ig == True or args.format == "socialmapper":
         titlestring = titlestring + "Instagram,"
         if args.email is not None:
             phishingoutputfilenameinstagram=phishingoutputfilename+"-instagram.csv"
-            filewriterinstagram = open(phishingoutputfilenameinstagram.format(phishingoutputfilenameinstagram), 'wb')
-if args.a == True or args.gp == True or args.format == "socialmapper":
-        titlestring = titlestring + "Google Plus,"
-        if args.email is not None:
-            phishingoutputfilenamegoogleplus=phishingoutputfilename+"-googleplus.csv"
-            filewritergoogleplus = open(phishingoutputfilenamegoogleplus.format(phishingoutputfilenamegoogleplus), 'wb')
+            filewriterinstagram = open(phishingoutputfilenameinstagram.format(phishingoutputfilenameinstagram), 'w')
 if args.a == True or args.vk == True or args.format == "socialmapper":
         titlestring = titlestring + "VKontakte,"
         if args.email is not None:
             phishingoutputfilenamevkontakte=phishingoutputfilename+"-vkontakte.csv"
-            filewritervkontakte = open(phishingoutputfilenamevkontakte.format(phishingoutputfilenamevkontakte), 'wb')
+            filewritervkontakte = open(phishingoutputfilenamevkontakte.format(phishingoutputfilenamevkontakte), 'w')
 if args.a == True or args.wb == True or args.format == "socialmapper":
         titlestring = titlestring + "Weibo,"
         if args.email is not None:
             phishingoutputfilenameweibo=phishingoutputfilename+"-weibo.csv"
-            filewriterweibo = open(phishingoutputfilenameweibo.format(phishingoutputfilenameweibo), 'wb')
+            filewriterweibo = open(phishingoutputfilenameweibo.format(phishingoutputfilenameweibo), 'w')
 if args.a == True or args.db == True or args.format == "socialmapper":
         titlestring = titlestring + "Douban,"
         if args.email is not None:
             phishingoutputfilenamedouban=phishingoutputfilename+"-douban.csv"
-            filewriterdouban = open(phishingoutputfilenamedouban.format(phishingoutputfilenamedouban), 'wb')
+            filewriterdouban = open(phishingoutputfilenamedouban.format(phishingoutputfilenamedouban), 'w')
 titlestring = titlestring[:-1]
-#filewriter.write("Full Name,LinkedIn,Facebook,Twitter,Instagram,Google Plus,Vkontakte,Weibo,Douban\n")
+#filewriter.write("Full Name,LinkedIn,Facebook,Twitter,Instagram,Vkontakte,Weibo,Douban\n")
 filewriter.write(titlestring)
 filewriter.write("\n")
 print("")
@@ -1251,12 +1153,6 @@ for person in peoplelist:
             if email != "Error":
                 instagramwritestring = '"%s","%s","%s","%s","%s","%s"\n' % (person.first_name,person.last_name,person.full_name,email,person.instagram,person.instagramimage)
                 filewriterinstagram.write(instagramwritestring)
-    if args.a == True or args.gp == True or args.format == "socialmapper":
-        writestring = writestring + '"%s",' % (person.googleplus)
-        if person.googleplus != "" and args.email is not None:
-            if email != "Error":
-                googlepluswritestring = '"%s","%s","%s","%s","%s","%s"\n' % (person.first_name,person.last_name,person.full_name,email,person.googleplus,person.googleplusimage)
-                filewritergoogleplus.write(googlepluswritestring)
     if args.a == True or args.vk == True or args.format == "socialmapper":
         writestring = writestring + '"%s",' % (person.vk)
         if person.vk != "" and args.email is not None:
@@ -1278,7 +1174,7 @@ for person in peoplelist:
 
     writestring = writestring[:-1]
     filewriter.write(writestring)
-    #filewriter.write('"%s","%s","%s","%s","%s","%s","%s","%s","%s"' % (person.full_name, person.linkedin, person.facebook, person.twitter, person.instagram, person.googleplus, person.vk, person.weibo, person.douban))
+    #filewriter.write('"%s","%s","%s","%s","%s","%s","%s","%s","%s"' % (person.full_name, person.linkedin, person.facebook, person.twitter, person.instagram, person.vk, person.weibo, person.douban))
     filewriter.write("\n")
 
     terminalstring = ""
@@ -1291,8 +1187,6 @@ for person in peoplelist:
         terminalstring = terminalstring +  "\tTwitter: " + person.twitter + "\n"
     if person.instagram != "":
         terminalstring = terminalstring +  "\tInstagram: " + person.instagram + "\n"
-    if person.googleplus != "":
-        terminalstring = terminalstring +  "\tGoogle Plus: " + person.googleplus + "\n"
     if person.vk != "":
         terminalstring = terminalstring +  "\tVkontakte: " + person.vk + "\n"
     if person.weibo != "":
@@ -1329,11 +1223,6 @@ try:
 except:
     pass
 try:
-    if filewritergoogleplus:
-        filewritergoogleplus.close()
-except:
-    pass
-try:
     if filewritervkontakte:
         filewritervkontakte.close()
 except:
@@ -1354,7 +1243,7 @@ except:
 htmloutputfilename = "SM-Results/" + args.input.replace("\"","").replace("/","-") + "-social-mapper.html"
 if args.format == "imagefolder":
     htmloutputfilename = "SM-Results/results-social-mapper.html"
-filewriter = open(htmloutputfilename.format(htmloutputfilename), 'wb')
+filewriter = open(htmloutputfilename.format(htmloutputfilename), 'w')
 #background-color: #4CAF50;
 css = """<meta charset="utf-8" />
 <style>
@@ -1499,7 +1388,7 @@ header = """<center><table id=\"employees\">
                 <th>Instagram</th>
             </tr>
             <tr>
-                <th>GooglePlus</th>
+                <th>-</th>
                 <th>VKontakte</th>
                 <th>Weibo</th>
                 <th>Douban</th>
@@ -1518,12 +1407,12 @@ for person in peoplelist:
                 "<td class=\"hasTooltipfarright\"><a href=\"%s\"><img src=\"%s\" onerror=\"this.style.display=\'none\'\" width=auto height=auto style=\"max-width:100px; max-height:100px;\"><span>Instagram:<br>%s</span></a></td>" \
             "</tr>" \
             "<tr>" \
-                "<td class=\"hasTooltipcenterleft\"><a href=\"%s\"><img src=\"%s\" onerror=\"this.style.display=\'none\'\" width=auto height=auto style=\"max-width:100px; max-height:100px;\"><span>GooglePlus:<br>%s</span></a></td>" \
+                "<td class=\"hasTooltipcenterleft\"><a href=\"%s\"><img src=\"%s\" onerror=\"this.style.display=\'none\'\" width=auto height=auto style=\"max-width:100px; max-height:100px;\"><span>-:<br>%s</span></a></td>" \
                 "<td class=\"hasTooltipcenterright\"><a href=\"%s\"><img src=\"%s\" onerror=\"this.style.display=\'none\'\" width=auto height=auto style=\"max-width:100px; max-height:100px;\"><span>VKontakte:<br>%s</span></a></td>" \
                 "<td class=\"hasTooltipright\"><a href=\"%s\"><img src=\"%s\" onerror=\"this.style.display=\'none\'\" width=auto height=auto style=\"max-width:100px; max-height:100px;\"><span>Weibo:<br>%s</span></a></td>" \
                 "<td class=\"hasTooltipfarright\"><a href=\"%s\"><img src=\"%s\" onerror=\"this.style.display=\'none\'\" width=auto height=auto style=\"max-width:100px; max-height:100px;\"><span>Douban:<br>%s</span></a></td>" \
             "</tr>" \
-            "</tbody>" % (person.person_imagelink, person.person_imagelink, person.full_name, person.linkedin, person.linkedinimage, person.linkedin, person.facebook, person.facebookcdnimage, person.facebook, person.twitter, person.twitterimage, person.twitter, person.instagram, person.instagramimage, person.instagram, person.googleplus, person.googleplusimage, person.googleplus, person.vk, person.vkimage, person.vk, person.weibo, person.weiboimage, person.weibo, person.douban, person.doubanimage, person.douban )
+            "</tbody>" % (person.person_imagelink, person.person_imagelink, person.full_name, person.linkedin, person.linkedinimage, person.linkedin, person.facebook, person.facebookcdnimage, person.facebook, person.twitter, person.twitterimage, person.twitter, person.instagram, person.instagramimage, person.instagram, "", "", "", person.vk, person.vkimage, person.vk, person.weibo, person.weiboimage, person.weibo, person.douban, person.doubanimage, person.douban )
     filewriter.write(body)
 
 filewriter.write(foot)
