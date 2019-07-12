@@ -27,8 +27,8 @@ class Instagramfinder(object):
 
 
 	def doLogin(self,username,password):
-			
-		self.driver.get("https://instagram.com/accounts/login/")
+		self.driver.get("https://www.instagram.com/accounts/login/?hl=en")
+		#self.driver.get("https://instagram.com/accounts/login/")
 		self.driver.execute_script('localStorage.clear();')
 
 		#convert unicode in instagram title to spaces for comparison
