@@ -3,6 +3,7 @@ from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from pyvirtualdisplay import Display
 from time import sleep
+import traceback
 import sys
 import os
 from bs4 import BeautifulSoup
