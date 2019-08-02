@@ -1,4 +1,5 @@
 group: travis_latest
+dist: xenial
 language: python
 python: 3.7
 cache: pip
