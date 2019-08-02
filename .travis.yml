@@ -3,7 +3,7 @@ dist: xenial
 language: python
 python: 3.7
 cache: pip
-install: pip install flake8 -r setup/requirements.txt
+install: pip install flake8  # -r setup/requirements.txt
 before_script:
   # stop the build if there are Python syntax errors or undefined names
   - flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
