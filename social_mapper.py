@@ -740,14 +740,16 @@ def authenticate():
 
 def loadPage(client, url, data=None):
     try:
-        response = client.open(url)
-    except:
-        print("[!] Cannot load main LinkedIn page")
-    try:
         if data is not None:
-            response = client.open(url, data.encode("utf-8"))
+            try:
+                response = client.open(url, data.encode("utf-8"))
+            except:
+                print("[!] Cannot load main LinkedIn GET page")
         else:
-            response = client.open(url)
+            try:
+                response = client.open(url)
+            except:
+                print("[!] Cannot load main LinkedIn POST page")
         emptybyte = bytearray()
         return emptybyte.join(response.readlines())
     except:
