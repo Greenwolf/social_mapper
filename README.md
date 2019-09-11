@@ -42,7 +42,7 @@ These instructions will show you the requirements for and how to use Social Mapp
 
 ### Prerequisites
 
-As this is a Python based tool, it should theoretically run on Linux, ChromeOS ([Developer Mode](https://www.chromium.org/chromium-os/developer-information-for-chrome-os-devices/generic)) and macOS. The main requirements are Firefox, Selenium and Geckodriver. To install the tool and set it up follow these 4 steps:
+As this is a Python3 based tool, it should theoretically run on Linux, ChromeOS ([Developer Mode](https://www.chromium.org/chromium-os/developer-information-for-chrome-os-devices/generic)) and macOS. The main requirements are Firefox, Selenium and Geckodriver. To install the tool and set it up follow these 4 steps:
 
 1) Install the latest version of Mozilla Firefox for macOS here:
 
@@ -79,7 +79,7 @@ On Linux & macOS finish the install with:
 ```
 git clone https://github.com/Greenwolf/social_mapper
 cd social_mapper/setup
-python -m pip install --no-cache-dir -r requirements.txt
+python3 -m pip install --no-cache-dir -r requirements.txt
 ```
 
 On Mac look through the [setup/setup-mac.txt](setup/setup-mac.txt) file to view some additional xcode, brew and xquartz installation instructions.
@@ -138,17 +138,17 @@ Here are a couple of example runs to get started for differing use cases:
 
 ```
 A quick run for Facebook and Twitter on some targets you have in an imagefolder, that you plan to manually review and don't mind some false positives:
-python social_mapper.py -f imagefolder -i ./mytargets -m fast -fb -tw
+python3 social_mapper.py -f imagefolder -i ./mytargets -m fast -fb -tw
 
 An exhaustive run on a large company where false positives must be kept to a minimum:
-python social_mapper.py -f company -i "SpiderLabs" -m accurate -a -t strict
+python3 social_mapper.py -f company -i "SpiderLabs" -m accurate -a -t strict
 
 A large run that needs to be split over multiple sessions due to time, the first run doing LinkedIn and Facebook, with the second resuming and filling in Twitter, Google Plus and Instagram:
-python social_mapper.py -f company -i "SpiderLabs" -m accurate -li -fb
-python social_mapper.py -f socialmapper -i ./SpiderLabs-social-mapper-linkedin-facebook.html -m accurate -tw -gp -ig
+python3 social_mapper.py -f company -i "SpiderLabs" -m accurate -li -fb
+python3 social_mapper.py -f socialmapper -i ./SpiderLabs-social-mapper-linkedin-facebook.html -m accurate -tw -gp -ig
 
 A quick run (~5min) without facial recognition to generate a CSV full of names, email addresses, profiles and photo links from up to 1000 people pulled out of a LinkedIn company, where the email format is known to be "firstname.lastname":
-python social_mapper.py -f company -i "SpiderLabs" -m accurate -li -e "<first>.<last>@spiderlabs.com"
+python3 social_mapper.py -f company -i "SpiderLabs" -m accurate -li -e "<first>.<last>@spiderlabs.com"
 ```
 
 ### Troubleshooting
