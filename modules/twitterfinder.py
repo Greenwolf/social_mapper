@@ -71,18 +71,21 @@ class Twitterfinder(object):
 
 
 	def getTwitterProfiles(self,first_name,last_name):
-		url = "https://twitter.com/search?f=users&vertical=default&q=" + first_name + "%20" + last_name + "&src=typd"
+		#url = "https://twitter.com/search?f=users&vertical=default&q=" + first_name + "%20" + last_name + "&src=typd"
+		url = "https://twitter.com/search?q=" + first_name + "%20" + last_name + "&src=typd&f=user"
 		self.driver.get(url)
 		sleep(3)
 		searchresponse = self.driver.page_source.encode('utf-8')
 		soupParser = BeautifulSoup(searchresponse, 'html.parser')
 		picturelist = []
-		for element in soupParser.find_all('div', {'class': 'ProfileCard-content'}):
+		#for element in soupParser.find_all('div', {'class': 'ProfileCard-content'}):
+		for element in soupParser.find_all('div', {'class': 'css-18t94o4 css-1dbjc4n r-1j3t67a r-1w50u8q r-o7ynqc r-1j63xyz'}):
 			try:
 				link = element.find('a')['href']
 				smallpic = element.find('img')['src']
-				replaced1 = smallpic.replace("_bigger.jpg","_400x400.jpg")
-				profilepic = replaced1.replace("_bigger.jpeg","_400x400.jpg")
+				#replaced1 = smallpic.replace("_bigger.jpg","_400x400.jpg")
+				#profilepic = replaced1.replace("_bigger.jpeg","_400x400.jpg")
+				profilepic = smallpic.replace("_reasonably_small.","_400x400.")
 				picturelist.append(["https://twitter.com" + link,profilepic,1.0])
 				#print("https://twitter.com" + link + "\n" + profilepic)
 			except:
