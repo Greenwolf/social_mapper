@@ -245,8 +245,8 @@ def fill_twitter(peoplelist):
             image_link = profilepic
             if image_link:
                 try:
-                    urllib.request.urlretrieve(image_link, "potential_target_image.jpg")
-                    potential_target_image = face_recognition.load_image_file("potential_target_image.jpg")
+                    urllib.request.urlretrieve(image_link, "potential_target_image")
+                    potential_target_image = face_recognition.load_image_file("potential_target_image")
                     try: # try block for when an image has no faces
                         potential_target_encoding = face_recognition.face_encodings(potential_target_image)[0]
                     except:
