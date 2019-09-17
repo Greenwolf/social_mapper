@@ -129,7 +129,7 @@ def fill_facebook(peoplelist):
         #for profilelink,distance in profilelist:
         for profilelink,profilepic,distance,cdnpicture in profilelist:
             try:
-                os.remove("potential_target_image.jpg")
+                os.remove("potential_target_image")
             except:
                 pass
             if early_break:
@@ -146,12 +146,12 @@ def fill_facebook(peoplelist):
                     headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/602.2.14 (KHTML, like Gecko) Version/10.0.1 Safari/602.2.14'}
                     # Get target image using requests, providing Selenium cookies, and fake user agent
                     response = requests.get(image_link, cookies=cookies,headers=headers,stream=True)
-                    with open('potential_target_image.jpg', 'wb') as out_file:
+                    with open('potential_target_image', 'wb') as out_file:
                         # Facebook images are sent content encoded so need to decode them
                         response.raw.decode_content = True
                         shutil.copyfileobj(response.raw, out_file)
                     del response
-                    potential_target_image = face_recognition.load_image_file("potential_target_image.jpg")
+                    potential_target_image = face_recognition.load_image_file("potential_target_image")
                     try: # try block for when an image has no faces
                         potential_target_encoding = face_recognition.face_encodings(potential_target_image)[0]
                     except:
@@ -237,7 +237,7 @@ def fill_twitter(peoplelist):
         updatedlist = []
         for profilelink,profilepic,distance in profilelist:
             try:
-                os.remove("potential_target_image.jpg")
+                os.remove("potential_target_image")
             except:
                 pass
             if early_break:
@@ -322,7 +322,7 @@ def fill_instagram(peoplelist):
         updatedlist = []
         for profilelink,profilepic,distance in profilelist:
             try:
-                os.remove("potential_target_image.jpg")
+                os.remove("potential_target_image")
             except:
                 pass
             if early_break:
@@ -330,8 +330,8 @@ def fill_instagram(peoplelist):
             image_link = profilepic
             if image_link:
                 try:
-                    urllib.request.urlretrieve(image_link, "potential_target_image.jpg")
-                    potential_target_image = face_recognition.load_image_file("potential_target_image.jpg")
+                    urllib.request.urlretrieve(image_link, "potential_target_image")
+                    potential_target_image = face_recognition.load_image_file("potential_target_image")
                     try: # try block for when an image has no faces
                         potential_target_encoding = face_recognition.face_encodings(potential_target_image)[0]
                     except:
@@ -406,7 +406,7 @@ def fill_linkedin(peoplelist):
         updatedlist = []
         for profilelink,profilepic,distance in profilelist:
             try:
-                os.remove("potential_target_image.jpg")
+                os.remove("potential_target_image")
             except:
                 pass
             if early_break:
@@ -414,8 +414,8 @@ def fill_linkedin(peoplelist):
             image_link = profilepic
             if image_link:
                 try:
-                    urllib.request.urlretrieve(image_link, "potential_target_image.jpg")
-                    potential_target_image = face_recognition.load_image_file("potential_target_image.jpg")
+                    urllib.request.urlretrieve(image_link, "potential_target_image")
+                    potential_target_image = face_recognition.load_image_file("potential_target_image")
                     try: # try block for when an image has no faces
                         potential_target_encoding = face_recognition.face_encodings(potential_target_image)[0]
                     except:
@@ -486,7 +486,7 @@ def fill_vkontakte(peoplelist):
         updatedlist = []
         for profilelink,profilepic,distance in profilelist:
             try:
-                os.remove("potential_target_image.jpg")
+                os.remove("potential_target_image")
             except:
                 pass
             if early_break:
@@ -494,8 +494,8 @@ def fill_vkontakte(peoplelist):
             image_link = profilepic
             if image_link:
                 try:
-                    urllib.request.urlretrieve(image_link, "potential_target_image.jpg")
-                    potential_target_image = face_recognition.load_image_file("potential_target_image.jpg")
+                    urllib.request.urlretrieve(image_link, "potential_target_image")
+                    potential_target_image = face_recognition.load_image_file("potential_target_image")
                     try: # try block for when an image has no faces
                         potential_target_encoding = face_recognition.face_encodings(potential_target_image)[0]
                     except:
@@ -566,7 +566,7 @@ def fill_weibo(peoplelist):
         updatedlist = []
         for profilelink,profilepic,distance in profilelist:
             try:
-                os.remove("potential_target_image.jpg")
+                os.remove("potential_target_image")
             except:
                 pass
             if early_break:
@@ -574,8 +574,8 @@ def fill_weibo(peoplelist):
             image_link = profilepic
             if image_link:
                 try:
-                    urllib.request.urlretrieve(image_link, "potential_target_image.jpg")
-                    potential_target_image = face_recognition.load_image_file("potential_target_image.jpg")
+                    urllib.request.urlretrieve(image_link, "potential_target_image")
+                    potential_target_image = face_recognition.load_image_file("potential_target_image")
                     try: # try block for when an image has no faces
                         potential_target_encoding = face_recognition.face_encodings(potential_target_image)[0]
                     except:
@@ -646,7 +646,7 @@ def fill_douban(peoplelist):
         updatedlist = []
         for profilelink,profilepic,distance in profilelist:
             try:
-                os.remove("potential_target_image.jpg")
+                os.remove("potential_target_image")
             except:
                 pass
             if early_break:
@@ -654,8 +654,8 @@ def fill_douban(peoplelist):
             image_link = profilepic
             if image_link:
                 try:
-                    urllib.request.urlretrieve(image_link, "potential_target_image.jpg")
-                    potential_target_image = face_recognition.load_image_file("potential_target_image.jpg")
+                    urllib.request.urlretrieve(image_link, "potential_target_image")
+                    potential_target_image = face_recognition.load_image_file("potential_target_image")
                     try: # try block for when an image has no faces
                         potential_target_encoding = face_recognition.face_encodings(potential_target_image)[0]
                     except:
