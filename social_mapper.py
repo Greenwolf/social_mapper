@@ -720,7 +720,7 @@ def login():
         cookie = cookiejar._cookies['.www.linkedin.com']['/']['li_at'].value
     except:
         print("Error logging in! Try changing language on social networks or verifying login data.")
-        print("If a capcha is required to login (due to excessive attempts) it will keep failing, try using a VPN.")
+        print("If a capcha is required to login (due to excessive attempts) it will keep failing, try using a VPN or running with the -s flag to show the browser, where you can manually solve the capcha.")
         sys.exit(0)
     cookiejar.save()
     os.remove(cookie_filename)
