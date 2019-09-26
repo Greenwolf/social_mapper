@@ -719,7 +719,8 @@ def login():
     try:
         cookie = cookiejar._cookies['.www.linkedin.com']['/']['li_at'].value
     except:
-        print("cookie debug")
+        print("Error logging in! Try changing language on social networks or verifying login data.")
+        print("If a capcha is required to login (due to excessive attempts) it will keep failing, try using a VPN.")
         sys.exit(0)
     cookiejar.save()
     os.remove(cookie_filename)
@@ -912,7 +913,11 @@ if args.format == "company":
     cookies['JSESSIONID'] = 'ajax:0397788525211216808'
     r = requests.get(url, cookies=cookies, headers=headers)
     content = json.loads(r.text)
-    data_total = content['elements'][0]['total']
+    try :
+      data_total = content['elements'][0]['total']
+    except IndexError:
+        print("Company has no people listed, nothing to match against other Social Networks!")
+        sys.exit(0)
 
     # Calculate pages off final results at 40 results/page
     pages = math.ceil(data_total / 40)
