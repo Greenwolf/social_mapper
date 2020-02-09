@@ -6,6 +6,7 @@ from modules import linkedinfinder
 from modules import vkontaktefinder
 from modules import weibofinder
 from modules import doubanfinder
+from modules import pinterestfinder
 from shutil import copyfile
 import facebook
 import requests
@@ -33,8 +34,8 @@ global linkedin_username
 global linkedin_password
 linkedin_username = ""
 linkedin_password = ""
-global facebook_username 
-global facebook_password 
+global facebook_username
+global facebook_password
 facebook_username = ""
 facebook_password = ""
 global twitter_username
@@ -45,6 +46,10 @@ global instagram_username
 global instagram_password
 instagram_username = ""
 instagram_password = ""
+global google_username
+global google_password
+google_username = ""
+google_password = ""
 global vk_username
 global vk_password
 vk_username = "" # Can be mobile or email
@@ -57,6 +62,10 @@ global douban_username
 global douban_password
 douban_username = ""
 douban_password = ""
+global pinterest_username
+global pinterest_password
+pinterest_username = ""
+pinterest_password = ""
 
 
 startTime = datetime.now()
@@ -82,6 +91,8 @@ class Person(object):
     weiboimage = ""
     douban = ""
     doubanimage = ""
+    pinterest = ""
+    pinterestimage = ""
     def __init__(self, first_name, last_name, full_name, person_image):
         self.first_name = first_name
         self.last_name = last_name
@@ -129,7 +140,7 @@ def fill_facebook(peoplelist):
         #for profilelink,distance in profilelist:
         for profilelink,profilepic,distance,cdnpicture in profilelist:
             try:
-                os.remove("potential_target_image")
+                os.remove("potential_target_image.jpg")
             except:
                 pass
             if early_break:
@@ -146,12 +157,12 @@ def fill_facebook(peoplelist):
                     headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/602.2.14 (KHTML, like Gecko) Version/10.0.1 Safari/602.2.14'}
                     # Get target image using requests, providing Selenium cookies, and fake user agent
                     response = requests.get(image_link, cookies=cookies,headers=headers,stream=True)
-                    with open('potential_target_image', 'wb') as out_file:
+                    with open('potential_target_image.jpg', 'wb') as out_file:
                         # Facebook images are sent content encoded so need to decode them
                         response.raw.decode_content = True
                         shutil.copyfileobj(response.raw, out_file)
                     del response
-                    potential_target_image = face_recognition.load_image_file("potential_target_image")
+                    potential_target_image = face_recognition.load_image_file("potential_target_image.jpg")
                     try: # try block for when an image has no faces
                         potential_target_encoding = face_recognition.face_encodings(potential_target_image)[0]
                     except:
@@ -210,6 +221,84 @@ def fill_facebook(peoplelist):
         print("Error Killing Facebook Selenium instance")
     return peoplelist
 
+def fill_pinterest(peoplelist):
+    PinterestfinderObject = pinterestfinder.Pinterestfinder(showbrowser)
+    PinterestfinderObject.doLogin(pinterest_username, pinterest_password)
+    
+    count=1
+    ammount=len(peoplelist)
+    for person in peoplelist:
+        if args.vv == True:
+            print("Pinterest Check %i/%i : %s" % (count,ammount,person.full_name))
+        else:
+            sys.stdout.write("\rPinterest Check %i/%i : %s                                " % (count,ammount,person.full_name))
+            sys.stdout.flush()
+        count = count + 1
+        if person.person_image:
+            try:
+                target_image = face_recognition.load_image_file(person.person_image)
+                target_encoding = face_recognition.face_encodings(target_image)[0]
+                profilelist = PinterestfinderObject.getPinterestProfiles(person.first_name, person.last_name)
+            except:
+                continue
+        else:
+            continue
+
+        early_break = False
+        updatedlist = []
+        for profilelink,profilepic,distance in profilelist:
+            try:
+                os.remove("potential_target_image.jpg")
+            except:
+                pass
+            if early_break:
+                break
+            image_link = profilepic
+            if image_link:
+                try:
+                    urllib.request.urlretrieve(image_link, "potential_target_image.jpg")
+                    potential_target_image = face_recognition.load_image_file("potential_target_image.jpg")
+                    try: # try block for when an image has no faces
+                        potential_target_encoding = face_recognition.face_encodings(potential_target_image)[0]
+                    except:
+                        continue
+                    results = face_recognition.face_distance([target_encoding], potential_target_encoding)
+                    for result in results:
+                        if args.mode == "fast":
+                            if result < threshold:
+                                person.pinterest = encoding.smart_str(profilelink, encoding='ascii', errors='ignore')
+                                person.pinterestimage = encoding.smart_str(image_link, encoding='ascii', errors='ignore')
+                                if args.vv == True:
+                                    print("\tMatch found: " + person.full_name)
+                                    print("\tPinterest: " + person.pinterest)
+                                early_break = True
+                                break
+                        elif args.mode == "accurate":
+                            if result < threshold:
+                                updatedlist.append([profilelink,image_link,result])
+                except:
+                    continue
+        if args.mode == "accurate":
+            highestdistance=1.0
+            bestprofilelink=""
+            bestimagelink=""
+            for profilelink,image_link,distance in updatedlist:
+                if distance < highestdistance:
+                    highestdistance = distance
+                    bestprofilelink = profilelink
+                    bestimagelink = image_link
+            if highestdistance < threshold:
+                person.pinterest = encoding.smart_str(bestprofilelink, encoding='ascii', errors='ignore')
+                person.pinterestimage = encoding.smart_str(bestimagelink, encoding='ascii', errors='ignore')
+                if args.vv == True:
+                    print("\tMatch found: " + person.full_name)
+                    print("\tPinterest: " + person.pinterest)
+    try:
+        PinterestfinderObject.kill()
+    except:
+        print("Error Killing Pinterest Selenium instance")
+    return peoplelist
+
 def fill_twitter(peoplelist):
     TwitterfinderObject = twitterfinder.Twitterfinder(showbrowser)
     TwitterfinderObject.doLogin(twitter_username,twitter_password)
@@ -237,7 +326,7 @@ def fill_twitter(peoplelist):
         updatedlist = []
         for profilelink,profilepic,distance in profilelist:
             try:
-                os.remove("potential_target_image")
+                os.remove("potential_target_image.jpg")
             except:
                 pass
             if early_break:
@@ -245,8 +334,8 @@ def fill_twitter(peoplelist):
             image_link = profilepic
             if image_link:
                 try:
-                    urllib.request.urlretrieve(image_link, "potential_target_image")
-                    potential_target_image = face_recognition.load_image_file("potential_target_image")
+                    urllib.request.urlretrieve(image_link, "potential_target_image.jpg")
+                    potential_target_image = face_recognition.load_image_file("potential_target_image.jpg")
                     try: # try block for when an image has no faces
                         potential_target_encoding = face_recognition.face_encodings(potential_target_image)[0]
                     except:
@@ -322,7 +411,7 @@ def fill_instagram(peoplelist):
         updatedlist = []
         for profilelink,profilepic,distance in profilelist:
             try:
-                os.remove("potential_target_image")
+                os.remove("potential_target_image.jpg")
             except:
                 pass
             if early_break:
@@ -330,8 +419,8 @@ def fill_instagram(peoplelist):
             image_link = profilepic
             if image_link:
                 try:
-                    urllib.request.urlretrieve(image_link, "potential_target_image")
-                    potential_target_image = face_recognition.load_image_file("potential_target_image")
+                    urllib.request.urlretrieve(image_link, "potential_target_image.jpg")
+                    potential_target_image = face_recognition.load_image_file("potential_target_image.jpg")
                     try: # try block for when an image has no faces
                         potential_target_encoding = face_recognition.face_encodings(potential_target_image)[0]
                     except:
@@ -406,7 +495,7 @@ def fill_linkedin(peoplelist):
         updatedlist = []
         for profilelink,profilepic,distance in profilelist:
             try:
-                os.remove("potential_target_image")
+                os.remove("potential_target_image.jpg")
             except:
                 pass
             if early_break:
@@ -414,8 +503,8 @@ def fill_linkedin(peoplelist):
             image_link = profilepic
             if image_link:
                 try:
-                    urllib.request.urlretrieve(image_link, "potential_target_image")
-                    potential_target_image = face_recognition.load_image_file("potential_target_image")
+                    urllib.request.urlretrieve(image_link, "potential_target_image.jpg")
+                    potential_target_image = face_recognition.load_image_file("potential_target_image.jpg")
                     try: # try block for when an image has no faces
                         potential_target_encoding = face_recognition.face_encodings(potential_target_image)[0]
                     except:
@@ -486,7 +575,7 @@ def fill_vkontakte(peoplelist):
         updatedlist = []
         for profilelink,profilepic,distance in profilelist:
             try:
-                os.remove("potential_target_image")
+                os.remove("potential_target_image.jpg")
             except:
                 pass
             if early_break:
@@ -494,8 +583,8 @@ def fill_vkontakte(peoplelist):
             image_link = profilepic
             if image_link:
                 try:
-                    urllib.request.urlretrieve(image_link, "potential_target_image")
-                    potential_target_image = face_recognition.load_image_file("potential_target_image")
+                    urllib.request.urlretrieve(image_link, "potential_target_image.jpg")
+                    potential_target_image = face_recognition.load_image_file("potential_target_image.jpg")
                     try: # try block for when an image has no faces
                         potential_target_encoding = face_recognition.face_encodings(potential_target_image)[0]
                     except:
@@ -566,7 +655,7 @@ def fill_weibo(peoplelist):
         updatedlist = []
         for profilelink,profilepic,distance in profilelist:
             try:
-                os.remove("potential_target_image")
+                os.remove("potential_target_image.jpg")
             except:
                 pass
             if early_break:
@@ -574,8 +663,8 @@ def fill_weibo(peoplelist):
             image_link = profilepic
             if image_link:
                 try:
-                    urllib.request.urlretrieve(image_link, "potential_target_image")
-                    potential_target_image = face_recognition.load_image_file("potential_target_image")
+                    urllib.request.urlretrieve(image_link, "potential_target_image.jpg")
+                    potential_target_image = face_recognition.load_image_file("potential_target_image.jpg")
                     try: # try block for when an image has no faces
                         potential_target_encoding = face_recognition.face_encodings(potential_target_image)[0]
                     except:
@@ -646,7 +735,7 @@ def fill_douban(peoplelist):
         updatedlist = []
         for profilelink,profilepic,distance in profilelist:
             try:
-                os.remove("potential_target_image")
+                os.remove("potential_target_image.jpg")
             except:
                 pass
             if early_break:
@@ -654,8 +743,8 @@ def fill_douban(peoplelist):
             image_link = profilepic
             if image_link:
                 try:
-                    urllib.request.urlretrieve(image_link, "potential_target_image")
-                    potential_target_image = face_recognition.load_image_file("potential_target_image")
+                    urllib.request.urlretrieve(image_link, "potential_target_image.jpg")
+                    potential_target_image = face_recognition.load_image_file("potential_target_image.jpg")
                     try: # try block for when an image has no faces
                         potential_target_encoding = face_recognition.face_encodings(potential_target_image)[0]
                     except:
@@ -784,6 +873,7 @@ parser.add_argument('-s', '--showbrowser',action='store_true',dest='showbrowser'
 
 parser.add_argument('-a', '--all',action='store_true',dest='a',help='Flag to check all social media sites')
 parser.add_argument('-fb', '--facebook',action='store_true',dest='fb',help='Flag to check Facebook')
+parser.add_argument('-pin', '--pinterest',action='store_true',dest='pin',help='Flag to check Pinterest')
 parser.add_argument('-tw', '--twitter',action='store_true',dest='tw',help='Flag to check Twitter')
 parser.add_argument('-ig', '--instagram',action='store_true',dest='ig',help='Flag to check Instagram')
 parser.add_argument('-li', '--linkedin',action='store_true',dest='li',help='Flag to check LinkedIn - Automatic with \'company\' input type')
@@ -793,8 +883,8 @@ parser.add_argument('-db', '--douban',action='store_true',dest='db',help='Flag t
 
 args = parser.parse_args()
 
-if not (args.a or args.fb or args.tw or args.ig or args.li or args.vk or args.wb or args.db):
-    parser.error('No sites specified requested, add -a for all, or a combination of the sites you want to check using a mix of -fb -tw -ig -li -vk -db -wb')
+if not (args.a or args.fb or args.tw or args.pin or args.ig or args.li or args.vk or args.wb or args.db):
+    parser.error('No sites specified requested, add -a for all, or a combination of the sites you want to check using a mix of -fb -tw -ig -li -pin -vk -db -wb')
 
 # Set up face matching threshold
 threshold = 0.6
@@ -983,7 +1073,7 @@ if args.format == "company":
 # To continue a Social Mapper run for additional sites.
 if args.format == "socialmapper":
     if args.a == True:
-        print("This option is for adding additional sites to a Social Mapper report\nFeed in a Social Mapper HTML file that's only been partially run, for example:\nFirst run (LinkedIn, Facebook, Twitter): python social_mapper -f company -i \"SpiderLabs\" -m fast -t standard -li -fb -tw\n Second run (adding Instagram): python social_mapper -f socialmapper -i SpiderLabs-social-mapper.html -m fast -t standard -ig")
+        print("This option is for adding additional sites to a Social Mapper report\nFeed in a Social Mapper HTML file that's only been partially run, for example:\nFirst run (LinkedIn, Facebook, Twitter): python social_mapper -f company -i \"SpiderLabs\" -m fast -t standard -li -fb -tw\n Second run (adding Instagram and Google Plus): python social_mapper -f socialmapper -i SpiderLabs-social-mapper.html -m fast -t standard -ig -gp")
         sys.exit(1)
     exit=False
     try:
@@ -1016,6 +1106,8 @@ if args.format == "socialmapper":
         person.facebookcdnimage = encoding.smart_str(personhtml.findAll("td")[3].find("img")['src'], encoding='ascii', errors='ignore').replace(";","")
         person.twitter = encoding.smart_str(personhtml.findAll("td")[4].find("a")['href'], encoding='ascii', errors='ignore').replace(";","")
         person.twitterimage = encoding.smart_str(personhtml.findAll("td")[4].find("img")['src'], encoding='ascii', errors='ignore').replace(";","")
+        person.pinterest = encoding.smart_str(personhtml.findAll("td")[4].find("a")['href'], encoding='ascii', errors='ignore').replace(";","")
+        person.pinterestimage = encoding.smart_str(personhtml.findAll("td")[4].find("img")['src'], encoding='ascii', errors='ignore').replace(";","")
         person.instagram = encoding.smart_str(personhtml.findAll("td")[5].find("a")['href'], encoding='ascii', errors='ignore').replace(";","")
         person.instagramimage = encoding.smart_str(personhtml.findAll("td")[5].find("img")['src'], encoding='ascii', errors='ignore').replace(";","")
         person.vk = encoding.smart_str(personhtml.findAll("td")[7].find("a")['href'], encoding='ascii', errors='ignore').replace(";","")
@@ -1046,6 +1138,11 @@ if args.a == True or args.tw == True:
         peoplelist = fill_twitter(peoplelist)
     else:
         print("Please provide Twitter Login Credentials in the social_mapper.py file")
+if args.a == True or args.pin == True:
+    if not (pinterest_username == "" or pinterest_password == ""):
+        peoplelist = fill_pinterest(peoplelist)
+    else:
+        print("Please provide Pinterest Login Credentials in the social_mapper.py file")
 if args.a == True or args.ig == True:
     if not (instagram_username == "" or instagram_password == ""):
         peoplelist = fill_instagram(peoplelist)
@@ -1101,6 +1198,11 @@ if args.a == True or args.tw == True or args.format == "socialmapper":
         if args.email is not None:
             phishingoutputfilenametwitter=phishingoutputfilename+"-twitter.csv"
             filewritertwitter = open(phishingoutputfilenametwitter.format(phishingoutputfilenametwitter), 'w')
+if args.a == True or args.pin == True or args.format == "socialmapper":
+        titlestring = titlestring + "Pinterest,"
+        if args.email is not None:
+            phishingoutputfilenamepinterest=phishingoutputfilename+"-pinterest.csv"
+            filewriterpinterest = open(phishingoutputfilenamepinterest.format(phishingoutputfilenamepinterest), 'w')
 if args.a == True or args.ig == True or args.format == "socialmapper":
         titlestring = titlestring + "Instagram,"
         if args.email is not None:
@@ -1122,7 +1224,7 @@ if args.a == True or args.db == True or args.format == "socialmapper":
             phishingoutputfilenamedouban=phishingoutputfilename+"-douban.csv"
             filewriterdouban = open(phishingoutputfilenamedouban.format(phishingoutputfilenamedouban), 'w')
 titlestring = titlestring[:-1]
-#filewriter.write("Full Name,LinkedIn,Facebook,Twitter,Instagram,Vkontakte,Weibo,Douban\n")
+#filewriter.write("Full Name,LinkedIn,Facebook,Twitter,Pinterest,Instagram,Google Plus,Vkontakte,Weibo,Douban\n")
 filewriter.write(titlestring)
 filewriter.write("\n")
 print("")
@@ -1154,6 +1256,12 @@ for person in peoplelist:
             if email != "Error":
                 twitterwritestring = '"%s","%s","%s","%s","%s","%s"\n' % (person.first_name,person.last_name,person.full_name,email,person.twitter,person.twitterimage)
                 filewritertwitter.write(twitterwritestring)
+    if args.a == True or args.pin == True or args.format == "socialmapper":
+        writestring = writestring + '"%s",' % (person.pinterest)
+        if person.pinterest != "" and args.email is not None:
+            if email != "Error":
+                pinterestwritestring = '"%s","%s","%s","%s","%s","%s"\n' % (person.first_name,person.last_name,person.full_name,email,person.pinterest,person.pinterestimage)
+                filewriterpinterest.write(pinterestwritestring)
     if args.a == True or args.ig == True or args.format == "socialmapper":
         writestring = writestring + '"%s",' % (person.instagram)
         if person.instagram != "" and args.email is not None:
@@ -1181,7 +1289,7 @@ for person in peoplelist:
 
     writestring = writestring[:-1]
     filewriter.write(writestring)
-    #filewriter.write('"%s","%s","%s","%s","%s","%s","%s","%s","%s"' % (person.full_name, person.linkedin, person.facebook, person.twitter, person.instagram, person.vk, person.weibo, person.douban))
+    #filewriter.write('"%s","%s","%s","%s","%s","%s","%s","%s","%s"' % (person.full_name, person.linkedin, person.facebook, person.twitter, person.pinterest, person.instagram, person.vk, person.weibo, person.douban))
     filewriter.write("\n")
 
     terminalstring = ""
@@ -1192,6 +1300,8 @@ for person in peoplelist:
         terminalstring = terminalstring +  "\tFacebook: " + person.facebook + "\n"
     if person.twitter != "":
         terminalstring = terminalstring +  "\tTwitter: " + person.twitter + "\n"
+    if person.pinterest != "":
+        terminalstring = terminalstring +  "\tPinterest: " + person.pinterest + "\n"
     if person.instagram != "":
         terminalstring = terminalstring +  "\tInstagram: " + person.instagram + "\n"
     if person.vk != "":
@@ -1222,6 +1332,11 @@ except:
 try:
     if filewritertwitter:
         filewritertwitter.close()
+except:
+    pass
+try:
+    if filewriterpinterest:
+        filewriterpinterest.close()
 except:
     pass
 try:
@@ -1392,6 +1507,7 @@ header = """<center><table id=\"employees\">
                 <th>LinkedIn</th>
                 <th>Facebook</th>
                 <th>Twitter</th>
+                <th>Pinterest</th>
                 <th>Instagram</th>
             </tr>
             <tr>
@@ -1411,6 +1527,7 @@ for person in peoplelist:
                 "<td class=\"hasTooltipcenterleft\"><a href=\"%s\"><img src=\"%s\" onerror=\"this.style.display=\'none\'\" width=auto height=auto style=\"max-width:100px; max-height:100px;\"><span>LinkedIn:<br>%s</span></a></td>" \
                 "<td class=\"hasTooltipcenterright\"><a href=\"%s\"><img src=\"%s\" onerror=\"this.style.display=\'none\'\" width=auto height=auto style=\"max-width:100px; max-height:100px;\"><span>Facebook:<br>%s</span></a></td>" \
                 "<td class=\"hasTooltipright\"><a href=\"%s\"><img src=\"%s\" onerror=\"this.style.display=\'none\'\" width=auto height=auto style=\"max-width:100px; max-height:100px;\"><span>Twitter:<br>%s</span></a></td>" \
+                "<td class=\"hasTooltipright\"><a href=\"%s\"><img src=\"%s\" onerror=\"this.style.display=\'none\'\" width=auto height=auto style=\"max-width:100px; max-height:100px;\"><span>Pinterest:<br>%s</span></a></td>" \
                 "<td class=\"hasTooltipfarright\"><a href=\"%s\"><img src=\"%s\" onerror=\"this.style.display=\'none\'\" width=auto height=auto style=\"max-width:100px; max-height:100px;\"><span>Instagram:<br>%s</span></a></td>" \
             "</tr>" \
             "<tr>" \
@@ -1419,7 +1536,7 @@ for person in peoplelist:
                 "<td class=\"hasTooltipright\"><a href=\"%s\"><img src=\"%s\" onerror=\"this.style.display=\'none\'\" width=auto height=auto style=\"max-width:100px; max-height:100px;\"><span>Weibo:<br>%s</span></a></td>" \
                 "<td class=\"hasTooltipfarright\"><a href=\"%s\"><img src=\"%s\" onerror=\"this.style.display=\'none\'\" width=auto height=auto style=\"max-width:100px; max-height:100px;\"><span>Douban:<br>%s</span></a></td>" \
             "</tr>" \
-            "</tbody>" % (person.person_imagelink, person.person_imagelink, person.full_name, person.linkedin, person.linkedinimage, person.linkedin, person.facebook, person.facebookcdnimage, person.facebook, person.twitter, person.twitterimage, person.twitter, person.instagram, person.instagramimage, person.instagram, "", "", "", person.vk, person.vkimage, person.vk, person.weibo, person.weiboimage, person.weibo, person.douban, person.doubanimage, person.douban )
+            "</tbody>" % (person.person_imagelink, person.person_imagelink, person.full_name, person.linkedin, person.linkedinimage, person.linkedin, person.facebook, person.facebookcdnimage, person.facebook, person.twitter, person.twitterimage, person.twitter, person.pinterest, person.pinterestimage, person.pinterest, person.instagram, person.instagramimage, person.instagram, "", "", "", person.vk, person.vkimage, person.vk, person.weibo, person.weiboimage, person.weibo, person.douban, person.doubanimage, person.douban )
     filewriter.write(body)
 
 filewriter.write(foot)
