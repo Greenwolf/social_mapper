@@ -12,6 +12,7 @@ Social Mapper supports the following social media platforms:
 
 * LinkedIn
 * Facebook
+* Pinterest
 * Twitter
 * Google Plus
 * Instagram
