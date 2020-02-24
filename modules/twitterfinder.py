@@ -34,10 +34,12 @@ class Twitterfinder(object):
 		#agent = self.driver.execute_script("return navigator.userAgent")
 		#print("User Agent: " + agent)
 		
+		sleep(2)
+
 		if(self.driver.title.encode('ascii','replace').startswith(bytes("Login on", 'utf-8'))):
 			print("\n[+] Twitter Login Page loaded successfully [+]")
 			try:
-				twUsername = self.driver.find_element_by_class_name("js-username-field")
+				twUsername = self.driver.find_element_by_name("session[username_or_email]")
 			except:
 				print("Twitter Login Page username field seems to have changed, please make an issue on: https://github.com/Greenwolf/social_mapper")
 				sys.exit()
@@ -46,7 +48,7 @@ class Twitterfinder(object):
 
 			try:
 				#twPassword = self.driver.find_element_by_xpath("//input[@class='js-password-field']")
-				twPassword = self.driver.find_element_by_class_name("js-password-field")
+				twPassword = self.driver.find_element_by_name("session[password]")
 			except:
 				print("Twitter Login Page password field seems to have changed, please make an issue on: https://github.com/Greenwolf/social_mapper")
 				sys.exit()
@@ -54,7 +56,7 @@ class Twitterfinder(object):
 			sleep(2)
 
 			try:
-				twLoginButton = self.driver.find_element_by_xpath("//button[@class='submit EdgeButton EdgeButton--primary EdgeButtom--medium']")
+				twLoginButton = self.driver.find_element_by_xpath("/html/body/div/div/div/div/main/div/div/form/div/div[3]/div")
 			except:
 				print("Twitter Login Page login button name seems to have changed, please make an issue on: https://github.com/Greenwolf/social_mapper")
 				traceback.print_exc()
