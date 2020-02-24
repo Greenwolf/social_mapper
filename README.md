@@ -172,7 +172,7 @@ If this tool has been useful for you, feel free to thank me by buying me a coffe
 ## Acknowledgments
 
 * Thanks to Vincent Yiu & MDSEC for their great LinkedInt tool which inspired me to add the search by LinkedIn company name input method.
-* Thanks to [ewpratten](https://github.com/ewpratten), [cclauss](https://github.com/cclauss), [TADT1909](https://github.com/tadt1909), [Molkree](https://github.com/Molkree) and [kix-s](https://github.com/kix-s) for their contributions to the project.
+* Thanks to [janmei](https://github.com/janmei) (Pinterest Module), [ewpratten](https://github.com/ewpratten), [cclauss](https://github.com/cclauss), [TADT1909](https://github.com/tadt1909), [Molkree](https://github.com/Molkree) and [kix-s](https://github.com/kix-s) for their contributions to the project.
 * Thanks to `[Your Name Could Be Here, Come Help Out!]` for contributions to the project.
 
 ![Social Mapper Logo](docs/logo.png?raw=true "Social Mapper Logo")
