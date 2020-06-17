@@ -24,6 +24,9 @@ May need to install XQuartz to solve 'Xvfb' issues:
 https://www.xquartz.org/
 If you can't run 'Xvfb -help' after installation, try running from the XQuartz terminal:
 Applications > Utilities > XQuartz > Right Click in Dock > Terminal
+You also need to give bash full disk access:
+$ open /bin
+System Preferences > Full Disk Access > drag bash into window
 
 If you run into problems, try using sudo to install with pip + for running Python.
 If you get Selenium problems when running as sudo, try 'sudo su' to change to the root user, then run as root.
