@@ -81,7 +81,8 @@ class Twitterfinder(object):
 		soupParser = BeautifulSoup(searchresponse, 'html.parser')
 		picturelist = []
 		#for element in soupParser.find_all('div', {'class': 'ProfileCard-content'}):
-		for element in soupParser.find_all('div', {'class': 'css-18t94o4 css-1dbjc4n r-1j3t67a r-1w50u8q r-o7ynqc r-1j63xyz'}):
+		#for element in soupParser.find_all('div', {'class': 'css-18t94o4 css-1dbjc4n r-1j3t67a r-1w50u8q r-o7ynqc r-1j63xyz'}):
+		for element in soupParser.find_all('div', {'class': 'css-1dbjc4n r-18kxxzh r-1h0z5md r-zso239'}):
 			try:
 				link = element.find('a')['href']
 				smallpic = element.find('img')['src']
