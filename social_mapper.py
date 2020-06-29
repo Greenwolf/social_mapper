@@ -26,9 +26,7 @@ from django.utils import encoding
 import traceback
 import math
 
-
 assert sys.version_info >= (3,), "Only Python 3 is currently supported."
-
 
 global linkedin_username
 global linkedin_password
@@ -115,7 +113,7 @@ def fill_facebook(peoplelist):
     count=1
     ammount=len(peoplelist)
     for person in peoplelist:
-        if args.vv == True:
+        if args.vv == True or args.debug == True:
             print("Facebook Check %i/%i : %s" % (count,ammount,person.full_name))
         else:
             sys.stdout.write("\rFacebook Check %i/%i : %s                                " % (count,ammount,person.full_name))
@@ -130,6 +128,8 @@ def fill_facebook(peoplelist):
                 target_image = face_recognition.load_image_file(person.person_image)
                 target_encoding = face_recognition.face_encodings(target_image)[0]
                 profilelist = FacebookfinderObject.getFacebookProfiles(person.first_name, person.last_name,facebook_username,facebook_password)
+                if args.debug == True:
+                    print(profilelist)
             except:
                 continue
         else:
@@ -228,7 +228,7 @@ def fill_pinterest(peoplelist):
     count=1
     ammount=len(peoplelist)
     for person in peoplelist:
-        if args.vv == True:
+        if args.vv == True or args.debug == True:
             print("Pinterest Check %i/%i : %s" % (count,ammount,person.full_name))
         else:
             sys.stdout.write("\rPinterest Check %i/%i : %s                                " % (count,ammount,person.full_name))
@@ -239,6 +239,8 @@ def fill_pinterest(peoplelist):
                 target_image = face_recognition.load_image_file(person.person_image)
                 target_encoding = face_recognition.face_encodings(target_image)[0]
                 profilelist = PinterestfinderObject.getPinterestProfiles(person.first_name, person.last_name)
+                if args.debug == True:
+                    print(profilelist)
             except:
                 continue
         else:
@@ -306,7 +308,7 @@ def fill_twitter(peoplelist):
     count=1
     ammount=len(peoplelist)
     for person in peoplelist:
-        if args.vv == True:
+        if args.vv == True or args.debug == True:
             print("Twitter Check %i/%i : %s" % (count,ammount,person.full_name))
         else:
             sys.stdout.write("\rTwitter Check %i/%i : %s                                " % (count,ammount,person.full_name))
@@ -317,6 +319,8 @@ def fill_twitter(peoplelist):
                 target_image = face_recognition.load_image_file(person.person_image)
                 target_encoding = face_recognition.face_encodings(target_image)[0]
                 profilelist = TwitterfinderObject.getTwitterProfiles(person.first_name, person.last_name)
+                if args.debug == True:
+                    print(profilelist)
             except:
                 continue
         else:
@@ -384,7 +388,7 @@ def fill_instagram(peoplelist):
     count=1
     ammount=len(peoplelist)
     for person in peoplelist:
-        if args.vv == True:
+        if args.vv == True or args.debug == True:
             print("Instagram Check %i/%i : %s" % (count,ammount,person.full_name))
         else:
             sys.stdout.write("\rInstagram Check %i/%i : %s                                " % (count,ammount,person.full_name))
@@ -398,9 +402,8 @@ def fill_instagram(peoplelist):
                 target_image = face_recognition.load_image_file(person.person_image)
                 target_encoding = face_recognition.face_encodings(target_image)[0]
                 profilelist = InstagramfinderObject.getInstagramProfiles(person.first_name, person.last_name,instagram_username,instagram_password)
-                #print "DEBUG"
-                #print profilelist
-                #print ""
+                if args.debug == True:
+                    print(profilelist)
             except:
                 continue
         else:
@@ -471,7 +474,7 @@ def fill_linkedin(peoplelist):
     count=1
     ammount=len(peoplelist)
     for person in peoplelist:
-        if args.vv == True:
+        if args.vv == True or args.debug == True:
             print("LinkedIn Check %i/%i : %s" % (count,ammount,person.full_name))
         else:
             sys.stdout.write("\rLinkedIn Check %i/%i : %s                                " % (count,ammount,person.full_name))
@@ -485,6 +488,8 @@ def fill_linkedin(peoplelist):
                 target_image = face_recognition.load_image_file(person.person_image)
                 target_encoding = face_recognition.face_encodings(target_image)[0]
                 profilelist = LinkedinfinderObject.getLinkedinProfiles(person.first_name, person.last_name,linkedin_username,linkedin_password)
+                if args.debug == True:
+                    print(profilelist)
             except:
                 continue
         else:
@@ -554,7 +559,7 @@ def fill_vkontakte(peoplelist):
     count=1
     ammount=len(peoplelist)
     for person in peoplelist:
-        if args.vv == True:
+        if args.vv == True or args.debug == True:
             print("VKontakte Check %i/%i : %s" % (count,ammount,person.full_name))
         else:
             sys.stdout.write("\rVKontakte Check %i/%i : %s                                " % (count,ammount,person.full_name))
@@ -565,6 +570,8 @@ def fill_vkontakte(peoplelist):
                 target_image = face_recognition.load_image_file(person.person_image)
                 target_encoding = face_recognition.face_encodings(target_image)[0]
                 profilelist = VkontaktefinderObject.getVkontakteProfiles(person.first_name, person.last_name)
+                if args.debug == True:
+                    print(profilelist)
             except:
                 continue
         else:
@@ -634,7 +641,7 @@ def fill_weibo(peoplelist):
     count=1
     ammount=len(peoplelist)
     for person in peoplelist:
-        if args.vv == True:
+        if args.vv == True or args.debug == True:
             print("Weibo Check %i/%i : %s" % (count,ammount,person.full_name))
         else:
             sys.stdout.write("\rWeibo Check %i/%i : %s                                " % (count,ammount,person.full_name))
@@ -645,6 +652,8 @@ def fill_weibo(peoplelist):
                 target_image = face_recognition.load_image_file(person.person_image)
                 target_encoding = face_recognition.face_encodings(target_image)[0]
                 profilelist = WeibofinderObject.getWeiboProfiles(person.first_name, person.last_name)
+                if args.debug == True:
+                    print(profilelist)
             except:
                 continue
         else:
@@ -714,7 +723,7 @@ def fill_douban(peoplelist):
     count=1
     ammount=len(peoplelist)
     for person in peoplelist:
-        if args.vv == True:
+        if args.vv == True or args.debug == True:
             print("Douban Check %i/%i : %s" % (count,ammount,person.full_name))
         else:
             sys.stdout.write("\rDouban Check %i/%i : %s                                " % (count,ammount,person.full_name))
@@ -725,6 +734,8 @@ def fill_douban(peoplelist):
                 target_image = face_recognition.load_image_file(person.person_image)
                 target_encoding = face_recognition.face_encodings(target_image)[0]
                 profilelist = DoubanfinderObject.getDoubanProfiles(person.first_name, person.last_name)
+                if args.debug == True:
+                    print(profilelist)
             except:
                 continue
         else:
@@ -856,6 +867,7 @@ parser = argparse.ArgumentParser(
 parser.add_argument('-v', '--version', action='version',
     version='%(prog)s 0.1.0 : Social Mapper by Greenwolf (Github Link Here)')
 parser.add_argument('-vv', '--verbose', action='store_true',dest='vv',help='Verbose Mode')
+parser.add_argument('-d', '--debug', action='store_true',dest='debug',help='Debug Mode')
 parser.add_argument('-f', '--format',action='store', dest='format',required=True,choices=set(("csv","imagefolder","company","socialmapper")),
     help='Specify if the input file is either a \'company\',a \'CSV\',a \'imagefolder\' or a Social Mapper HTML file to resume')
 parser.add_argument('-i', '--input',action='store', dest='input',required=True,
@@ -873,7 +885,7 @@ parser.add_argument('-s', '--showbrowser',action='store_true',dest='showbrowser'
 
 parser.add_argument('-a', '--all',action='store_true',dest='a',help='Flag to check all social media sites')
 parser.add_argument('-fb', '--facebook',action='store_true',dest='fb',help='Flag to check Facebook')
-parser.add_argument('-pin', '--pinterest',action='store_true',dest='pin',help='Flag to check Pinterest')
+parser.add_argument('-pn', '--pinterest',action='store_true',dest='pin',help='Flag to check Pinterest')
 parser.add_argument('-tw', '--twitter',action='store_true',dest='tw',help='Flag to check Twitter')
 parser.add_argument('-ig', '--instagram',action='store_true',dest='ig',help='Flag to check Instagram')
 parser.add_argument('-li', '--linkedin',action='store_true',dest='li',help='Flag to check LinkedIn - Automatic with \'company\' input type')
@@ -884,7 +896,7 @@ parser.add_argument('-db', '--douban',action='store_true',dest='db',help='Flag t
 args = parser.parse_args()
 
 if not (args.a or args.fb or args.tw or args.pin or args.ig or args.li or args.vk or args.wb or args.db):
-    parser.error('No sites specified requested, add -a for all, or a combination of the sites you want to check using a mix of -fb -tw -ig -li -pin -vk -db -wb')
+    parser.error('No sites specified requested, add -a for all, or a combination of the sites you want to check using a mix of -fb -tw -ig -li -pn -vk -db -wb')
 
 # Set up face matching threshold
 threshold = 0.6
@@ -1106,10 +1118,10 @@ if args.format == "socialmapper":
         person.facebookcdnimage = encoding.smart_str(personhtml.findAll("td")[3].find("img")['src'], encoding='ascii', errors='ignore').replace(";","")
         person.twitter = encoding.smart_str(personhtml.findAll("td")[4].find("a")['href'], encoding='ascii', errors='ignore').replace(";","")
         person.twitterimage = encoding.smart_str(personhtml.findAll("td")[4].find("img")['src'], encoding='ascii', errors='ignore').replace(";","")
-        person.pinterest = encoding.smart_str(personhtml.findAll("td")[4].find("a")['href'], encoding='ascii', errors='ignore').replace(";","")
-        person.pinterestimage = encoding.smart_str(personhtml.findAll("td")[4].find("img")['src'], encoding='ascii', errors='ignore').replace(";","")
         person.instagram = encoding.smart_str(personhtml.findAll("td")[5].find("a")['href'], encoding='ascii', errors='ignore').replace(";","")
         person.instagramimage = encoding.smart_str(personhtml.findAll("td")[5].find("img")['src'], encoding='ascii', errors='ignore').replace(";","")
+        person.pinterest = encoding.smart_str(personhtml.findAll("td")[6].find("a")['href'], encoding='ascii', errors='ignore').replace(";","")
+        person.pinterestimage = encoding.smart_str(personhtml.findAll("td")[6].find("img")['src'], encoding='ascii', errors='ignore').replace(";","")
         person.vk = encoding.smart_str(personhtml.findAll("td")[7].find("a")['href'], encoding='ascii', errors='ignore').replace(";","")
         person.vkimage = encoding.smart_str(personhtml.findAll("td")[7].find("img")['src'], encoding='ascii', errors='ignore').replace(";","")
         person.weibo = encoding.smart_str(personhtml.findAll("td")[8].find("a")['href'], encoding='ascii', errors='ignore').replace(";","")
@@ -1507,11 +1519,11 @@ header = """<center><table id=\"employees\">
                 <th>LinkedIn</th>
                 <th>Facebook</th>
                 <th>Twitter</th>
-                <th>Pinterest</th>
                 <th>Instagram</th>
             </tr>
             <tr>
                 <th>-</th>
+                <th>Pinterest</th>
                 <th>VKontakte</th>
                 <th>Weibo</th>
                 <th>Douban</th>
@@ -1527,16 +1539,15 @@ for person in peoplelist:
                 "<td class=\"hasTooltipcenterleft\"><a href=\"%s\"><img src=\"%s\" onerror=\"this.style.display=\'none\'\" width=auto height=auto style=\"max-width:100px; max-height:100px;\"><span>LinkedIn:<br>%s</span></a></td>" \
                 "<td class=\"hasTooltipcenterright\"><a href=\"%s\"><img src=\"%s\" onerror=\"this.style.display=\'none\'\" width=auto height=auto style=\"max-width:100px; max-height:100px;\"><span>Facebook:<br>%s</span></a></td>" \
                 "<td class=\"hasTooltipright\"><a href=\"%s\"><img src=\"%s\" onerror=\"this.style.display=\'none\'\" width=auto height=auto style=\"max-width:100px; max-height:100px;\"><span>Twitter:<br>%s</span></a></td>" \
-                "<td class=\"hasTooltipright\"><a href=\"%s\"><img src=\"%s\" onerror=\"this.style.display=\'none\'\" width=auto height=auto style=\"max-width:100px; max-height:100px;\"><span>Pinterest:<br>%s</span></a></td>" \
                 "<td class=\"hasTooltipfarright\"><a href=\"%s\"><img src=\"%s\" onerror=\"this.style.display=\'none\'\" width=auto height=auto style=\"max-width:100px; max-height:100px;\"><span>Instagram:<br>%s</span></a></td>" \
             "</tr>" \
             "<tr>" \
-                "<td class=\"hasTooltipcenterleft\"><a href=\"%s\"><img src=\"%s\" onerror=\"this.style.display=\'none\'\" width=auto height=auto style=\"max-width:100px; max-height:100px;\"><span>-:<br>%s</span></a></td>" \
+                "<td class=\"hasTooltipright\"><a href=\"%s\"><img src=\"%s\" onerror=\"this.style.display=\'none\'\" width=auto height=auto style=\"max-width:100px; max-height:100px;\"><span>Pinterest:<br>%s</span></a></td>" \
                 "<td class=\"hasTooltipcenterright\"><a href=\"%s\"><img src=\"%s\" onerror=\"this.style.display=\'none\'\" width=auto height=auto style=\"max-width:100px; max-height:100px;\"><span>VKontakte:<br>%s</span></a></td>" \
                 "<td class=\"hasTooltipright\"><a href=\"%s\"><img src=\"%s\" onerror=\"this.style.display=\'none\'\" width=auto height=auto style=\"max-width:100px; max-height:100px;\"><span>Weibo:<br>%s</span></a></td>" \
                 "<td class=\"hasTooltipfarright\"><a href=\"%s\"><img src=\"%s\" onerror=\"this.style.display=\'none\'\" width=auto height=auto style=\"max-width:100px; max-height:100px;\"><span>Douban:<br>%s</span></a></td>" \
             "</tr>" \
-            "</tbody>" % (person.person_imagelink, person.person_imagelink, person.full_name, person.linkedin, person.linkedinimage, person.linkedin, person.facebook, person.facebookcdnimage, person.facebook, person.twitter, person.twitterimage, person.twitter, person.pinterest, person.pinterestimage, person.pinterest, person.instagram, person.instagramimage, person.instagram, "", "", "", person.vk, person.vkimage, person.vk, person.weibo, person.weiboimage, person.weibo, person.douban, person.doubanimage, person.douban )
+            "</tbody>" % (person.person_imagelink, person.person_imagelink, person.full_name, person.linkedin, person.linkedinimage, person.linkedin, person.facebook, person.facebookcdnimage, person.facebook, person.twitter, person.twitterimage, person.twitter, person.instagram, person.instagramimage, person.instagram, person.pinterest, person.pinterestimage, person.pinterest, person.vk, person.vkimage, person.vk, person.weibo, person.weiboimage, person.weibo, person.douban, person.doubanimage, person.douban )
     filewriter.write(body)
 
 filewriter.write(foot)
@@ -1551,7 +1562,13 @@ if args.format != "imagefolder":
 #if not os.path.exists('temp-targets'):
 #    shutil.rmtree('temp-targets')
 
+#remove the last potential target image if it exists
+try:
+    os.remove("potential_target_image.jpg")
+except:
+    pass
 
 #print datetime.now() - startTime
 #completiontime = datetime.now() - startTime
 print("Task Duration: " + str(datetime.now() - startTime))
+
