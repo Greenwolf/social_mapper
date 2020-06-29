@@ -2,7 +2,7 @@
 ![alt text](https://img.shields.io/badge/Python-3_only-blue.svg "Python 3 only")
 ![alt text](https://img.shields.io/travis/Greenwolf/social_mapper.svg "Travis build status")
 
-WARNING: FACEBOOK NOW DETECTS THIS AFTER A FEW 100 SEARCHES, USE ONLY DISPOSABLE ACCOUNTS
+**WARNING: FACEBOOK NOW DETECTS THIS AFTER A FEW 100 SEARCHES, USE ONLY DISPOSABLE ACCOUNTS**
 
 A Social Media Mapping Tool that correlates profiles via facial recognition by Jacob Wilkin ([Greenwolf](https://github.com/Greenwolf)).
 
