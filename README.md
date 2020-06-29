@@ -93,7 +93,7 @@ On Mac look through the [setup/setup-mac.txt](setup/setup-mac.txt) file to view 
 Open social_mapper.py and enter social media credentials into global variables at the top of the file
 ```
 
-5) For Facebook, make sure the language of the account which you have provided credentials for is set to 'English (US)' for the duration of the run. Additionally make sure all of your accounts are working, and can be logged into without requiring 2 factor authentication. 
+5) For Facebook & Instagram, make sure the language of the account which you have provided credentials for is set to 'English (US)' for the duration of the run. Additionally make sure all of your accounts are working, and can be logged into without requiring 2 factor authentication. 
 
 ## Using Social Mapper
 
