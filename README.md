@@ -2,6 +2,8 @@
 ![alt text](https://img.shields.io/badge/Python-3_only-blue.svg "Python 3 only")
 ![alt text](https://img.shields.io/travis/Greenwolf/social_mapper.svg "Travis build status")
 
+WARNING: FACEBOOK NOW DETECTS THIS AFTER A FEW 100 SEARCHES, USE ONLY DISPOSABLE ACCOUNTS
+
 A Social Media Mapping Tool that correlates profiles via facial recognition by Jacob Wilkin ([Greenwolf](https://github.com/Greenwolf)).
 
 Social Mapper is an Open Source Intelligence Tool that uses facial recognition to correlate social media profiles across different sites on a large scale. It takes an automated approach to search popular social media sites for targets' names and pictures to accurately detect and group a person’s presence, outputting the results into report that a human operator can quickly review.
