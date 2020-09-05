@@ -48,6 +48,8 @@ class Doubanfinder(object):
 				print("[+] Douban Login Success [+]\n")
 			else:
 				print("[-] Douban Login Failed [-]\n")
+		else:
+			print("[-] Douban Login Page loaded error [-]")
 
 
 	def getDoubanProfiles(self,first_name,last_name):
