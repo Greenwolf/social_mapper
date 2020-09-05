@@ -934,7 +934,7 @@ if args.format == "csv":
         os.remove('temp.csv')
     except OSError:
         pass
-    tempcsv = open('temp.csv', 'w')
+    tempcsv = open('temp.csv', 'wb')
     tempcsv.write(data.replace(b'\x00',b''))
     tempcsv.close()
     if not os.path.exists('temp-targets'):
