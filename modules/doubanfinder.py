@@ -65,6 +65,10 @@ class Doubanfinder(object):
 		else:
 			print("[-] Douban Login Page loaded error [-]")
 
+	def _fetch_login_frame(self):
+		iframes = self.driver.find_elements_by_tag_name("iframe")
+		return next((x for x in iframes if "accounts.douban.com/passport/login_popup" in x.get_attribute("src")))
+
 	def change_signin_method(self, method: 'phone|username' = 'username'):
 		try:
 			xpath = f"//div[@class='account-body-tabs']/ul[@class='tab-start']/li[contains(@class, '{method_map[method]}')]"
@@ -76,17 +80,14 @@ class Doubanfinder(object):
 	def is_login_page(self):
 		"""checking for a anony iframe is exists on page"""
 		try:
-			iframes = self.driver.find_elements_by_tag_name("iframe")
-			_ = next((x for x in iframes if "accounts.douban.com/passport/login_popup" in x.get_attribute("src")))
+			self._fetch_login_frame()
 		except (NoSuchElementException, StopIteration):
 			return False
 		else:
 			return True
 
 	def switch_to_login_iframe(self):
-		iframes = self.driver.find_elements_by_tag_name("iframe")
-		# select one of
-		frame = next((x for x in iframes if "accounts.douban.com/passport/login_popup" in x.get_attribute("src")))
+		frame = self._fetch_login_frame()
 		self.driver.switch_to.frame(frame)
 
 	def getDoubanProfiles(self,first_name,last_name):
