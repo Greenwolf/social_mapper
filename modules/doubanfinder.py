@@ -12,7 +12,7 @@ from bs4 import BeautifulSoup
 class Doubanfinder(object):
 
 	timeout = 10
-	
+
 	def __init__(self,showbrowser):
 		display = Display(visible=0, size=(1600, 1024))
 		display.start()
@@ -30,11 +30,11 @@ class Doubanfinder(object):
 
 
 	def doLogin(self,username,password):
-			
+
 		self.driver.get("https://www.douban.com")
 		self.driver.execute_script('localStorage.clear();')
-		
-		if(self.driver.title.encode('utf8','replace').startswith(bytes("登录", 'utf-8'))):
+
+		if(self.driver.title.encode('utf8','replace').startswith(bytes("豆瓣", 'utf-8'))):
 			print("\n[+] Douban Login Page loaded successfully [+]")
 			wbUsername = self.driver.find_element_by_id("email")
 			wbUsername.send_keys(username)
