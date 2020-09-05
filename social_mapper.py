@@ -935,7 +935,7 @@ if args.format == "csv":
     except OSError:
         pass
     tempcsv = open('temp.csv', 'w')
-    tempcsv.write(data.replace('\x00',''))
+    tempcsv.write(data.replace(b'\x00',b''))
     tempcsv.close()
     if not os.path.exists('temp-targets'):
         os.makedirs('temp-targets')
