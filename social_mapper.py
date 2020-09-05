@@ -939,7 +939,7 @@ if args.format == "csv":
     tempcsv.close()
     if not os.path.exists('temp-targets'):
         os.makedirs('temp-targets')
-    filereader = csv.reader(open('temp.csv', 'rb'), delimiter=",")
+    filereader = csv.reader(open('temp.csv', 'r'), delimiter=",")
     for full_name, person_image in filereader:
         try:
             full_name = encoding.smart_str(full_name, encoding='ascii', errors='ignore')
