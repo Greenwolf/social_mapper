@@ -131,6 +131,7 @@ Additional optional parameters can also be set to add additional customisation t
 -t, --threshold		: Customises the facial recognition threshold for matches, this can be seen as the match accuracy. Default is 'standard', but can be set to 'loose', 'standard', 'strict' or 'superstrict'. For example 'loose' will find more matches, but some may be incorrect. While 'strict' may find less matches but also contain less false positives in the final report.
 -cid, --companyid	: Additional parameter to add in a LinkedIn Company ID for if name searches are not picking the correct company.
 -s, --showbrowser	: Makes the Firefox browser visible so you can see the searches performed. Useful for debugging.
+-w, --waitafterlogin : Wait for user to press Enter after login to give time to enter 2FA codes. Must use with -s
 -v, --version		: Display current version.
 -vv, --verbose  : Verbose Mode (Useful for Debugging)
 -e, --email		: Provide a fuzzy email format like "<f><last>@domain.com" to generate additional CSV files for each site with firstname, lastname, fullname, email, profileURL, photoURL. These can be fed into phishing frameworks such as Gophish or Lucy.
@@ -142,7 +143,10 @@ Here are a couple of example runs to get started for differing use cases:
 
 ```
 A quick run for Facebook and Twitter on some targets you have in an imagefolder, that you plan to manually review and don't mind some false positives:
-python3 social_mapper.py -f imagefolder -i ./mytargets -m fast -fb -tw
+python3 social_mapper.py -f imagefolder -i ./Input-Examples/imagefolder/ -m fast -fb -tw
+
+The same as above but with the browser showing, and waiting enabled to allow a user to enter 2FA codes and manually rectify changed login processes:
+python3 social_mapper.py -f imagefolder -i ./Input-Examples/imagefolder/ -m fast -fb -tw -s -w
 
 An exhaustive run on a large company where false positives must be kept to a minimum:
 python3 social_mapper.py -f company -i "SpiderLabs" -m accurate -a -t strict
