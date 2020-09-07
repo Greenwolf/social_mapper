@@ -6,22 +6,30 @@ from time import sleep
 import sys
 import json
 import os
+import time
 from bs4 import BeautifulSoup
+from sys import platform
 
 class Facebookfinder(object):
 
 	timeout = 10
 
 	def __init__(self,showbrowser):
-		display = Display(visible=0, size=(1600, 1024))
-		display.start()
+		if sys.platform == "darwin":
+			display = Display(visible=0, size=(1600, 1024))
+			display.start()
+		opts = Options()
 		if not showbrowser:
 			os.environ['MOZ_HEADLESS'] = '1'
+			opts.headless = True
+		else:
+			opts.headless = False
 		firefoxprofile = webdriver.FirefoxProfile()
 		firefoxprofile.set_preference("permissions.default.desktop-notification", 1)
 		firefoxprofile.set_preference("dom.webnotifications.enabled", 1)
 		firefoxprofile.set_preference("dom.push.enabled", 1)
-		self.driver = webdriver.Firefox(firefox_profile=firefoxprofile)
+		self.driver = webdriver.Firefox(firefox_profile=firefoxprofile,options=opts)
+
 		self.driver.implicitly_wait(15)
 		self.driver.delete_all_cookies()
 
@@ -151,5 +159,4 @@ class Facebookfinder(object):
 		except:
 			return ""
 '''
-
 

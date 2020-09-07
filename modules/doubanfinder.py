@@ -10,7 +10,6 @@ import json
 import os
 from bs4 import BeautifulSoup
 
-
 method_map = {
 	"username": "account-tab-account",
 	"phone": "account-tab-phone"
@@ -23,15 +22,21 @@ class Doubanfinder(object):
 	authentication_method = "username"
 
 	def __init__(self,showbrowser):
-		display = Display(visible=0, size=(1600, 1024))
-		display.start()
+		if sys.platform == "darwin":
+			display = Display(visible=0, size=(1600, 1024))
+			display.start()
+		opts = Options()
 		if not showbrowser:
 			os.environ['MOZ_HEADLESS'] = '1'
+			opts.headless = True
+		else:
+			opts.headless = False
 		firefoxprofile = webdriver.FirefoxProfile()
 		firefoxprofile.set_preference("permissions.default.desktop-notification", 1)
 		firefoxprofile.set_preference("dom.webnotifications.enabled", 1)
 		firefoxprofile.set_preference("dom.push.enabled", 1)
-		self.driver = webdriver.Firefox(firefox_profile=firefoxprofile,
+		self.driver = webdriver.Firefox(options=opts,
+                    firefox_profile=firefoxprofile,
 										firefox_binary=os.environ.get("FIREFOX_BINARY", None),
 										executable_path=os.environ.get("GECKODRIVER", None))
 		self.driver.implicitly_wait(15)
@@ -157,5 +162,4 @@ class Doubanfinder(object):
 		except:
 			return ""
 '''
-
 

@@ -20,11 +20,15 @@ import argparse
 import shutil
 import http.cookiejar
 import json
+import time
 from datetime import datetime
 from bs4 import BeautifulSoup
 from django.utils import encoding
 import traceback
 import math
+
+from selenium.webdriver import Firefox
+from selenium.webdriver.firefox.options import Options
 
 assert sys.version_info >= (3,), "Only Python 3 is currently supported."
 
@@ -65,6 +69,7 @@ global pinterest_password
 pinterest_username = ""
 pinterest_password = ""
 
+global showbrowser
 
 startTime = datetime.now()
 
@@ -109,6 +114,8 @@ class PotentialPerson(object):
 def fill_facebook(peoplelist):
     FacebookfinderObject = facebookfinder.Facebookfinder(showbrowser)
     FacebookfinderObject.doLogin(facebook_username,facebook_password)
+    if args.waitafterlogin:
+        input("Press Enter to continue after verifying you are logged in...")
 
     count=1
     ammount=len(peoplelist)
@@ -123,6 +130,8 @@ def fill_facebook(peoplelist):
         #if count == 3:
         #    print "triggered delete"
         #    FacebookfinderObject.testdeletecookies()
+        print(person.person_imagelink)
+        print(person.person_image)
         if person.person_image:
             try:
                 target_image = face_recognition.load_image_file(person.person_image)
@@ -224,7 +233,9 @@ def fill_facebook(peoplelist):
 def fill_pinterest(peoplelist):
     PinterestfinderObject = pinterestfinder.Pinterestfinder(showbrowser)
     PinterestfinderObject.doLogin(pinterest_username, pinterest_password)
-    
+    if args.waitafterlogin:
+        input("Press Enter to continue after verifying you are logged in...")
+
     count=1
     ammount=len(peoplelist)
     for person in peoplelist:
@@ -304,6 +315,9 @@ def fill_pinterest(peoplelist):
 def fill_twitter(peoplelist):
     TwitterfinderObject = twitterfinder.Twitterfinder(showbrowser)
     TwitterfinderObject.doLogin(twitter_username,twitter_password)
+    if args.waitafterlogin:
+        input("Press Enter to continue after verifying you are logged in...")
+
 
     count=1
     ammount=len(peoplelist)
@@ -384,6 +398,8 @@ def fill_twitter(peoplelist):
 def fill_instagram(peoplelist):
     InstagramfinderObject = instagramfinder.Instagramfinder(showbrowser)
     InstagramfinderObject.doLogin(instagram_username,instagram_password)
+    if args.waitafterlogin:
+        input("Press Enter to continue after verifying you are logged in...")
 
     count=1
     ammount=len(peoplelist)
@@ -470,6 +486,8 @@ def fill_instagram(peoplelist):
 def fill_linkedin(peoplelist):
     LinkedinfinderObject = linkedinfinder.Linkedinfinder(showbrowser)
     LinkedinfinderObject.doLogin(linkedin_username,linkedin_password)
+    if args.waitafterlogin:
+        input("Press Enter to continue after verifying you are logged in...")
 
     count=1
     ammount=len(peoplelist)
@@ -555,6 +573,8 @@ def fill_linkedin(peoplelist):
 def fill_vkontakte(peoplelist):
     VkontaktefinderObject = vkontaktefinder.Vkontaktefinder(showbrowser)
     VkontaktefinderObject.doLogin(vk_username,vk_password)
+    if args.waitafterlogin:
+        input("Press Enter to continue after verifying you are logged in...")
 
     count=1
     ammount=len(peoplelist)
@@ -637,6 +657,8 @@ def fill_vkontakte(peoplelist):
 def fill_weibo(peoplelist):
     WeibofinderObject = weibofinder.Weibofinder(showbrowser)
     WeibofinderObject.doLogin(weibo_username,weibo_password)
+    if args.waitafterlogin:
+        input("Press Enter to continue after verifying you are logged in...")
 
     count=1
     ammount=len(peoplelist)
@@ -719,6 +741,8 @@ def fill_weibo(peoplelist):
 def fill_douban(peoplelist):
     DoubanfinderObject = doubanfinder.Doubanfinder(showbrowser)
     DoubanfinderObject.doLogin(douban_username,douban_password)
+    if args.waitafterlogin:
+        input("Press Enter to continue after verifying you are logged in...")
 
     count=1
     ammount=len(peoplelist)
@@ -881,7 +905,9 @@ parser.add_argument('-e', '--email',action='store', dest='email',required=False,
 parser.add_argument('-cid', '--companyid',action='store', dest='companyid',required=False,
     help='Provide an optional company id, for use with \'-f company\' only')
 
+
 parser.add_argument('-s', '--showbrowser',action='store_true',dest='showbrowser',help='If flag is set then browser will be visible')
+parser.add_argument('-w', '--waitafterlogin',action='store_true',dest='waitafterlogin',help='Wait for user to press Enter after login to give time to enter 2FA codes. Must use with -s') 
 
 parser.add_argument('-a', '--all',action='store_true',dest='a',help='Flag to check all social media sites')
 parser.add_argument('-fb', '--facebook',action='store_true',dest='fb',help='Flag to check Facebook')
@@ -898,6 +924,9 @@ args = parser.parse_args()
 if not (args.a or args.fb or args.tw or args.pin or args.ig or args.li or args.vk or args.wb or args.db):
     parser.error('No sites specified requested, add -a for all, or a combination of the sites you want to check using a mix of -fb -tw -ig -li -pn -vk -db -wb')
 
+if args.waitafterlogin and not args.showbrowser:
+    parser.error('Cannot wait after login (-w) without showing the browser (-s)')
+
 # Set up face matching threshold
 threshold = 0.6
 try:
@@ -913,9 +942,9 @@ except:
     pass
 
 if args.showbrowser:
-    showbrowser=True
+    showbrowser = True
 else:
-    showbrowser=False
+    showbrowser = False
 
 exit=True
 # remove targets dir for remaking
@@ -923,6 +952,19 @@ if os.path.exists('temp-targets'):
     shutil.rmtree('temp-targets')
 # people list to hold people in memory
 peoplelist = []
+
+# Testing
+'''opts = Options()
+opts.headless = False
+driver = Firefox(options=opts)
+driver.get('http://webcode.me')
+print(driver.title)
+assert 'My html page' == driver.title
+driver.quit()
+
+print("exit now")
+time.sleep(5000)
+'''
 
 # Fill people list from document with just name + image link
 if args.format == "csv":
@@ -935,7 +977,8 @@ if args.format == "csv":
     except OSError:
         pass
     tempcsv = open('temp.csv', 'wb')
-    tempcsv.write(data.replace(b'\x00',b''))
+    #tempcsv.write(data.replace('\x00',''))
+    tempcsv.write(data.rstrip(b'\x00'))
     tempcsv.close()
     if not os.path.exists('temp-targets'):
         os.makedirs('temp-targets')
@@ -1187,6 +1230,9 @@ csv = []
 
 if not os.path.exists("SM-Results"):
     os.makedirs("SM-Results")
+
+if args.input[0] == ".":
+    args.input = args.input[1:]
 
 outputfilename = "SM-Results/" + args.input.replace("\"","").replace("/","-") + "-social-mapper.csv"
 phishingoutputfilename = "SM-Results/" + args.input.replace("\"","").replace("/","-")
@@ -1522,7 +1568,6 @@ header = """<center><table id=\"employees\">
                 <th>Instagram</th>
             </tr>
             <tr>
-                <th>-</th>
                 <th>Pinterest</th>
                 <th>VKontakte</th>
                 <th>Weibo</th>
@@ -1542,7 +1587,7 @@ for person in peoplelist:
                 "<td class=\"hasTooltipfarright\"><a href=\"%s\"><img src=\"%s\" onerror=\"this.style.display=\'none\'\" width=auto height=auto style=\"max-width:100px; max-height:100px;\"><span>Instagram:<br>%s</span></a></td>" \
             "</tr>" \
             "<tr>" \
-                "<td class=\"hasTooltipright\"><a href=\"%s\"><img src=\"%s\" onerror=\"this.style.display=\'none\'\" width=auto height=auto style=\"max-width:100px; max-height:100px;\"><span>Pinterest:<br>%s</span></a></td>" \
+                "<td class=\"hasTooltipcenterleft\"><a href=\"%s\"><img src=\"%s\" onerror=\"this.style.display=\'none\'\" width=auto height=auto style=\"max-width:100px; max-height:100px;\"><span>Pinterest:<br>%s</span></a></td>" \
                 "<td class=\"hasTooltipcenterright\"><a href=\"%s\"><img src=\"%s\" onerror=\"this.style.display=\'none\'\" width=auto height=auto style=\"max-width:100px; max-height:100px;\"><span>VKontakte:<br>%s</span></a></td>" \
                 "<td class=\"hasTooltipright\"><a href=\"%s\"><img src=\"%s\" onerror=\"this.style.display=\'none\'\" width=auto height=auto style=\"max-width:100px; max-height:100px;\"><span>Weibo:<br>%s</span></a></td>" \
                 "<td class=\"hasTooltipfarright\"><a href=\"%s\"><img src=\"%s\" onerror=\"this.style.display=\'none\'\" width=auto height=auto style=\"max-width:100px; max-height:100px;\"><span>Douban:<br>%s</span></a></td>" \
@@ -1571,4 +1616,3 @@ except:
 #print datetime.now() - startTime
 #completiontime = datetime.now() - startTime
 print("Task Duration: " + str(datetime.now() - startTime))
-
