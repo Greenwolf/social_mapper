@@ -36,7 +36,7 @@ class Doubanfinder(object):
 		firefoxprofile.set_preference("dom.webnotifications.enabled", 1)
 		firefoxprofile.set_preference("dom.push.enabled", 1)
 		self.driver = webdriver.Firefox(options=opts,
-                    firefox_profile=firefoxprofile,
+										firefox_profile=firefoxprofile,
 										firefox_binary=os.environ.get("FIREFOX_BINARY", None),
 										executable_path=os.environ.get("GECKODRIVER", None))
 		self.driver.implicitly_wait(15)
