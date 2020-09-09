@@ -107,10 +107,10 @@ class Facebookfinder(object):
         return picturelist
 
     # except Exception as e:
-    #	picturelist = []
-    #	print "Error"
-    #	print e
-    #	return picturelist
+    #    picturelist = []
+    #    print "Error"
+    #    print e
+    #    return picturelist
 
     def getCookies(self):
         all_cookies = self.driver.get_cookies()

@@ -127,7 +127,7 @@ class Instagramfinder(object):
                     # Old code for getting a bigger instagram profile picture, doesnt work since March 23rd 2018
                     # profilepicwithsmallid = element.find('img')['src']
                     # if not "150x150" in profilepicwithsmallid:
-                    #	continue
+                    #    continue
                     # profilepicbadurl = profilepicwithsmallid.replace('150x150', '600x600')
                     # profilepic = profilepicbadurl.split("/")[0] + "//" + profilepicbadurl.split("/")[2] + "/" + profilepicbadurl.split("/")[6] + "/" + profilepicbadurl.split("/")[7] + "/" + profilepicbadurl.split("/")[8]
 
