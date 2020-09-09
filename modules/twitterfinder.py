@@ -1,13 +1,15 @@
 from __future__ import print_function
-from selenium import webdriver
-from selenium.webdriver.firefox.options import Options
-from selenium.webdriver.common.keys import Keys
-from pyvirtualdisplay import Display
-from time import sleep
-import traceback
-import sys
+
 import os
+import sys
+import traceback
+from time import sleep
+
 from bs4 import BeautifulSoup
+from pyvirtualdisplay import Display
+from selenium import webdriver
+from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.firefox.options import Options
 
 
 class Twitterfinder(object):

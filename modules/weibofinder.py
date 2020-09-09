@@ -1,12 +1,14 @@
 # -*- coding: utf-8 -*-
 from __future__ import print_function
+
+import os
+import sys
+from time import sleep
+
+from bs4 import BeautifulSoup
+from pyvirtualdisplay import Display
 from selenium import webdriver
 from selenium.webdriver.firefox.options import Options
-from pyvirtualdisplay import Display
-from time import sleep
-import sys
-import os
-from bs4 import BeautifulSoup
 
 
 class Weibofinder(object):
@@ -73,10 +75,10 @@ class Weibofinder(object):
         return picturelist
 
     # except Exception as e:
-    #	picturelist = []
-    #	print "Error"
-    #	print e
-    #	return picturelist
+    #   picturelist = []
+    #   print "Error"
+    #   print e
+    #   return picturelist
 
     def kill(self):
         self.driver.quit()

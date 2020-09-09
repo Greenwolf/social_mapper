@@ -1,13 +1,15 @@
 # -*- coding: utf-8 -*-
 from __future__ import print_function
+
+import os
+import sys
+from time import sleep
+
+from bs4 import BeautifulSoup
+from pyvirtualdisplay import Display
 from selenium import webdriver
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.firefox.options import Options
-from pyvirtualdisplay import Display
-from time import sleep
-import sys
-import os
-from bs4 import BeautifulSoup
 
 method_map = {
     "username": "account-tab-account",
@@ -16,11 +18,10 @@ method_map = {
 
 
 class Doubanfinder(object):
-
     timeout = 10
     authentication_method = "username"
 
-    def __init__(self,showbrowser):
+    def __init__(self, showbrowser):
         if sys.platform == "darwin":
             display = Display(visible=0, size=(1600, 1024))
             display.start()
@@ -41,13 +42,12 @@ class Doubanfinder(object):
         self.driver.implicitly_wait(15)
         self.driver.delete_all_cookies()
 
-
-    def doLogin(self,username,password):
+    def doLogin(self, username, password):
 
         self.driver.get("https://www.douban.com")
         self.driver.execute_script('localStorage.clear();')
         sleep(3)  # waiting an iframe
-        if(self.driver.title.encode('utf8','replace').startswith(bytes("豆瓣", 'utf-8'))):
+        if (self.driver.title.encode('utf8', 'replace').startswith(bytes("豆瓣", 'utf-8'))):
             print("\n[+] Douban Login Page loaded successfully [+]")
             if not self.is_login_page():
                 print("[+] Douban Login not found a login form. Exit... [+]")
@@ -94,8 +94,8 @@ class Doubanfinder(object):
         frame = self._fetch_login_frame()
         self.driver.switch_to.frame(frame)
 
-    def getDoubanProfiles(self,first_name,last_name):
-        #try:
+    def getDoubanProfiles(self, first_name, last_name):
+        # try:
         url = "https://www.douban.com/search?cat=1005&q=" + first_name + "+" + last_name
         self.driver.get(url)
         sleep(3)
@@ -106,16 +106,17 @@ class Doubanfinder(object):
         for element in soupParser.find_all('div', {'class': 'pic'}):
             try:
                 badlink = element.find('a')['href']
-                link = badlink.split('?url=', 1)[1].split('&query', 1)[0].replace("%3A",":").replace("%2F","/")
+                link = badlink.split('?url=', 1)[1].split('&query', 1)[0].replace("%3A", ":").replace("%2F", "/")
                 badprofilepiclinksmall = element.find('img')['src']
-                profilepic = badprofilepiclinksmall.replace("/icon/u","/icon/ul")
-                picturelist.append([link,profilepic,1.0])
+                profilepic = badprofilepiclinksmall.replace("/icon/u", "/icon/ul")
+                picturelist.append([link, profilepic, 1.0])
             except Exception as e:
                 print("Error")
                 print(e)
                 continue
         return picturelist
-    #except Exception as e:
+
+    # except Exception as e:
     #	picturelist = []
     #	print "Error"
     #	print e
