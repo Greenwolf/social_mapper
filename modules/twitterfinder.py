@@ -109,36 +109,32 @@ class Twitterfinder(object):
     def kill(self):
         self.driver.quit()
 
-
-'''
-	def getTwitterProfiles(self,first_name,last_name):
-		url = "https://twitter.com/search?f=users&vertical=default&q=" + first_name + "%20" + last_name + "&src=typd"
-		self.driver.get(url)
-		sleep(3)
-		searchresponse = self.driver.page_source.encode('utf-8')
-		soupParser = BeautifulSoup(searchresponse, 'html.parser')
-		picturelist = []
-		for element in soupParser.find_all('div', {'class': 'ProfileCard'}):
-			link = element.find('a')['href']
-			picturelist.append(["https://twitter.com" + link,1.0])
-		return picturelist
-
-
-	def getProfilePicture(self, profilelink):
-		try:	
-			#print "Profile Link: " + profilelink
-			# THIS IS SO SLOW????
-			self.driver.get(profilelink)
-			# Make it better?
-			sleep(3)
-			profileresponse = self.driver.page_source.encode('utf-8')
-			soupParser = BeautifulSoup(profileresponse, 'html.parser')
-			linktobigpic = ""
-			for element in soupParser.find_all('img', {'class': 'ProfileAvatar-image'}):
-				linktobigpic = element['src']
-			return linktobigpic
-		except:
-			print "getProfilePicture EXCEPTION"
-			return ""
-
-'''
+    # def getTwitterProfiles(self,first_name,last_name):
+    #     url = "https://twitter.com/search?f=users&vertical=default&q=" + first_name + "%20" + last_name + "&src=typd"
+    #     self.driver.get(url)
+    #     sleep(3)
+    #     searchresponse = self.driver.page_source.encode('utf-8')
+    #     soupParser = BeautifulSoup(searchresponse, 'html.parser')
+    #     picturelist = []
+    #     for element in soupParser.find_all('div', {'class': 'ProfileCard'}):
+    #         link = element.find('a')['href']
+    #         picturelist.append(["https://twitter.com" + link,1.0])
+    #     return picturelist
+    #
+    #
+    # def getProfilePicture(self, profilelink):
+    #     try:
+    #         #print "Profile Link: " + profilelink
+    #         # THIS IS SO SLOW????
+    #         self.driver.get(profilelink)
+    #         # Make it better?
+    #         sleep(3)
+    #         profileresponse = self.driver.page_source.encode('utf-8')
+    #         soupParser = BeautifulSoup(profileresponse, 'html.parser')
+    #         linktobigpic = ""
+    #         for element in soupParser.find_all('img', {'class': 'ProfileAvatar-image'}):
+    #             linktobigpic = element['src']
+    #         return linktobigpic
+    #     except:
+    #         print "getProfilePicture EXCEPTION"
+    #         return ""

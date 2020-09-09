@@ -125,41 +125,37 @@ class Facebookfinder(object):
     def kill(self):
         self.driver.quit()
 
-
-'''
-	def getFacebookProfiles(self,first_name,last_name):
-		url = "https://www.facebook.com/search/people/?q=" + first_name + "%20" + last_name
-		self.driver.get(url)
-		sleep(3)
-		searchresponse = self.driver.page_source.encode('utf-8')
-		soupParser = BeautifulSoup(searchresponse, 'html.parser')
-		picturelist = []
-		for element in soupParser.find_all('div', {'class': '_52eh _ajx'}):
-			link = element.find('a')['href']
-			picturelist.append([link,1.0])
-		return picturelist
-
-
-	def getProfilePicture(self, profilelink):
-		try:
-			self.driver.get(profilelink)
-			sleep(3)
-			profileresponse = self.driver.page_source.encode('utf-8')
-			soupParser = BeautifulSoup(profileresponse, 'html.parser')
-			linktobigpic = ""
-			for element in soupParser.find_all('div', {'class': 'photoContainer'}):
-				linktobigpic = element.find('a')['href']
-
-			#if linktobigpic.startswith(bytes("/")
-				#return ""
-			self.driver.get(linktobigpic)
-			sleep(3)
-			bigpicresponse = self.driver.page_source.encode('utf-8')
-			soupParser = BeautifulSoup(bigpicresponse, 'html.parser')
-			image_link = ""
-			for element in soupParser.find_all('div', {'class': '_2-sx'}):
-				image_link = element.find('img')['src']
-			return image_link
-		except:
-			return ""
-'''
+    # def getFacebookProfiles(self, first_name, last_name):
+    #     url = "https://www.facebook.com/search/people/?q=" + first_name + "%20" + last_name
+    #     self.driver.get(url)
+    #     sleep(3)
+    #     searchresponse = self.driver.page_source.encode('utf-8')
+    #     soupParser = BeautifulSoup(searchresponse, 'html.parser')
+    #     picturelist = []
+    #     for element in soupParser.find_all('div', {'class': '_52eh _ajx'}):
+    #         link = element.find('a')['href']
+    #         picturelist.append([link, 1.0])
+    #     return picturelist
+    #
+    # def getProfilePicture(self, profilelink):
+    #     try:
+    #         self.driver.get(profilelink)
+    #         sleep(3)
+    #         profileresponse = self.driver.page_source.encode('utf-8')
+    #         soupParser = BeautifulSoup(profileresponse, 'html.parser')
+    #         linktobigpic = ""
+    #         for element in soupParser.find_all('div', {'class': 'photoContainer'}):
+    #             linktobigpic = element.find('a')['href']
+    #
+    #         # if linktobigpic.startswith(bytes("/")
+    #         # return ""
+    #         self.driver.get(linktobigpic)
+    #         sleep(3)
+    #         bigpicresponse = self.driver.page_source.encode('utf-8')
+    #         soupParser = BeautifulSoup(bigpicresponse, 'html.parser')
+    #         image_link = ""
+    #         for element in soupParser.find_all('div', {'class': '_2-sx'}):
+    #             image_link = element.find('img')['src']
+    #         return image_link
+    #     except:
+    #         return ""
