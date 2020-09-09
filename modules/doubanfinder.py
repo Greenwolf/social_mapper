@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import print_function
 from selenium import webdriver
+from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.firefox.options import Options
 from pyvirtualdisplay import Display
 from time import sleep
@@ -9,11 +10,17 @@ import json
 import os
 from bs4 import BeautifulSoup
 
+method_map = {
+	"username": "account-tab-account",
+	"phone": "account-tab-phone"
+}
+
 
 class Doubanfinder(object):
 
 	timeout = 10
-	
+	authentication_method = "username"
+
 	def __init__(self,showbrowser):
 		if sys.platform == "darwin":
 			display = Display(visible=0, size=(1600, 1024))
@@ -28,32 +35,65 @@ class Doubanfinder(object):
 		firefoxprofile.set_preference("permissions.default.desktop-notification", 1)
 		firefoxprofile.set_preference("dom.webnotifications.enabled", 1)
 		firefoxprofile.set_preference("dom.push.enabled", 1)
-		self.driver = webdriver.Firefox(firefox_profile=firefoxprofile,options=opts)
-
+		self.driver = webdriver.Firefox(options=opts,
+										firefox_profile=firefoxprofile,
+										firefox_binary=os.environ.get("FIREFOX_BINARY", None),
+										executable_path=os.environ.get("GECKODRIVER", None))
 		self.driver.implicitly_wait(15)
 		self.driver.delete_all_cookies()
 
 
 	def doLogin(self,username,password):
-			
+
 		self.driver.get("https://www.douban.com")
 		self.driver.execute_script('localStorage.clear();')
-		
-		if(self.driver.title.encode('utf8','replace').startswith(bytes("登录", 'utf-8'))):
+		sleep(3)  # waiting an iframe
+		if(self.driver.title.encode('utf8','replace').startswith(bytes("豆瓣", 'utf-8'))):
 			print("\n[+] Douban Login Page loaded successfully [+]")
-			wbUsername = self.driver.find_element_by_id("email")
-			wbUsername.send_keys(username)
-			wbPassword = self.driver.find_element_by_id("password")
-			wbPassword.send_keys(password)
-			#self.driver.find_element_by_id("login_button").click()
-			#self.driver.find_element_by_css_selector('a.submitBtn').click()
-			self.driver.find_element_by_css_selector('input[type=\'submit\']').click()
+			if not self.is_login_page():
+				print("[+] Douban Login not found a login form. Exit... [+]")
+				return False
+			self.switch_to_login_iframe()
+			self.change_signin_method(self.authentication_method)
+			sleep(1)  # waiting a document changed
+			# fill form
+			self.driver.find_element_by_id("username").send_keys(username)
+			self.driver.find_element_by_id("password").send_keys(password)
+			# submit
+			self.driver.find_element_by_xpath("//div[contains(@class, 'account-form-field-submit')]").click()
 			sleep(5)
-			if(self.driver.title.encode('utf8','replace').startswith(bytes("豆", 'utf-8')) == False):
-				print("[+] Douban Login Success [+]\n")
-			else:
+			self.driver.switch_to.default_content()
+			if self.is_login_page():
 				print("[-] Douban Login Failed [-]\n")
+			else:
+				print("[+] Douban Login Success [+]\n")
+		else:
+			print("[-] Douban Login Page loaded error [-]")
 
+	def _fetch_login_frame(self):
+		iframes = self.driver.find_elements_by_tag_name("iframe")
+		return next((x for x in iframes if "accounts.douban.com/passport/login_popup" in x.get_attribute("src")))
+
+	def change_signin_method(self, method: 'phone|username' = 'username'):
+		try:
+			xpath = f"//div[@class='account-body-tabs']/ul[@class='tab-start']/li[contains(@class, '{method_map[method]}')]"
+		except KeyError:
+			print(f"authentication method `{method}` not support... {method_map.keys()}")
+		else:
+			self.driver.find_element_by_xpath(xpath).click()
+
+	def is_login_page(self):
+		"""checking for a anony iframe is exists on page"""
+		try:
+			self._fetch_login_frame()
+		except (NoSuchElementException, StopIteration):
+			return False
+		else:
+			return True
+
+	def switch_to_login_iframe(self):
+		frame = self._fetch_login_frame()
+		self.driver.switch_to.frame(frame)
 
 	def getDoubanProfiles(self,first_name,last_name):
 		#try:
