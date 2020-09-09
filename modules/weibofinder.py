@@ -5,7 +5,6 @@ from selenium.webdriver.firefox.options import Options
 from pyvirtualdisplay import Display
 from time import sleep
 import sys
-import json
 import os
 from bs4 import BeautifulSoup
 

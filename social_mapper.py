@@ -8,27 +8,21 @@ from modules import weibofinder
 from modules import doubanfinder
 from modules import pinterestfinder
 from shutil import copyfile
-import facebook
 import requests
 import sys
 import csv
 import face_recognition
 import urllib
 import os
-import codecs
 import argparse
 import shutil
 import http.cookiejar
 import json
-import time
 from datetime import datetime
 from bs4 import BeautifulSoup
 from django.utils import encoding
 import traceback
 import math
-
-from selenium.webdriver import Firefox
-from selenium.webdriver.firefox.options import Options
 
 assert sys.version_info >= (3,), "Only Python 3 is currently supported."
 

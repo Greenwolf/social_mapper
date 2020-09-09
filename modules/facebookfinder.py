@@ -6,9 +6,7 @@ from time import sleep
 import sys
 import json
 import os
-import time
 from bs4 import BeautifulSoup
-from sys import platform
 
 
 class Facebookfinder(object):
