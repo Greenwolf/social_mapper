@@ -47,13 +47,13 @@ class Facebookfinder(object):
             self.driver.find_element_by_id("loginbutton").click()
             sleep(5)
             # checks if a notification is in place, which changes the title
-            if (self.driver.title.encode('utf8', 'replace')[0] == "("):
-                if (str(self.driver.title.encode('utf8', 'replace').split()[1]) == bytes("Facebook", 'utf-8')):
+            if (self.driver.title.encode('ascii', 'replace')[0] == bytes("(",'ascii')):
+                if (str(self.driver.title.encode('ascii', 'replace').split()[1]) == bytes("Facebook", 'ascii')):
                     print("[+] Facebook Login Success [+]\n")
                 else:
                     print("[-] Facebook Login Failed [-]\n")
             else:
-                if (self.driver.title.encode('utf8', 'replace').startswith(bytes("Facebook", 'utf-8')) == True):
+                if (self.driver.title.encode('ascii', 'replace').startswith(bytes("Facebook", 'ascii')) == True):
                     print("[+] Facebook Login Success [+]\n")
                 else:
                     print("[-] Facebook Login Failed [-]\n")
