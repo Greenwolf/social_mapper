@@ -95,6 +95,8 @@ Open social_mapper.py and enter social media credentials into global variables a
 
 5) For Facebook & Instagram, make sure the language of the account which you have provided credentials for is set to 'English (US)' for the duration of the run. Additionally make sure all of your accounts are working, and can be logged into without requiring 2 factor authentication. 
 
+6) Use the Firefox browser to login to each Social Media Profile once and save/process and "unknown browser" or "trust this browser" pages. 
+
 ## Using Social Mapper
 
 Social Mapper is run from the command-line using a mix of required and optional parameters. You can specify options such as input type and which sites to check alongside a number of other parameters which affect speed and accuracy.
@@ -131,6 +133,7 @@ Additional optional parameters can also be set to add additional customisation t
 -t, --threshold		: Customises the facial recognition threshold for matches, this can be seen as the match accuracy. Default is 'standard', but can be set to 'loose', 'standard', 'strict' or 'superstrict'. For example 'loose' will find more matches, but some may be incorrect. While 'strict' may find less matches but also contain less false positives in the final report.
 -cid, --companyid	: Additional parameter to add in a LinkedIn Company ID for if name searches are not picking the correct company.
 -s, --showbrowser	: Makes the Firefox browser visible so you can see the searches performed. Useful for debugging.
+-w, --waitafterlogin : Wait for user to press Enter after login to give time to enter 2FA codes. Must use with -s
 -v, --version		: Display current version.
 -vv, --verbose  : Verbose Mode (Useful for Debugging)
 -e, --email		: Provide a fuzzy email format like "<f><last>@domain.com" to generate additional CSV files for each site with firstname, lastname, fullname, email, profileURL, photoURL. These can be fed into phishing frameworks such as Gophish or Lucy.
@@ -142,17 +145,20 @@ Here are a couple of example runs to get started for differing use cases:
 
 ```
 A quick run for Facebook and Twitter on some targets you have in an imagefolder, that you plan to manually review and don't mind some false positives:
-python3 social_mapper.py -f imagefolder -i ./mytargets -m fast -fb -tw
+python3 social_mapper.py -f imagefolder -i ./Input-Examples/imagefolder/ -m fast -fb -tw
+
+The same as above but with the browser showing, and waiting enabled to allow a user to enter 2FA codes and manually rectify changed login processes:
+python3 social_mapper.py -f imagefolder -i ./Input-Examples/imagefolder/ -m fast -fb -tw -s -w
 
 An exhaustive run on a large company where false positives must be kept to a minimum:
-python3 social_mapper.py -f company -i "SpiderLabs" -m accurate -a -t strict
+python3 social_mapper.py -f company -i "Evil Corp LLC" -m accurate -a -t strict
 
 A large run that needs to be split over multiple sessions due to time, the first run doing LinkedIn and Facebook, with the second resuming and filling in Twitter, Google Plus and Instagram:
-python3 social_mapper.py -f company -i "SpiderLabs" -m accurate -li -fb
-python3 social_mapper.py -f socialmapper -i ./SpiderLabs-social-mapper-linkedin-facebook.html -m accurate -tw -gp -ig
+python3 social_mapper.py -f company -i "Evil Corp LLC" -m accurate -li -fb
+python3 social_mapper.py -f socialmapper -i ./Evil-Corp-LLC-social-mapper-linkedin-facebook.html -m accurate -tw -gp -ig
 
 A quick run (~5min) without facial recognition to generate a CSV full of names, email addresses, profiles and photo links from up to 1000 people pulled out of a LinkedIn company, where the email format is known to be "firstname.lastname":
-python3 social_mapper.py -f company -i "SpiderLabs" -m accurate -li -e "<first>.<last>@spiderlabs.com"
+python3 social_mapper.py -f company -i "Evil Corp LLC" -m accurate -li -e "<first>.<last>@evilcorpllc.com"
 ```
 
 ### Troubleshooting
@@ -165,7 +171,7 @@ For a guide to loading your Social Mapper results into Maltego, check out the [d
 
 ## Authors
 
-* [**Jacob Wilkin**](https://github.com/Greenwolf) - *Research and Development* - [Trustwave SpiderLabs](https://github.com/SpiderLabs)
+* [**Jacob Wilkin**](https://github.com/Greenwolf) - *Research and Development*
 
 ## Donation
 If this tool has been useful for you, feel free to thank me by buying me a coffee :)
@@ -175,7 +181,7 @@ If this tool has been useful for you, feel free to thank me by buying me a coffe
 ## Acknowledgments
 
 * Thanks to Vincent Yiu & MDSEC for their great LinkedInt tool which inspired me to add the search by LinkedIn company name input method.
-* Thanks to [janmei](https://github.com/janmei) (Pinterest Module), [ewpratten](https://github.com/ewpratten), [cclauss](https://github.com/cclauss), [TADT1909](https://github.com/tadt1909), [Molkree](https://github.com/Molkree) and [kix-s](https://github.com/kix-s) for their contributions to the project.
+* Thanks to [janmei](https://github.com/janmei) (Pinterest Module), [alexsok-bit](https://github.com/alexsok-bit), [ewpratten](https://github.com/ewpratten), [cclauss](https://github.com/cclauss), [TADT1909](https://github.com/tadt1909), [Molkree](https://github.com/Molkree) and [kix-s](https://github.com/kix-s) for their contributions to the project.
 * Thanks to `[Your Name Could Be Here, Come Help Out!]` for contributions to the project.
 
 ![Social Mapper Logo](docs/logo.png?raw=true "Social Mapper Logo")
