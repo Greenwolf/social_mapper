@@ -1294,8 +1294,10 @@ csv = []
 if not os.path.exists("SM-Results"):
     os.makedirs("SM-Results")
 
+dot_removed = False
 if args.input[0] == ".":
     args.input = args.input[1:]
+    dot_removed = True
 
 outputfilename = "SM-Results/" + args.input.replace("\"", "").replace("/", "-") + "-social-mapper.csv"
 phishingoutputfilename = "SM-Results/" + args.input.replace("\"", "").replace("/", "-")
@@ -1650,6 +1652,11 @@ header = """<center><table id=\"employees\">
 filewriter.write(css)
 filewriter.write(header)
 for person in peoplelist:
+    local_image_link = person.person_imagelink
+    if args.format == "imagefolder":
+        outputfoldername =  args.input.replace("\"","").replace("/","-") + "-social-mapper"
+        local_image_link = "./" + outputfoldername + "/" + person.full_name + ".jpg"
+    
     body = "<tbody>" \
            "<tr>" \
            "<td class=\"hasTooltipleft\" rowspan=\"2\"><img src=\"%s\" width=auto height=auto style=\"max-width:200px; max-height:200px;\"><span>%s</span></td>" \
@@ -1666,7 +1673,7 @@ for person in peoplelist:
            "<td class=\"hasTooltipfarright\"><a href=\"%s\"><img src=\"%s\" onerror=\"this.style.display=\'none\'\" width=auto height=auto style=\"max-width:100px; max-height:100px;\"><span>Douban:<br>%s</span></a></td>" \
            "</tr>" \
            "</tbody>" % (
-           person.person_imagelink, person.person_imagelink, person.full_name, person.linkedin, person.linkedinimage,
+           local_image_link, local_image_link, person.full_name, person.linkedin, person.linkedinimage,
            person.linkedin, person.facebook, person.facebookcdnimage, person.facebook, person.twitter,
            person.twitterimage, person.twitter, person.instagram, person.instagramimage, person.instagram,
            person.pinterest, person.pinterestimage, person.pinterest, person.vk, person.vkimage, person.vk,
@@ -1678,9 +1685,13 @@ print("HTML file: " + htmloutputfilename + "\n")
 filewriter.close()
 
 # copy images from Social Mapper to output folder
-outputfoldername = "SM-Results/" + args.input.replace("\"", "").replace("/", "-") + "-social-mapper"
-if args.format != "imagefolder":
-    os.rename('temp-targets', outputfoldername)
+outputfoldername = "SM-Results/" + args.input.replace("\"","").replace("/","-") + "-social-mapper"
+if args.format == "imagefolder":
+    if dot_removed == True:
+        args.input = "." + args.input
+    shutil.copytree(args.input, outputfoldername)
+else:
+    os.rename('temp-targets',outputfoldername)
     print("Image folder: " + outputfoldername + "\n")
 # if not os.path.exists('temp-targets'):
 #    shutil.rmtree('temp-targets')
