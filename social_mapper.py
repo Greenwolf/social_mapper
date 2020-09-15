@@ -133,8 +133,8 @@ def fill_facebook(peoplelist):
         # if count == 3:
         #    print "triggered delete"
         #    FacebookfinderObject.testdeletecookies()
-        print(person.person_imagelink)
-        print(person.person_image)
+        #print(person.person_imagelink)
+        #print(person.person_image)
         if person.person_image:
             try:
                 target_image = face_recognition.load_image_file(person.person_image)
@@ -1689,14 +1689,19 @@ outputfoldername = "SM-Results/" + args.input.replace("\"","").replace("/","-") 
 if args.format == "imagefolder":
     if dot_removed == True:
         args.input = "." + args.input
+    if os.path.exists(outputfoldername):
+        try:
+            shutil.rmtree(outputfoldername)
+        except:
+            print("output folder for images for .html already exists and for some reason couldnt be removed and replaced")
     shutil.copytree(args.input, outputfoldername)
 else:
     os.rename('temp-targets',outputfoldername)
     print("Image folder: " + outputfoldername + "\n")
-# if not os.path.exists('temp-targets'):
+#if not os.path.exists('temp-targets'):
 #    shutil.rmtree('temp-targets')
 
-# remove the last potential target image if it exists
+#remove the last potential target image if it exists
 try:
     os.remove("potential_target_image.jpg")
 except:
