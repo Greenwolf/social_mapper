@@ -45,6 +45,8 @@ These instructions will show you the requirements for and how to use Social Mapp
 
 ### Prerequisites
 
+Note: On Kali you can now run ./kali-installer.sh from the setup directory.
+
 As this is a Python3 based tool, it should theoretically run on Linux, ChromeOS ([Developer Mode](https://www.chromium.org/chromium-os/developer-information-for-chrome-os-devices/generic)) and macOS. The main requirements are Firefox, Selenium and Geckodriver. To install the tool and set it up follow these 4 steps:
 
 1) Install the latest version of Mozilla Firefox for macOS here:
