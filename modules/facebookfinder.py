@@ -40,6 +40,8 @@ class Facebookfinder(object):
 
         if (self.driver.title.encode('ascii', 'replace').endswith(bytes("Facebook", 'utf-8'))):
             print("\n[+] Facebook Login Page loaded successfully [+]")
+            # click on accept cookies banner
+            self.driver.find_element_by_xpath("//button[@data-testid='cookie-policy-banner-accept']").click()
             fbUsername = self.driver.find_element_by_id("email")
             fbUsername.send_keys(username)
             fbPassword = self.driver.find_element_by_id("pass")
