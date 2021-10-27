@@ -35,12 +35,12 @@ class Instagramfinder(object):
     def doLogin(self, username, password):
         self.driver.get("https://www.instagram.com/accounts/login/?hl=en")
         # self.driver.get("https://instagram.com/accounts/login/")
-        self.driver.execute_script('localStorage.clear();')
-
+        self.driver.execute_script('localStorage.clear();')	
+	
         # convert unicode in instagram title to spaces for comparison
         titleString = ''.join([i if ord(i) < 128 else ' ' for i in self.driver.title])
-
-        if (titleString.startswith("Login")):
+		
+        if (titleString.startswith("Login")):                 
             print("\n[+] Instagram Login Page loaded successfully [+]")
             try:
                 instagramUsername = self.driver.find_element_by_xpath("//input[@name='username']")
@@ -55,9 +55,9 @@ class Instagramfinder(object):
                     "Instagram Login Page password field seems to have changed, please make an issue on: https://github.com/Greenwolf/social_mapper")
             instagramPassword.send_keys(password)
             try:
-                # self.driver.find_element_by_xpath("//button[contains(.,'Log in')]").click()
-                self.driver.find_element_by_xpath("//button[@type='submit']").click()
-            except:
+                #self.driver.find_element_by_xpath("//button[contains(.,'Log In')]").click()
+                self.driver.find_element_by_tag_name('form').submit()
+            except:            	
                 print(
                     "Instagram Login Page login button seems to have changed, please make an issue on: https://github.com/Greenwolf/social_mapper")
             # self.driver.find_element_by_class_name("submit").click()
